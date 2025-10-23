@@ -1,6 +1,6 @@
 # ArtesaNica - Ecommerce Multitienda
 
-Ecommerce multitienda para emprendedores de Niquinohomo, Nicaragua.
+Ecommerce multitienda para artesanos de Niquinohomo, Nicaragua.
 
 ## Características
 
