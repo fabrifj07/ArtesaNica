@@ -13,57 +13,82 @@
     <!-- Navigation -->
     <nav id="navbar" class="bg-gradient-to-r from-blue-600 to-green-600 shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-hands-helping text-yellow-300 text-2xl mr-2"></i>
-                        <span class="text-white font-bold text-xl">ArtesaNica</span>
-                    </div>
-                    <div class="hidden md:ml-6 md:flex md:space-x-4">
-                        <a href="#home" class="nav-link text-white hover:text-yellow-300 px-3 py-2 rounded-md">Inicio</a>
-                        <a href="#tiendas" class="nav-link text-white hover:text-yellow-300 px-3 py-2 rounded-md">Tiendas</a>
-                        <a href="#productos" class="nav-link text-white hover:text-yellow-300 px-3 py-2 rounded-md">Productos</a>
-                        <a href="#vendedores" class="nav-link text-white hover:text-yellow-300 px-3 py-2 rounded-md">Ser Vendedor</a>
-                        <a href="#contacto" class="nav-link text-white hover:text-yellow-300 px-3 py-2 rounded-md">Contacto</a>
-                        <a href="#nosotros" class="nav-link text-white hover:text-yellow-300 px-3 py-2 rounded-md">Nosotros</a>
-                    </div>
-                </div>
+            <div class="flex items-center justify-between h-16">
+                <!-- Left: Logo -->
                 <div class="flex items-center space-x-4">
-                    <!-- Search Bar -->
-                    <div class="relative hidden md:block">
-                        <input type="text" id="search-input" placeholder="Buscar productos..." 
-                               class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                        <div id="search-results" class="absolute top-12 left-0 w-96 bg-white shadow-xl rounded-lg hidden z-50 max-h-96 overflow-y-auto"></div>
-                    </div>
-                    
-                    <button id="cart-btn" class="text-white hover:text-yellow-300 relative">
+                    <a href="#home" class="text-white font-bold text-lg nav-logo">ArtesaNica</a>
+                </div>
+
+                <!-- Center: Nav links (hidden on small screens) -->
+                <div class="hidden md:flex md:space-x-6 lg:space-x-8 items-center">
+                    <a href="#home" class="nav-link text-white">Inicio</a>
+                    <a href="#tiendas" class="nav-link text-white">Tiendas</a>
+                    <a href="#productos" class="nav-link text-white">Productos</a>
+                    <a href="#vendedores" class="nav-link text-white">Ser Vendedor</a>
+                    <a href="#contacto" class="nav-link text-white">Contacto</a>
+                    <a href="#nosotros" class="nav-link text-white">Nosotros</a>
+                </div>
+
+                <!-- (search moved below hero for web view) -->
+
+                <!-- Right: Cart / Auth / mobile menu -->
+                <div class="flex items-center space-x-3">
+                    <!-- Cart button (visible on all sizes) -->
+                    <button id="cart-btn" class="text-white hover:text-yellow-300 relative" aria-label="Abrir carrito">
                         <i class="fas fa-shopping-cart text-xl"></i>
                         <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">0</span>
                     </button>
-                    
-                    <div id="auth-buttons" class="flex space-x-2">
-                        <button onclick="showAuthModal('login')" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
-                            Iniciar Sesión
+
+                    <div id="auth-buttons" class="hidden sm:flex items-center space-x-2">
+                        <button onclick="showAuthModal('login')" class="btn btn-slim btn-slim--outline" aria-haspopup="dialog" aria-controls="auth-modal" aria-label="Iniciar sesión">
+                            <i class="fas fa-sign-in-alt"></i><span>Iniciar Sesión</span>
                         </button>
-                        <button onclick="showAuthModal('register')" class="bg-yellow-400 text-blue-800 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition duration-300">
-                            Registrarse
-                        </button>
-                    </div>
-                    <div id="user-menu" class="hidden flex items-center space-x-3">
-                        <img id="user-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-full border-2 border-white">
-                        <span id="user-name" class="text-white font-medium"></span>
-                        <button onclick="showUserProfile()" class="text-white hover:text-yellow-300" title="Mi Perfil">
-                            <i class="fas fa-user"></i>
-                        </button>
-                        <button onclick="logout()" class="text-white hover:text-yellow-300">
-                            <i class="fas fa-sign-out-alt"></i>
+                        <button onclick="showAuthModal('register')" class="btn btn-slim btn-slim--accent" aria-haspopup="dialog" aria-controls="auth-modal" aria-label="Registrarse">
+                            <i class="fas fa-user-plus"></i><span>Registrarse</span>
                         </button>
                     </div>
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-btn" class="md:hidden text-white p-2 rounded-md focus:outline-none" aria-label="Abrir menú" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile menu overlay (hidden by default). This is a full-screen panel that slides from top -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden">
+        <div id="mobile-menu-panel" class="absolute inset-0 bg-white overflow-auto">
+            <div class="px-5 py-6">
+                <div class="flex items-center justify-between mb-4">
+                    <a href="#home" class="text-lg font-bold">ArtesaNica</a>
+                    <button id="mobile-menu-close" class="text-gray-600 p-2 rounded-md" aria-label="Cerrar menú">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <nav class="grid gap-3">
+                    <a href="#home" class="py-3 px-3 rounded-md nav-link text-gray-800">Inicio</a>
+                    <a href="#vendedores" class="py-3 px-3 rounded-md nav-link text-gray-800">Ser Vendedor</a>
+                    <a href="#contacto" class="py-3 px-3 rounded-md nav-link text-gray-800">Contacto</a>
+                    <a href="#nosotros" class="py-3 px-3 rounded-md nav-link text-gray-800">Nosotros</a>
+                </nav>
+
+                <div class="mt-6">
+                    <div class="flex gap-3">
+                        <button onclick="showAuthModal('login')" class="btn btn-slim btn-slim--outline w-full">Iniciar Sesión</button>
+                        <button onclick="showAuthModal('register')" class="btn btn-slim btn-slim--accent w-full">Registrarse</button>
+                    </div>
+
+                    <!-- After auth buttons, add Productos and Tiendas as requested -->
+                    <div class="mt-4 grid gap-2">
+                        <a href="#productos" class="py-3 px-3 rounded-md nav-link text-gray-800 border border-gray-100">Productos</a>
+                        <a href="#tiendas" class="py-3 px-3 rounded-md nav-link text-gray-800 border border-gray-100">Tiendas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Mobile Search -->
     <div class="md:hidden bg-white border-b px-4 py-2">
@@ -207,6 +232,15 @@
             </div>
         </section>
 
+        <!-- Global Search (placed below Hero for desktop) -->
+        <div id="global-search-container" class="hidden">
+            <div class="search-box mx-auto relative">
+                <i class="fas fa-search search-icon absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="search-input" placeholder="Buscar productos, tiendas..." aria-label="Buscar productos" class="pl-12 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                <div id="search-results" class="absolute left-0 top-full mt-2 w-full bg-white rounded-lg shadow-xl hidden z-50 max-h-72 overflow-y-auto"></div>
+            </div>
+        </div>
+
         <!-- Stores Section -->
         <section id="tiendas" class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -214,8 +248,47 @@
                 <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
                     Descubre los emprendimientos locales de Niquinohomo. Cada tienda ofrece productos únicos y auténticos.
                 </p>
-                <div id="stores-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Stores will be populated by JavaScript -->
+                <!-- Carousel of stores -->
+                <div class="stores-carousel">
+                    <button class="carousel-arrow left" aria-label="Anterior tienda"><i class="fas fa-chevron-left"></i></button>
+                    <div class="stores-track" id="stores-container">
+                        <!-- Example store cards (replace or populate via JS) -->
+                        <article class="store-card">
+                            <img src="https://images.unsplash.com/photo-1542834369-f10ebf06d3cb?auto=format&fit=crop&w=800&q=60" alt="Tienda 1">
+                            <div class="store-body">
+                                <div class="store-title">Tienda Artesanal Sol</div>
+                                <div class="store-meta">Niquinohomo · Artesanías</div>
+                                <div class="store-actions">
+                                    <button class="btn btn-outline-secondary btn-follow btn-follow-small btn-follow" aria-label="Seguir tienda">Seguir</button>
+                                    <button class="btn btn-primary btn-visit" aria-label="Ver tienda">Ver tienda</button>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="store-card">
+                            <img src="https://images.unsplash.com/photo-1520975912412-2a1d6b9d3b54?auto=format&fit=crop&w=800&q=60" alt="Tienda 2">
+                            <div class="store-body">
+                                <div class="store-title">Manos de Niquinohomo</div>
+                                <div class="store-meta">Artesanías · Textiles</div>
+                                <div class="store-actions">
+                                    <button class="btn btn-outline-secondary btn-follow" aria-label="Seguir tienda">Seguir</button>
+                                    <button class="btn btn-primary btn-visit" aria-label="Ver tienda">Ver tienda</button>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="store-card">
+                            <img src="https://images.unsplash.com/photo-1505081988376-1e1ddc0f8b54?auto=format&fit=crop&w=800&q=60" alt="Tienda 3">
+                            <div class="store-body">
+                                <div class="store-title">Dulces y Tradición</div>
+                                <div class="store-meta">Comida Tradicional</div>
+                                <div class="store-actions">
+                                    <button class="btn btn-outline-secondary btn-follow" aria-label="Seguir tienda">Seguir</button>
+                                    <button class="btn btn-primary btn-visit" aria-label="Ver tienda">Ver tienda</button>
+                                </div>
+                            </div>
+                        </article>
+                        <!-- more cards can be added dynamically -->
+                    </div>
+                    <button class="carousel-arrow right" aria-label="Siguiente tienda"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
         </section>
@@ -247,8 +320,55 @@
                     </button>
                 </div>
                 
-                <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Products will be populated by JavaScript -->
+                <div id="products-container" class="products-grid">
+                    <!-- Example product cards -->
+                    <article class="product-card">
+                        <img src="https://images.unsplash.com/photo-1518183214770-9cffbec72538?auto=format&fit=crop&w=800&q=60" alt="Producto 1">
+                        <div class="product-body">
+                            <div class="product-title">Maceta Artesanal</div>
+                            <div class="product-price">C$ 450.00</div>
+                            <div class="product-actions">
+                                <button class="btn btn-details">Ver</button>
+                                <button class="btn btn-add" onclick="addToCart && addToCart('prod-1')">Agregar</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=60" alt="Producto 2">
+                        <div class="product-body">
+                            <div class="product-title">Textil Bordado</div>
+                            <div class="product-price">C$ 850.00</div>
+                            <div class="product-actions">
+                                <button class="btn btn-details">Ver</button>
+                                <button class="btn btn-add" onclick="addToCart && addToCart('prod-2')">Agregar</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=60" alt="Producto 3">
+                        <div class="product-body">
+                            <div class="product-title">Madera Tallada</div>
+                            <div class="product-price">C$ 1,200.00</div>
+                            <div class="product-actions">
+                                <button class="btn btn-details">Ver</button>
+                                <button class="btn btn-add" onclick="addToCart && addToCart('prod-3')">Agregar</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="product-card">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=60" alt="Producto 4">
+                        <div class="product-body">
+                            <div class="product-title">Dulces Tradicionales</div>
+                            <div class="product-price">C$ 230.00</div>
+                            <div class="product-actions">
+                                <button class="btn btn-details">Ver</button>
+                                <button class="btn btn-add" onclick="addToCart && addToCart('prod-4')">Agregar</button>
+                            </div>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>

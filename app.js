@@ -45,6 +45,52 @@ class ArtesaNicaApp {
             }
         });
 
+        // Mobile menu overlay toggle (new): show/hide full-screen overlay
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileClose = document.getElementById('mobile-menu-close');
+        if (mobileBtn && mobileOverlay) {
+            mobileBtn.addEventListener('click', (e) => {
+                const isHidden = mobileOverlay.classList.contains('hidden');
+                if (isHidden) {
+                    mobileOverlay.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                    mobileBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    mobileOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    mobileBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+        if (mobileClose && mobileOverlay) {
+            mobileClose.addEventListener('click', () => {
+                mobileOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+                if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        // Close overlay by clicking on the overlay background (not panel)
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', (e) => {
+                if (e.target === mobileOverlay) {
+                    mobileOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        // Ensure overlay closes when resizing to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768 && mobileOverlay && !mobileOverlay.classList.contains('hidden')) {
+                mobileOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+                if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
         // Escape key to close modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -58,6 +104,86 @@ class ArtesaNicaApp {
                 });
             }
         });
+
+        // Additional UI initializers
+        this.setupCarouselControls();
+        this.setupGlobalSearchToggle();
+    }
+
+    // Carousel arrow controls for stores carousel (supports multiple instances, tolerant thresholds)
+    setupCarouselControls() {
+        const carousels = document.querySelectorAll('.stores-carousel');
+        if (!carousels || carousels.length === 0) return;
+
+        carousels.forEach((carousel) => {
+            const container = document.getElementById('stores-container') || carousel.querySelector('.stores-track');
+            const leftBtn = carousel.querySelector('.carousel-arrow.left');
+            const rightBtn = carousel.querySelector('.carousel-arrow.right');
+            if (!container || !leftBtn || !rightBtn) return;
+
+            const scrollAmount = () => Math.round(container.clientWidth * 0.8) || 300;
+            let isAnimating = false;
+
+            const update = () => {
+                // Use a small tolerance to account for fractional scrolling and smooth scroll timing
+                const tolerance = 5;
+                const atStart = container.scrollLeft <= tolerance;
+                const atEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - tolerance;
+
+                leftBtn.disabled = atStart;
+                rightBtn.disabled = atEnd;
+
+                leftBtn.classList.toggle('opacity-50', atStart);
+                rightBtn.classList.toggle('opacity-50', atEnd);
+            };
+
+            leftBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (leftBtn.disabled) return;
+                isAnimating = true;
+                container.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+                // Ensure update runs after smooth scroll finishes (best-effort)
+                setTimeout(() => { isAnimating = false; update(); }, 420);
+            });
+
+            rightBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (rightBtn.disabled) return;
+                isAnimating = true;
+                container.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+                setTimeout(() => { isAnimating = false; update(); }, 420);
+            });
+
+            // Update on manual scroll as well
+            container.addEventListener('scroll', () => {
+                if (isAnimating) return; // avoid thrash during programmatic scroll
+                requestAnimationFrame(update);
+            });
+
+            // Also update on resize (layout changes)
+            window.addEventListener('resize', () => requestAnimationFrame(update));
+
+            // Initial state
+            requestAnimationFrame(update);
+        });
+    }
+
+    // Show desktop/global search under hero on wider viewports and hide on small screens
+    setupGlobalSearchToggle() {
+        const globalSearch = document.getElementById('global-search-container');
+        if (!globalSearch) return;
+
+        const toggle = () => {
+            if (window.innerWidth >= 768) {
+                globalSearch.classList.remove('hidden');
+            } else {
+                globalSearch.classList.add('hidden');
+            }
+        };
+
+        // Run once and on resize
+        toggle();
+        window.addEventListener('resize', toggle);
     }
 
     initializeForms() {
