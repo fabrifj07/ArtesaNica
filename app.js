@@ -133,6 +133,10 @@ class ArtesaNicaApp {
                 leftBtn.disabled = atStart;
                 rightBtn.disabled = atEnd;
 
+                // Sync aria-disabled for accessibility
+                leftBtn.setAttribute('aria-disabled', atStart ? 'true' : 'false');
+                rightBtn.setAttribute('aria-disabled', atEnd ? 'true' : 'false');
+
                 leftBtn.classList.toggle('opacity-50', atStart);
                 rightBtn.classList.toggle('opacity-50', atEnd);
             };

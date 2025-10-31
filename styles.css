@@ -324,6 +324,30 @@ footer { padding-top: 3rem; padding-bottom: 3rem; }
     z-index: 1; /* keep at low z-index so arrows remain on top */
 }
 
+/* Increase hit area for touch devices without changing visual size */
+.carousel-arrow {
+    /* ensure pseudo-element can expand beyond the button box */
+    overflow: visible;
+    touch-action: manipulation; /* prefer taps over pans on touch devices */
+}
+
+.carousel-arrow::after {
+    content: "";
+    position: absolute;
+    inset: -10px; /* expands hit area by 10px on all sides */
+    border-radius: 50%;
+    background: transparent;
+    pointer-events: auto; /* allow the expanded area to capture taps */
+    z-index: 39; /* slightly below the arrow visual (arrow has z-index:40) */
+}
+
+/* Make the icon itself non-blocking so expanded area handles events */
+.carousel-arrow i {
+    position: relative;
+    z-index: 41;
+    pointer-events: none; /* clicks handled by the button area/pseudo element */
+}
+
 /* --- Product cards grid --- */
 .products-grid {
     display: grid;
