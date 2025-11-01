@@ -1,7 +1,13 @@
+// cart.js
+
+// Configuration
+const WHATSAPP_PHONE_NUMBER = "76450952";
+
 // Cart System with Invoice Generation and User Order History
 class CartSystem {
     constructor() {
         this.cart = JSON.parse(localStorage.getItem('artesanica_cart')) || [];
+        this.selectedPaymentMethod = null;
         this.init();
     }
 
@@ -63,10 +69,9 @@ class CartSystem {
         const cartItems = document.getElementById('cart-items');
         const cartTotal = document.getElementById('cart-total');
 
-        // Update cart count
-        cartCount.textContent = this.getItemCount();
+        if (!cartCount || !cartItems || !cartTotal) return;
 
-        // Update cart items
+        cartCount.textContent = this.getItemCount();
         cartItems.innerHTML = '';
 
         if (this.cart.length === 0) {
@@ -83,7 +88,6 @@ class CartSystem {
             });
         }
 
-        // Update total
         cartTotal.textContent = `C$ ${this.getTotal().toFixed(2)}`;
     }
 
@@ -134,7 +138,7 @@ class CartSystem {
             subtotal: this.getTotal(),
             tax: this.getTotal() * 0.15,
             total: this.getTotal() * 1.15,
-            paymentMethod: window.selectedPaymentMethod || 'efectivo',
+            paymentMethod: this.selectedPaymentMethod || 'efectivo',
             status: 'pending',
             createdAt: new Date().toISOString()
         };
@@ -156,7 +160,6 @@ class CartSystem {
             users[userIndex].orders.unshift(order);
             localStorage.setItem('artesanica_users', JSON.stringify(users));
             
-            // Update current user in auth system
             auth.users = users;
             if (auth.currentUser.id === user.id) {
                 auth.currentUser = users[userIndex];
@@ -181,22 +184,10 @@ class CartSystem {
                 </div>
                 
                 <div class="grid grid-cols-2 gap-3 mb-4 bg-gray-50 p-3 rounded-lg text-sm">
-                    <div>
-                        <p class="text-gray-700 font-semibold">Factura:</p>
-                        <p class="text-blue-600 font-bold">${invoice.id}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-700 font-semibold">Fecha:</p>
-                        <p>${invoice.date}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-700 font-semibold">Cliente:</p>
-                        <p>${invoice.customer}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-700 font-semibold">Hora:</p>
-                        <p>${invoice.time}</p>
-                    </div>
+                    <div><p class="text-gray-700 font-semibold">Factura:</p><p class="text-blue-600 font-bold">${invoice.id}</p></div>
+                    <div><p class="text-gray-700 font-semibold">Fecha:</p><p>${invoice.date}</p></div>
+                    <div><p class="text-gray-700 font-semibold">Cliente:</p><p>${invoice.customer}</p></div>
+                    <div><p class="text-gray-700 font-semibold">Hora:</p><p>${invoice.time}</p></div>
                 </div>
                 
                 <div class="mb-4">
@@ -216,45 +207,28 @@ class CartSystem {
                 
                 <div class="bg-gray-50 rounded-lg p-3 mb-4">
                     <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-700">Subtotal:</span>
-                            <span class="font-semibold">C$ ${invoice.subtotal.toFixed(2)}</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-700">IVA (15%):</span>
-                            <span class="font-semibold">C$ ${invoice.tax.toFixed(2)}</span>
-                        </div>
-                        <div class="flex justify-between text-base font-bold border-t pt-2 mt-2">
-                            <span class="text-gray-800">Total:</span>
-                            <span class="text-green-600">C$ ${invoice.total.toFixed(2)}</span>
-                        </div>
+                        <div class="flex justify-between"><span class="text-gray-700">Subtotal:</span><span class="font-semibold">C$ ${invoice.subtotal.toFixed(2)}</span></div>
+                        <div class="flex justify-between"><span class="text-gray-700">IVA (15%):</span><span class="font-semibold">C$ ${invoice.tax.toFixed(2)}</span></div>
+                        <div class="flex justify-between text-base font-bold border-t pt-2 mt-2"><span class="text-gray-800">Total:</span><span class="text-green-600">C$ ${invoice.total.toFixed(2)}</span></div>
                     </div>
                 </div>
                 
                 <div class="mb-4">
                     <h3 class="text-lg font-bold text-gray-800 mb-2">Método de Pago</h3>
                     <div class="grid grid-cols-2 gap-3 mb-3">
-                        <div class="payment-option border-2 border-gray-300 rounded-lg p-3 cursor-pointer transition-all duration-300 ${window.selectedPaymentMethod === 'efectivo' ? 'border-blue-500 bg-blue-50' : ''}" 
-                             onclick="selectPaymentMethod('efectivo')">
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-money-bill-wave text-green-500"></i>
-                                <span class="font-semibold text-sm">Efectivo</span>
-                            </div>
+                        <div class="payment-option border-2 border-gray-300 rounded-lg p-3 cursor-pointer transition-all duration-300" 
+                             onclick="selectPaymentMethod(this, 'efectivo')">
+                            <div class="flex items-center space-x-2"><i class="fas fa-money-bill-wave text-green-500"></i><span class="font-semibold text-sm">Efectivo</span></div>
                         </div>
-                        <div class="payment-option border-2 border-gray-300 rounded-lg p-3 cursor-pointer transition-all duration-300 ${window.selectedPaymentMethod === 'tarjeta' ? 'border-blue-500 bg-blue-50' : ''}" 
-                             onclick="selectPaymentMethod('tarjeta')">
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-credit-card text-blue-500"></i>
-                                <span class="font-semibold text-sm">Tarjeta</span>
-                            </div>
+                        <div class="payment-option border-2 border-gray-300 rounded-lg p-3 cursor-pointer transition-all duration-300" 
+                             onclick="selectPaymentMethod(this, 'tarjeta')">
+                            <div class="flex items-center space-x-2"><i class="fas fa-credit-card text-blue-500"></i><span class="font-semibold text-sm">Tarjeta</span></div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="flex space-x-3 mt-4">
-                    <button onclick="hideInvoiceModal()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition duration-300 text-sm">
-                        Cancelar
-                    </button>
+                    <button onclick="hideInvoiceModal()" class="flex-1 bg-gray-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition duration-300 text-sm">Cancelar</button>
                     <button id="pay-button" onclick="processPayment()" 
                             class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300 flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed text-sm"
                             disabled>
@@ -265,7 +239,7 @@ class CartSystem {
         `;
         
         modal.classList.remove('hidden');
-        window.selectedPaymentMethod = null;
+        this.selectedPaymentMethod = null;
         updatePayButton();
     }
 }
@@ -273,7 +247,7 @@ class CartSystem {
 // Initialize cart system
 const cartSystem = new CartSystem();
 
-// Cart UI Functions
+// --- UI Functions ---
 function showCart() {
     document.getElementById('cart-sidebar').classList.remove('translate-x-full');
     document.getElementById('cart-overlay').classList.remove('hidden');
@@ -300,36 +274,35 @@ function checkout() {
     hideCart();
 }
 
-// Payment Functions
-function selectPaymentMethod(method) {
-    // Remover selección anterior
+// --- Payment Functions ---
+function selectPaymentMethod(element, method) {
     document.querySelectorAll('.payment-option').forEach(option => {
         option.classList.remove('border-blue-500', 'bg-blue-50');
         option.classList.add('border-gray-300');
     });
     
-    // Agregar selección actual
-    const selectedOption = event.currentTarget;
-    selectedOption.classList.add('border-blue-500', 'bg-blue-50');
-    selectedOption.classList.remove('border-gray-300');
+    element.classList.add('border-blue-500', 'bg-blue-50');
+    element.classList.remove('border-gray-300');
     
-    window.selectedPaymentMethod = method;
+    cartSystem.selectedPaymentMethod = method;
     updatePayButton();
 }
 
 function updatePayButton() {
     const payButton = document.getElementById('pay-button');
-    if (window.selectedPaymentMethod && payButton) {
+    if (!payButton) return;
+    
+    if (cartSystem.selectedPaymentMethod) {
         payButton.disabled = false;
         payButton.classList.remove('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
-    } else if (payButton) {
+    } else {
         payButton.disabled = true;
         payButton.classList.add('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
     }
 }
 
 async function processPayment() {
-    if (!window.selectedPaymentMethod) {
+    if (!cartSystem.selectedPaymentMethod) {
         showNotification('Por favor selecciona un método de pago', 'warning');
         return;
     }
@@ -337,35 +310,22 @@ async function processPayment() {
     showNotification('Generando factura...', 'info');
 
     try {
-        // Generar la factura
         const invoice = cartSystem.generateInvoice();
-        
-        // Guardar en el perfil del usuario
         cartSystem.saveOrderToUserProfile(invoice);
-        
-        // Generar imagen de la factura
         const invoiceImage = await generateInvoiceImage();
-        
-        // Enviar por WhatsApp
         await sendWhatsAppWithInvoice(invoice, invoiceImage);
         
     } catch (error) {
         console.error('Error procesando pago:', error);
-        showNotification('Error generando la factura', 'error');
-        // Fallback: enviar solo texto
+        showNotification('Error generando la factura. Se enviará solo el texto.', 'error');
         sendWhatsAppTextOnly();
     }
 }
 
-// Función para generar la factura como imagen
 async function generateInvoiceImage() {
     const invoiceElement = document.querySelector('.invoice-container');
-    
-    if (!invoiceElement) {
-        throw new Error('No se encontró la factura');
-    }
+    if (!invoiceElement) throw new Error('Contenedor de factura no encontrado');
 
-    // Ocultar botones temporalmente para la captura
     const buttons = invoiceElement.querySelectorAll('button');
     const originalDisplay = [];
     buttons.forEach(btn => {
@@ -382,7 +342,6 @@ async function generateInvoiceImage() {
         height: invoiceElement.scrollHeight
     });
 
-    // Restaurar botones
     buttons.forEach((btn, index) => {
         btn.style.display = originalDisplay[index];
     });
@@ -390,39 +349,28 @@ async function generateInvoiceImage() {
     return canvas.toDataURL('image/jpeg', 0.9);
 }
 
-// Función para enviar por WhatsApp con imagen
 async function sendWhatsAppWithInvoice(invoice, invoiceImage) {
-    const phoneNumber = "50588888888";
-
-    // Mensaje de texto
     let message = `¡Hola! Quiero realizar un pedido en ArtesaNica%0A%0A`;
     message += `*Factura:* ${invoice.id}%0A`;
     message += `*Cliente:* ${invoice.customer}%0A`;
     message += `*Fecha:* ${invoice.date}%0A`;
     message += `*Método de Pago:* ${invoice.paymentMethod === 'efectivo' ? 'Efectivo' : 'Tarjeta'}%0A`;
     message += `*Total:* C$ ${invoice.total.toFixed(2)}%0A%0A`;
-    message += `Ver detalles en la imagen adjunta.%0A%0A`;
-    message += `¡Gracias!`;
+    message += `Ver detalles en la imagen adjunta.%0A%0A¡Gracias!`;
 
-    // Descargar imagen de la factura
     downloadInvoiceImage(invoiceImage, `factura-${invoice.id}.jpg`);
     
-    // Mensaje para WhatsApp
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
-    // Abrir WhatsApp
+    const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`;
     window.open(whatsappUrl, '_blank');
     
     showNotification('Factura generada. Por favor adjunta la imagen descargada.', 'success');
     
-    // Limpiar carrito después de un delay
     setTimeout(() => {
         cartSystem.clearCart();
         hideInvoiceModal();
     }, 3000);
 }
 
-// Función para descargar la imagen de la factura
 function downloadInvoiceImage(dataUrl, filename) {
     const link = document.createElement('a');
     link.download = filename;
@@ -432,41 +380,30 @@ function downloadInvoiceImage(dataUrl, filename) {
     document.body.removeChild(link);
 }
 
-// Función alternativa: solo texto (fallback)
 function sendWhatsAppTextOnly() {
     const invoice = cartSystem.generateInvoice();
-    const phoneNumber = "50588888888";
     
     let message = `¡Hola! Quiero realizar un pedido en ArtesaNica%0A%0A`;
     message += `*Factura:* ${invoice.id}%0A`;
     message += `*Cliente:* ${invoice.customer}%0A`;
-    message += `*Fecha:* ${invoice.date}%0A`;
-    message += `*Hora:* ${invoice.time}%0A`;
+    message += `*Fecha:* ${invoice.date} ${invoice.time}%0A`;
     message += `*Método de Pago:* ${invoice.paymentMethod === 'efectivo' ? 'Efectivo' : 'Tarjeta'}%0A%0A`;
     
     message += `*Productos:*%0A`;
     invoice.items.forEach(item => {
-        message += `• ${item.product.name}%0A`;
-        message += `  Cantidad: ${item.quantity}%0A`;
-        message += `  Precio: C$ ${item.product.price}%0A`;
-        message += `  Subtotal: C$ ${(item.product.price * item.quantity).toFixed(2)}%0A%0A`;
+        message += `• ${item.product.name} (x${item.quantity}) - C$ ${(item.product.price * item.quantity).toFixed(2)}%0A`;
     });
     
-    message += `*Resumen de Pago:*%0A`;
+    message += `%0A*Resumen de Pago:*%0A`;
     message += `Subtotal: C$ ${invoice.subtotal.toFixed(2)}%0A`;
     message += `IVA (15%): C$ ${invoice.tax.toFixed(2)}%0A`;
-    message += `*TOTAL A PAGAR: C$ ${invoice.total.toFixed(2)}*%0A%0A`;
+    message += `*TOTAL A PAGAR: C$ ${invoice.total.toFixed(2)}*%0A%0A¡Gracias!`;
     
-    message += `¡Gracias!`;
-    
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    
+    const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${message}`;
     window.open(whatsappUrl, '_blank');
     
-    // Guardar en el perfil del usuario
     cartSystem.saveOrderToUserProfile(invoice);
     
-    // Limpiar carrito y cerrar modal
     setTimeout(() => {
         cartSystem.clearCart();
         hideInvoiceModal();
@@ -474,13 +411,12 @@ function sendWhatsAppTextOnly() {
     }, 1000);
 }
 
-// Función para ocultar el modal de factura
 function hideInvoiceModal() {
     document.getElementById('invoice-modal').classList.add('hidden');
-    window.selectedPaymentMethod = null;
+    cartSystem.selectedPaymentMethod = null;
 }
 
-// User Profile Functions
+// --- User Profile Functions ---
 function showUserProfile() {
     if (!auth.isAuthenticated()) {
         showNotification('Debes iniciar sesión para ver tu perfil', 'warning');
@@ -495,7 +431,6 @@ function showUserProfile() {
     
     profileContent.innerHTML = `
         <div class="space-y-6">
-            <!-- Información del usuario -->
             <div class="bg-gray-50 rounded-lg p-4">
                 <div class="flex items-center space-x-4 mb-4">
                     <img src="${user.avatar}" alt="${user.name}" class="w-16 h-16 rounded-full border-2 border-blue-500">
@@ -505,19 +440,8 @@ function showUserProfile() {
                         <p class="text-sm text-gray-500">Miembro desde: ${new Date(user.createdAt).toLocaleDateString()}</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <p class="font-semibold">Teléfono:</p>
-                        <p class="text-gray-600">${user.phone || 'No registrado'}</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold">Tipo de usuario:</p>
-                        <p class="text-gray-600">Comprador</p>
-                    </div>
-                </div>
             </div>
             
-            <!-- Historial de pedidos -->
             <div>
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Mis Pedidos</h3>
                 ${orders.length > 0 ? `
@@ -529,15 +453,9 @@ function showUserProfile() {
                                         <p class="font-semibold">${order.id}</p>
                                         <p class="text-sm text-gray-600">${order.date} ${order.time}</p>
                                     </div>
-                                    <span class="px-2 py-1 text-xs rounded-full ${
-                                        order.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                        order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                        'bg-blue-100 text-blue-800'
-                                    }">${order.status}</span>
+                                    <span class="px-2 py-1 text-xs rounded-full ${order.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">${order.status}</span>
                                 </div>
-                                <div class="text-sm text-gray-600 mb-2">
-                                    ${order.items.length} productos • C$ ${order.total.toFixed(2)}
-                                </div>
+                                <div class="text-sm text-gray-600 mb-2">${order.items.length} productos • C$ ${order.total.toFixed(2)}</div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-gray-500">${order.paymentMethod}</span>
                                     <button onclick="downloadOrderInvoice('${order.id}')" class="text-blue-600 hover:text-blue-800 text-sm">
@@ -551,7 +469,6 @@ function showUserProfile() {
                     <div class="text-center py-8 bg-gray-50 rounded-lg">
                         <i class="fas fa-receipt text-4xl text-gray-300 mb-3"></i>
                         <p class="text-gray-500">No tienes pedidos aún</p>
-                        <p class="text-sm text-gray-400 mt-1">Realiza tu primera compra para ver tu historial aquí</p>
                     </div>
                 `}
             </div>
@@ -565,16 +482,16 @@ function hideUserProfile() {
     document.getElementById('user-profile-modal').classList.add('hidden');
 }
 
+// NOTE: This function is a placeholder for future development.
 function downloadOrderInvoice(orderId) {
-    showNotification('Descargando factura...', 'info');
-    // Aquí podrías implementar la descarga de facturas anteriores
-    setTimeout(() => {
-        showNotification('Funcionalidad en desarrollo', 'info');
-    }, 1000);
+    showNotification('Funcionalidad para descargar facturas antiguas aún en desarrollo.', 'info');
 }
 
-// Event listener for cart button
-document.getElementById('cart-btn').addEventListener('click', showCart);
+// --- Event Listeners ---
+document.addEventListener('DOMContentLoaded', () => {
+    const cartBtn = document.getElementById('cart-btn');
+    const cartOverlay = document.getElementById('cart-overlay');
 
-// Close cart when clicking overlay
-document.getElementById('cart-overlay').addEventListener('click', hideCart);
+    if(cartBtn) cartBtn.addEventListener('click', showCart);
+    if(cartOverlay) cartOverlay.addEventListener('click', hideCart);
+});
