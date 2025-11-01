@@ -222,7 +222,7 @@
                 <h1 class="text-5xl md:text-6xl font-bold mb-6">ArtesaNica</h1>
                 <p class="text-xl md:text-2xl mb-8">Mercado Digital de los Emprendedores de Niquinohomo</p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#tiendas" class="bg-yellow-400 text-blue-800 px-8 py-3 rounded-lg font-bold text-lg hover:bg-yellow-300 transition duration-300 pulse-hover">
+                    <a href="tiendas.html" class="bg-yellow-400 text-blue-800 px-8 py-3 rounded-lg font-bold text-lg hover:bg-yellow-300 transition duration-300 pulse-hover">
                         Explorar Tiendas
                     </a>
                     <a href="#vendedores" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold text-lg hover:bg-gray-100 transition duration-300 pulse-hover">
@@ -244,7 +244,10 @@
         <!-- Stores Section -->
         <section id="tiendas" class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-4xl font-bold text-center text-gray-800 mb-4">Nuestras Tiendas</h2>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-4xl font-bold text-gray-800">Nuestras Tiendas</h2>
+                    <a href="tiendas.html" class="text-blue-600 font-semibold hover:underline">Ver más</a>
+                </div>
                 <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
                     Descubre los emprendimientos locales de Niquinohomo. Cada tienda ofrece productos únicos y auténticos.
                 </p>
@@ -252,41 +255,7 @@
                 <div class="stores-carousel">
                     <button class="carousel-arrow left" aria-label="Anterior tienda"><i class="fas fa-chevron-left"></i></button>
                     <div class="stores-track" id="stores-container">
-                        <!-- Example store cards (replace or populate via JS) -->
-                        <article class="store-card">
-                            <img src="https://images.unsplash.com/photo-1542834369-f10ebf06d3cb?auto=format&fit=crop&w=800&q=60" alt="Tienda 1">
-                            <div class="store-body">
-                                <div class="store-title">Tienda Artesanal Sol</div>
-                                <div class="store-meta">Niquinohomo · Artesanías</div>
-                                <div class="store-actions">
-                                    <button class="btn btn-outline-secondary btn-follow btn-follow-small btn-follow" aria-label="Seguir tienda">Seguir</button>
-                                    <button class="btn btn-primary btn-visit" aria-label="Ver tienda">Ver tienda</button>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="store-card">
-                            <img src="https://images.unsplash.com/photo-1520975912412-2a1d6b9d3b54?auto=format&fit=crop&w=800&q=60" alt="Tienda 2">
-                            <div class="store-body">
-                                <div class="store-title">Manos de Niquinohomo</div>
-                                <div class="store-meta">Artesanías · Textiles</div>
-                                <div class="store-actions">
-                                    <button class="btn btn-outline-secondary btn-follow" aria-label="Seguir tienda">Seguir</button>
-                                    <button class="btn btn-primary btn-visit" aria-label="Ver tienda">Ver tienda</button>
-                                </div>
-                            </div>
-                        </article>
-                        <article class="store-card">
-                            <img src="https://images.unsplash.com/photo-1505081988376-1e1ddc0f8b54?auto=format&fit=crop&w=800&q=60" alt="Tienda 3">
-                            <div class="store-body">
-                                <div class="store-title">Dulces y Tradición</div>
-                                <div class="store-meta">Comida Tradicional</div>
-                                <div class="store-actions">
-                                    <button class="btn btn-outline-secondary btn-follow" aria-label="Seguir tienda">Seguir</button>
-                                    <button class="btn btn-primary btn-visit" aria-label="Ver tienda">Ver tienda</button>
-                                </div>
-                            </div>
-                        </article>
-                        <!-- more cards can be added dynamically -->
+                        <!-- Las tarjetas se generan dinámicamente vía stores-renderer.js -->
                     </div>
                     <button class="carousel-arrow right" aria-label="Siguiente tienda"><i class="fas fa-chevron-right"></i></button>
                 </div>
@@ -689,6 +658,8 @@
     </footer>
 
     <script src="auth.js"></script>
+    <script src="stores-data.js"></script>
+    <script src="stores-renderer.js"></script>
     <script src="products.js"></script>
     <script src="cart.js"></script>
     <script src="app.js"></script>

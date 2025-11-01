@@ -108,6 +108,7 @@ class ArtesaNicaApp {
         // Additional UI initializers
         this.setupCarouselControls();
         this.setupGlobalSearchToggle();
+        this.setupStoresModal();
     }
 
     // Carousel arrow controls for stores carousel (supports multiple instances, tolerant thresholds)
@@ -169,7 +170,81 @@ class ArtesaNicaApp {
 
             // Initial state
             requestAnimationFrame(update);
+
+            // Add pointer drag (desktop & touch) to make the carousel tactile
+            let isDown = false;
+            let startX = 0;
+            let startScroll = 0;
+
+            container.addEventListener('pointerdown', (e) => {
+                isDown = true;
+                container.classList.add('dragging');
+                startX = e.clientX;
+                startScroll = container.scrollLeft;
+                // capture pointer so we still get events
+                try { e.target.setPointerCapture && e.target.setPointerCapture(e.pointerId); } catch (err) {}
+            });
+
+            container.addEventListener('pointermove', (e) => {
+                if (!isDown) return;
+                const x = e.clientX;
+                const walk = x - startX; // positive when moving right
+                container.scrollLeft = startScroll - walk;
+            });
+
+            const upHandler = (e) => {
+                if (!isDown) return;
+                isDown = false;
+                container.classList.remove('dragging');
+                try { e.target.releasePointerCapture && e.target.releasePointerCapture(e.pointerId); } catch (err) {}
+                // call update after the manual drag
+                requestAnimationFrame(update);
+            };
+
+            container.addEventListener('pointerup', upHandler);
+            container.addEventListener('pointercancel', upHandler);
         });
+    }
+
+    // Modal and 'Ver más' behavior for stores
+    setupStoresModal() {
+        const viewMore = document.getElementById('stores-view-more');
+        const modal = document.getElementById('stores-modal');
+        const overlay = document.getElementById('stores-modal-overlay');
+        const closeBtn = document.getElementById('stores-modal-close');
+        const modalContent = document.getElementById('stores-modal-content');
+        const storesContainer = document.getElementById('stores-container');
+        if (!viewMore || !modal || !overlay || !closeBtn || !modalContent || !storesContainer) return;
+
+        const openModal = (e) => {
+            e && e.preventDefault();
+            // Clone current store cards into modal content (deep clone)
+            modalContent.innerHTML = '';
+            Array.from(storesContainer.children).forEach(node => {
+                const clone = node.cloneNode(true);
+                // remove any inline width/min-width to allow grid sizing
+                clone.style.minWidth = '';
+                clone.style.maxWidth = '';
+                modalContent.appendChild(clone);
+            });
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            // focus first item for accessibility
+            const first = modalContent.querySelector('.store-card');
+            if (first) first.focus && first.focus();
+        };
+
+        const closeModal = () => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            modalContent.innerHTML = '';
+        };
+
+        viewMore.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', closeModal);
+        // close with Escape
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
     }
 
     // Show desktop/global search under hero on wider viewports and hide on small screens

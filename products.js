@@ -467,72 +467,8 @@ class ProductSystem {
     }
 
     showStoreDetails(storeId) {
-        const store = this.stores.find(s => s.id === storeId);
-        const storeProducts = this.products.filter(p => p.storeId === storeId);
-        
-        const modal = document.createElement('div');
-        modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
-        modal.innerHTML = `
-            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-90vh overflow-y-auto">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center space-x-4">
-                            <img src="${store.image}" alt="${store.name}" class="w-20 h-20 rounded-xl object-cover">
-                            <div>
-                                <h2 class="text-2xl font-bold text-gray-800">${store.name}</h2>
-                                <p class="text-gray-600">${store.owner}</p>
-                                <div class="flex items-center mt-1">
-                                    <span class="text-yellow-400 mr-1">
-                                        <i class="fas fa-star"></i>
-                                    </span>
-                                    <span>${store.rating} • ${storeProducts.length} productos</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
-                            <i class="fas fa-times text-xl"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="lg:col-span-2">
-                            <h3 class="text-xl font-bold text-gray-800 mb-4">Productos de la Tienda</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                ${storeProducts.map(product => `
-                                    <div class="border border-gray-200 rounded-lg p-4">
-                                        <img src="${product.image}" alt="${product.name}" class="w-full h-32 object-cover rounded-lg mb-3">
-                                        <h4 class="font-semibold text-gray-800">${product.name}</h4>
-                                        <p class="text-green-600 font-bold">C$ ${product.price}</p>
-                                        <button onclick="addToCart('${product.id}')" 
-                                                class="w-full mt-2 bg-blue-600 text-white py-2 rounded-lg text-sm hover:bg-blue-700 transition duration-300">
-                                            Agregar al Carrito
-                                        </button>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h4 class="font-bold text-gray-800 mb-2">Información de la Tienda</h4>
-                                <div class="space-y-2 text-sm">
-                                    <p><strong>Ubicación:</strong> ${store.location}</p>
-                                    <p><strong>Categoría:</strong> ${this.getCategoryName(store.category)}</p>
-                                    <p><strong>Miembro desde:</strong> ${new Date(store.joined).toLocaleDateString()}</p>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h4 class="font-bold text-gray-800 mb-2">Descripción</h4>
-                                <p class="text-sm text-gray-600">${store.description}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
+        // Navigate to dedicated store page instead of showing a modal
+        window.location.href = `store.html?id=${encodeURIComponent(storeId)}`;
     }
 
     getCategoryName(category) {

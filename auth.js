@@ -20,16 +20,22 @@ class AuthSystem {
 
     setupEventListeners() {
         // Login form
-        document.getElementById('login-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.login();
-        });
+        const loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.login();
+            });
+        }
 
         // Register form
-        document.getElementById('register-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.register();
-        });
+        const registerForm = document.getElementById('register-form');
+        if (registerForm) {
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.register();
+            });
+        }
     }
 
     login() {
@@ -110,16 +116,16 @@ class AuthSystem {
         const userAvatar = document.getElementById('user-avatar');
 
         if (this.currentUser) {
-            authButtons.classList.add('hidden');
-            userMenu.classList.remove('hidden');
-            cartBtn.classList.remove('hidden');
-            
-            userName.textContent = this.currentUser.name;
-            userAvatar.src = this.currentUser.avatar;
+            if (authButtons) authButtons.classList.add('hidden');
+            if (userMenu) userMenu.classList.remove('hidden');
+            if (cartBtn) cartBtn.classList.remove('hidden');
+
+            if (userName) userName.textContent = this.currentUser.name;
+            if (userAvatar) userAvatar.src = this.currentUser.avatar;
         } else {
-            authButtons.classList.remove('hidden');
-            userMenu.classList.add('hidden');
-            cartBtn.classList.add('hidden');
+            if (authButtons) authButtons.classList.remove('hidden');
+            if (userMenu) userMenu.classList.add('hidden');
+            if (cartBtn) cartBtn.classList.add('hidden');
         }
     }
 

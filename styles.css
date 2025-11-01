@@ -245,6 +245,11 @@ footer { padding-top: 3rem; padding-bottom: 3rem; }
     padding: 1rem 0.5rem;
 }
 .stores-track::-webkit-scrollbar { display: none; }
+/* Make track draggable and indicate grip */
+.stores-track { cursor: grab; }
+.stores-track.dragging { cursor: grabbing; }
+/* Allow pointer-based horizontal dragging while preserving vertical scroll */
+.stores-track { touch-action: pan-y; }
 
 .store-card {
     min-width: 240px;
@@ -346,6 +351,20 @@ footer { padding-top: 3rem; padding-bottom: 3rem; }
     position: relative;
     z-index: 41;
     pointer-events: none; /* clicks handled by the button area/pseudo element */
+}
+
+/* Modal styles for stores full-view */
+#stores-modal { display: none; }
+#stores-modal.fixed { display: block; }
+#stores-modal .max-w-5xl { width: calc(100% - 2rem); }
+#stores-modal .p-6 { padding: 1.5rem; }
+#stores-modal .grid { padding-bottom: 1.5rem; }
+#stores-modal .store-card { max-width: none; min-width: 0; }
+
+/* responsive modal tweaks */
+@media (max-width: 640px) {
+    #stores-modal .relative { margin: 1rem; }
+    #stores-modal .max-w-5xl { width: calc(100% - 2rem); }
 }
 
 /* --- Product cards grid --- */

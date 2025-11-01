@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ArtesaNica - Tienda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50">
+    <nav id="navbar" class="bg-gradient-to-r from-blue-600 to-green-600 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html#tiendas" class="text-white font-bold text-lg nav-logo">ArtesaNica</a>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="tiendas.html" class="text-white hover:underline">Volver a Tiendas</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Store hero -->
+            <section id="store-hero" class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3">
+                    <div class="lg:col-span-1">
+                        <img id="store-hero-img" src="" alt="Foto de la tienda" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="p-6 lg:col-span-2">
+                        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                            <div>
+                                <h1 id="store-name" class="text-3xl font-bold text-gray-800"></h1>
+                                <p id="store-owner" class="text-sm text-gray-600 mt-1"></p>
+                                <div class="flex items-center mt-3 gap-3">
+                                    <div class="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded">
+                                        <i class="fas fa-star mr-2"></i>
+                                        <span id="store-rating" class="font-bold"></span>
+                                    </div>
+                                    <div class="text-sm text-gray-500" id="store-joined"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <button id="follow-store" class="btn btn-outline-secondary btn-follow">Seguir</button>
+                                <div class="flex items-center gap-2">
+                                    <a id="store-phone" href="#" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 hidden">
+                                        <i class="fas fa-phone mr-2"></i>Llamar
+                                    </a>
+                                    <a id="store-email" href="#" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 hidden">
+                                        <i class="fas fa-envelope mr-2"></i>Contacto
+                                    </a>
+                                    <a id="store-website" href="#" target="_blank" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 hidden">
+                                        <i class="fas fa-globe mr-2"></i>Visitar web
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2">
+                                <h3 class="text-lg font-semibold mb-2">Descripción</h3>
+                                <p id="store-description" class="text-gray-600"></p>
+                            </div>
+                            <aside class="space-y-4">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Información</h4>
+                                    <p class="text-sm text-gray-600"><strong>Ubicación:</strong> <span id="store-location"></span></p>
+                                    <p class="text-sm text-gray-600"><strong>Categoría:</strong> <span id="store-category"></span></p>
+                                    <p class="text-sm text-gray-600"><strong>Miembro desde:</strong> <span id="store-joined-2"></span></p>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h4 class="font-bold mb-2">Mapa</h4>
+                                    <div id="store-map" class="w-full h-36 rounded overflow-hidden bg-white"></div>
+                                    <a id="store-open-map" href="#" target="_blank" class="text-sm text-blue-600 hover:underline block mt-2 hidden">Abrir en mapa</a>
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact / Actions -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">Productos de la tienda</h2>
+                    <div id="store-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Filled dynamically -->
+                    </div>
+                </div>
+
+                <aside class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-lg font-bold mb-3">Contacto</h3>
+                    <div id="contact-card" class="space-y-3">
+                        <p id="contact-owner" class="text-sm text-gray-700"></p>
+                        <p id="contact-phone" class="text-sm text-gray-700"></p>
+                        <p id="contact-email" class="text-sm text-gray-700"></p>
+                        <a id="contact-mailto" href="#" class="inline-block mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg">Enviar mensaje</a>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="font-semibold mb-2">Enviar mensaje directo</h4>
+                        <form id="contact-store-form" class="space-y-3">
+                            <input id="contact-name" type="text" placeholder="Tu nombre" class="w-full px-3 py-2 border rounded" required>
+                            <input id="contact-email-input" type="email" placeholder="Tu email" class="w-full px-3 py-2 border rounded" required>
+                            <textarea id="contact-message" rows="4" placeholder="Escribe tu mensaje" class="w-full px-3 py-2 border rounded" required></textarea>
+                            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg">Enviar</button>
+                        </form>
+                    </div>
+                </aside>
+            </section>
+        </div>
+    </main>
+
+    <script src="products.js"></script>
+    <script src="app.js"></script>
+    <script>
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const id = getQueryParam('id');
+            if (!id) return;
+
+            const el = sel => document.getElementById(sel);
+
+            const tryPopulate = () => {
+                if (!window.productSystem) return setTimeout(tryPopulate, 100);
+
+                const store = productSystem.getStoreById(id);
+                if (!store) {
+                    const wrapper = document.querySelector('main .max-w-7xl');
+                    wrapper.innerHTML = '<p class="text-red-500">Tienda no encontrada</p>';
+                    return;
+                }
+
+                // Header / hero
+                el('store-hero-img').src = store.image || 'https://via.placeholder.com/600x400?text=Sin+imagen';
+                el('store-hero-img').alt = store.name;
+                el('store-name').textContent = store.name;
+                el('store-owner').textContent = store.owner ? `Por ${store.owner}` : '';
+                el('store-rating').textContent = store.rating ? store.rating.toFixed(1) : '—';
+                el('store-joined').textContent = store.joined ? `Miembro desde ${store.joined}` : '';
+                el('store-description').textContent = store.description || 'Sin descripción disponible.';
+                el('store-location').textContent = store.location || 'No disponible';
+                el('store-category').textContent = store.category || 'General';
+                el('store-joined-2').textContent = store.joined || '';
+
+                // Contact buttons
+                if (store.phone) {
+                    const phoneEl = el('store-phone');
+                    phoneEl.href = `tel:${store.phone}`;
+                    phoneEl.classList.remove('hidden');
+                }
+                if (store.email) {
+                    const emailEl = el('store-email');
+                    emailEl.href = `mailto:${store.email}`;
+                    emailEl.classList.remove('hidden');
+                }
+                if (store.website) {
+                    const siteEl = el('store-website');
+                    siteEl.href = store.website;
+                    siteEl.classList.remove('hidden');
+                }
+
+                // Contact sidebar info
+                el('contact-owner').textContent = store.owner ? `Contacto: ${store.owner}` : '';
+                el('contact-phone').textContent = store.phone ? `Tel: ${store.phone}` : '';
+                el('contact-email').textContent = store.email ? `Email: ${store.email}` : '';
+                const mailto = el('contact-mailto');
+                if (store.email) {
+                    mailto.href = `mailto:${store.email}?subject=${encodeURIComponent('Consulta desde ArtesaNica')}`;
+                } else {
+                    mailto.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        alert('Esta tienda no ha publicado un email de contacto.');
+                    });
+                }
+
+                // Map embed (Google Maps simple query) — fallback to OSM link if no location
+                const mapContainer = el('store-map');
+                const openMapLink = el('store-open-map');
+                let mapQuery = store.location || store.name || '';
+                if (mapQuery) {
+                    const q = encodeURIComponent(mapQuery);
+                    const src = `https://www.google.com/maps?q=${q}&output=embed`;
+                    mapContainer.innerHTML = `<iframe class="w-full h-full" frameborder="0" referrerpolicy="no-referrer-when-downgrade" src="${src}"></iframe>`;
+                    openMapLink.href = `https://www.google.com/maps/search/?api=1&query=${q}`;
+                    openMapLink.classList.remove('hidden');
+                } else {
+                    mapContainer.innerHTML = `<div class="w-full h-full flex items-center justify-center text-sm text-gray-500">Ubicación no disponible</div>`;
+                }
+
+                // Follow button (localStorage)
+                const followBtn = el('follow-store');
+                const followKey = `follow_store_${store.id}`;
+                const setFollowState = (isFollowing) => {
+                    followBtn.textContent = isFollowing ? 'Siguiendo' : 'Seguir';
+                    followBtn.classList.toggle('bg-green-600', isFollowing);
+                    followBtn.classList.toggle('text-white', isFollowing);
+                    followBtn.classList.toggle('btn-outline-secondary', !isFollowing);
+                };
+                const currently = localStorage.getItem(followKey) === '1';
+                setFollowState(currently);
+                followBtn.addEventListener('click', () => {
+                    const now = localStorage.getItem(followKey) === '1';
+                    if (now) {
+                        localStorage.removeItem(followKey);
+                        setFollowState(false);
+                    } else {
+                        localStorage.setItem(followKey, '1');
+                        setFollowState(true);
+                    }
+                });
+
+                // Populate products
+                const productsList = el('store-products-list');
+                productsList.innerHTML = '';
+                const products = productSystem.getProductsByStore(id) || [];
+                if (products.length === 0) {
+                    productsList.innerHTML = '<p class="text-gray-500">No hay productos en esta tienda.</p>';
+                } else {
+                    products.forEach(p => {
+                        const card = productSystem.createProductCard(p);
+                        productsList.appendChild(card);
+                    });
+                }
+
+                // Contact form handling: try mailto if store has email
+                const contactForm = el('contact-store-form');
+                contactForm.addEventListener('submit', (ev) => {
+                    ev.preventDefault();
+                    const name = el('contact-name').value.trim();
+                    const from = el('contact-email-input').value.trim();
+                    const message = el('contact-message').value.trim();
+                    if (!name || !from || !message) return alert('Por favor completa todos los campos.');
+                    if (!store.email) return alert('Esta tienda no tiene un email público para recibir mensajes.');
+                    const subject = `Mensaje desde ArtesaNica de ${name}`;
+                    const body = `De: ${name} (${from})%0D%0A%0D%0A${encodeURIComponent(message)}`;
+                    window.location.href = `mailto:${store.email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+                });
+
+            };
+
+            tryPopulate();
+        });
+    </script>
+</body>
+</html>
