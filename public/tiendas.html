@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtesaNica - Tiendas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+
+    <!-- layout.js inyectará aquí la barra de navegación -->
+
+    <main class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-bold mb-4 text-gray-800">Tiendas</h1>
+            <p class="text-gray-600 mb-8">Vista completa de todas las tiendas registradas en ArtesaNica.</p>
+
+            <div id="stores-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Las tarjetas se generarán dinámicamente desde stores-renderer.js -->
+            </div>
+        </div>
+    </main>
+
+    <!-- layout.js inyectará aquí el pie de página -->
+    <footer></footer>
+
+    <script src="js/layout.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/stores-data.js"></script>
+    <script src="js/stores-renderer.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof renderStores === 'function') {
+                renderStores('#stores-list', { featuredOnly: false, tabIndex: true });
+            }
+        });
+    </script>
+</body>
+</html>

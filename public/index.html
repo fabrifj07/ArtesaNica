@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtesaNica - Mercado de Emprendedores de Niquinohomo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-gray-50">
+
+    <nav id="navbar" class="bg-gradient-to-r from-blue-600 to-green-600 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="#home" class="text-white font-bold text-lg nav-logo flex items-center">
+                        <img src="https://i.postimg.cc/JnfVTGvm/logo-Artesanica.png" alt="ArtesaNica Logo" class="h-8 w-auto mr-2">
+                        ArtesaNica
+                    </a>
+                </div>
+                <div class="hidden md:flex md:space-x-6 lg:space-x-8 items-center">
+                    <a href="#home" class="nav-link text-white">Inicio</a>
+                    <a href="#tiendas" class="nav-link text-white">Tiendas</a>
+                    <a href="#productos" class="nav-link text-white">Productos</a>
+                    <a href="#vendedores" class="nav-link text-white">Ser Vendedor</a>
+                    <a href="#contacto" class="nav-link text-white">Contacto</a>
+                    <a href="#nosotros" class="nav-link text-white">Nosotros</a>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button id="cart-btn" class="text-white hover:text-yellow-300 relative" aria-label="Abrir carrito">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">0</span>
+                    </button>
+
+                    <div id="auth-buttons" class="hidden sm:flex items-center space-x-2">
+                        <button onclick="showAuthModal('login')" class="btn btn-slim btn-slim--outline" aria-haspopup="dialog" aria-controls="auth-modal" aria-label="Iniciar sesión">
+                            <i class="fas fa-sign-in-alt"></i><span>Iniciar Sesión</span>
+                        </button>
+                        <button onclick="showAuthModal('register')" class="btn btn-slim btn-slim--accent" aria-haspopup="dialog" aria-controls="auth-modal" aria-label="Registrarse">
+                            <i class="fas fa-user-plus"></i><span>Registrarse</span>
+                        </button>
+                    </div>
+                    <button id="mobile-menu-btn" class="md:hidden text-white p-2 rounded-md focus:outline-none" aria-label="Abrir menú" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu-overlay" class="fixed inset-0 z-50 hidden">
+        <div id="mobile-menu-panel" class="absolute inset-0 bg-white overflow-auto">
+            <div class="px-5 py-6">
+                <div class="flex items-center justify-between mb-4">
+                    <a href="#home" class="text-lg font-bold flex items-center">
+                        <img src="https://i.postimg.cc/JnfVTGvm/logo-Artesanica.png" alt="ArtesaNica Logo" class="h-8 w-auto mr-2">
+                        ArtesaNica
+                    </a>
+                    <button id="mobile-menu-close" class="text-gray-600 p-2 rounded-md" aria-label="Cerrar menú">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <nav class="grid gap-3 mb-6">
+                    <a href="#home" class="py-3 px-3 rounded-md nav-link text-gray-800">Inicio</a>
+                    <a href="#tiendas" class="py-3 px-3 rounded-md nav-link text-gray-800">Tiendas</a>
+                    <a href="#productos" class="py-3 px-3 rounded-md nav-link text-gray-800">Productos</a>
+                    <a href="#vendedores" class="py-3 px-3 rounded-md nav-link text-gray-800">Ser Vendedor</a>
+                    <a href="#contacto" class="py-3 px-3 rounded-md nav-link text-gray-800">Contacto</a>
+                    <a href="#nosotros" class="py-3 px-3 rounded-md nav-link text-gray-800">Nosotros</a>
+                </nav>
+
+                <div class="flex gap-3">
+                    <button onclick="showAuthModal('login')" class="btn btn-slim btn-slim--outline w-full">Iniciar Sesión</button>
+                    <button onclick="showAuthModal('register')" class="btn btn-slim btn-slim--accent w-full">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals (Auth) -->
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="auth-title" class="text-2xl font-bold text-gray-800"></h2>
+                    <button onclick="hideAuthModal()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+                </div>
+                <form id="login-form" class="auth-form space-y-4">
+                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Email</label><input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label><input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Iniciar Sesión</button>
+                </form>
+                <form id="register-form" class="auth-form hidden space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Nombre</label><input type="text" id="register-name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Teléfono</label><input type="tel" id="register-phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    </div>
+                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Email</label><input type="email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label><input type="password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Confirmar</label><input type="password" id="register-confirm" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition duration-300">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section text-white py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">ArtesaNica</h1>
+                <p class="text-xl md:text-2xl mb-8">Mercado Digital de los Emprendedores de Niquinohomo</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#vendedores" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-bold text-lg hover:bg-gray-100 transition duration-300 pulse-hover">Vender en ArtesaNica</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Global Search -->
+        <div id="global-search-container" class="hidden">
+            <div class="search-box mx-auto relative">
+                <i class="fas fa-search search-icon absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="search-input" placeholder="Buscar productos, tiendas..." aria-label="Buscar productos" class="pl-12 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                <div id="search-results" class="absolute left-0 top-full mt-2 w-full bg-white rounded-lg shadow-xl hidden z-50 max-h-72 overflow-y-auto"></div>
+            </div>
+        </div>
+
+        <!-- Stores Section -->
+        <section id="tiendas" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-4xl font-bold text-gray-800">Nuestras Tiendas</h2>
+                    <a href="tiendas.html" class="text-blue-600 font-semibold hover:underline">Ver más</a>
+                </div>
+                <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+                    Descubre los emprendimientos locales de Niquinohomo. Cada tienda ofrece productos únicos y auténticos.
+                </p>
+                <div class="stores-carousel">
+                    <button class="carousel-arrow left"><i class="fas fa-chevron-left"></i></button>
+                    <div class="stores-track" id="stores-container"></div>
+                    <button class="carousel-arrow right"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="productos" class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center text-gray-800 mb-4">Productos Destacados</h2>
+                <p class="text-gray-600 text-center mb-12 max-w-3xl mx-auto">Los mejores productos artesanales y locales seleccionados para ti</p>
+                <div class="flex flex-wrap gap-4 mb-8 justify-center">
+                    <button class="category-btn active" data-category="all">Todos</button>
+                    <button class="category-btn" data-category="artesanias">Artesanías</button>
+                    <button class="category-btn" data-category="comida">Comida</button>
+                    <button class="category-btn" data-category="textiles">Textiles</button>
+                    <button class="category-btn" data-category="madera">Madera</button>
+                </div>
+                <div id="products-container" class="products-grid"></div>
+            </div>
+        </section>
+
+        <!-- Become Seller Section -->
+        <section id="vendedores" class="py-16 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">¿Quieres Vender en ArtesaNica?</h2>
+                    <p class="text-xl text-gray-600">Únete a nuestra comunidad de emprendedores.</p>
+                </div>
+                <div class="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-8 shadow-lg">
+                    <form id="seller-application-form" class="space-y-6">
+                        <!-- Form fields -->
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-green-700 transition">Enviar Solicitud</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contacto" class="py-16 bg-gray-50">
+            <!-- Contact content -->
+        </section>
+
+        <!-- About Us Section -->
+        <section id="nosotros" class="py-16 bg-white">
+            <!-- About us content -->
+        </section>
+    </main>
+
+    <footer class="bg-gradient-to-r from-blue-600 to-green-600 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">ArtesaNica</h3>
+                    <p class="text-blue-100">Mercado digital de los emprendedores de Niquinohomo. Conectamos tradición con innovación.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-blue-100 hover:text-white transition duration-300">Inicio</a></li>
+                        <li><a href="#tiendas" class="text-blue-100 hover:text-white transition duration-300">Tiendas</a></li>
+                        <li><a href="#productos" class="text-blue-100 hover:text-white transition duration-300">Productos</a></li>
+                        <li><a href="#vendedores" class="text-blue-100 hover:text-white transition duration-300">Ser Vendedor</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Soporte</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#contacto" class="text-blue-100 hover:text-white transition duration-300">Contacto</a></li>
+                        <li><a href="#" class="text-blue-100 hover:text-white transition duration-300">Preguntas Frecuentes</a></li>
+                        <li><a href="#" class="text-blue-100 hover:text-white transition duration-300">Términos de Servicio</a></li>
+                        <li><a href="#" class="text-blue-100 hover:text-white transition duration-300">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Síguenos</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-blue-100 hover:text-white transition duration-300"><i class="fab fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-blue-100 hover:text-white transition duration-300"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-blue-100 hover:text-white transition duration-300"><i class="fab fa-whatsapp text-xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-blue-500 mt-8 pt-8 text-center">
+                <p>&copy; 2024 ArtesaNica. Todos los derechos reservados. Niquinohomo, Masaya, Nicaragua</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/stores-data.js"></script>
+    <script src="/js/stores-renderer.js"></script>
+    <script src="/js/products.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

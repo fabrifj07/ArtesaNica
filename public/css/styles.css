@@ -1,0 +1,551 @@
+:root {
+    --primary-blue: #0067C0;
+    --primary-green: #1A7F3F;
+    --primary-white: #FFFFFF;
+    --secondary-blue: #E0F2FE;
+    --secondary-green: #D1FAE5;
+    --text-dark: #1F2937;
+    --text-light: #6B7280;
+    --border-color: #E5E7EB;
+}
+
+/* Botones */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+    color: var(--primary-white);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary {
+    background-color: var(--primary-white);
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-blue);
+    color: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-blue);
+    color: var(--primary-white);
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    color: var(--primary-green);
+    border: 2px solid var(--primary-green);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--primary-green);
+    color: var(--primary-white);
+}
+
+/* Layout & secciones */
+.section {
+    padding-top: 3.25rem; /* 52px */
+    padding-bottom: 3.25rem;
+}
+
+/* Encabezados consistentes */
+.section h2, .section .section-title {
+    font-size: 2.25rem;
+    line-height: 1.05;
+    margin-bottom: 0.75rem;
+    color: var(--text-dark);
+    text-align: center;
+}
+
+/* Subtítulos */
+.section p.lead, .section .lead {
+    color: var(--text-light);
+    max-width: 56ch;
+    margin: 0.25rem auto 1.5rem;
+    text-align: center;
+}
+
+/* Hero: mejor legibilidad y altura */
+.hero-section {
+    position: relative;
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    /* Hero background image + subtle gradient overlay */
+    background: linear-gradient(135deg, rgba(0,103,192,0.35), rgba(26,127,63,0.25)),
+                url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80') center/cover no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll; /* evita issues en móviles */
+}
+
+/* Global search container (web) placed after hero */
+#global-search-container {
+    display: none; /* visible in desktop */
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: transparent;
+}
+/* Global search layout + card styling */
+#global-search-container {
+    /* place the search below the hero with clear separation */
+    margin-top: 1.25rem;
+    padding-bottom: 1.5rem;
+    display: none; /* visible in desktop via media query */
+    justify-content: center;
+}
+
+#global-search-container .search-box {
+    width: 60%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* solid white card with neutral border + soft shadow to avoid warm tint */
+    background: var(--primary-white);
+    border-radius: 0.9rem;
+    padding: 0.6rem;
+    border: 1px solid rgba(31,41,55,0.06); /* neutral gray-blue border */
+    box-shadow: 0 6px 16px rgba(31,41,55,0.035); /* soft neutral shadow */
+}
+
+#global-search-container input[type="text"] {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 3rem;
+    border-radius: 0.6rem;
+    border: none; /* input sits inside the card */
+    background: transparent; /* let the .search-box background show through */
+    color: var(--text-dark);
+    box-shadow: none;
+}
+
+#global-search-container input::placeholder { color: var(--text-light); }
+
+#global-search-container .search-icon {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--primary-green);
+}
+
+/* overlay sutil para legibilidad */
+.hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(2,6,23,0.18) 0%, rgba(2,6,23,0.28) 100%);
+    z-index: 0;
+    border-radius: 0;
+}
+
+/* Contenido del hero encima del overlay */
+.hero-section .animate-fade-in, .hero-section > .max-w-7xl {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 4px 18px rgba(2,6,23,0.35);
+}
+
+/* Titular del hero */
+.hero-section h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: -0.5px;
+}
+
+/* Nav links estilo y separación */
+.nav-link {
+    color: rgba(255,255,255,0.95);
+    padding: 0.35rem 0.2rem;
+    font-weight: 600;
+}
+.nav-link:hover {
+    color: #ffffff;
+    opacity: 0.95;
+    transform: translateY(-2px);
+}
+
+/* Logo */
+.nav-logo {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Contenedor de secciones (mejor separación en pantallas grandes) */
+@media (min-width: 1024px) {
+    .section { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+}
+
+/* Ajustes para grids: más equilibrio en tablet/desktop */
+#stores-container {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+#products-container {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+/* Footer más aire */
+footer { padding-top: 3rem; padding-bottom: 3rem; }
+
+/* Mobile: reduce padding to evitar scroll largo innecesario */
+@media (max-width: 640px) {
+    .section { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+    .nav-logo { font-size: 0.95rem; }
+    #navbar .nav-link { display: none; } /* Ocultar links de la barra principal en móvil */
+    #auth-buttons { display: none; } /* botones ocultos en pantallas muy pequeñas */
+}
+
+/* show global desktop search on md+ screens */
+@media (min-width: 768px) {
+    #global-search-container { display: flex; }
+}
+
+/* Mobile menu overlay panel styles */
+#mobile-menu-overlay { background: rgba(0,0,0,0.32); }
+#mobile-menu-panel { background: #fff; transform-origin: top center; }
+#mobile-menu-overlay.hidden { display: none; }
+#mobile-menu-overlay .nav-link {
+    display: block; /* Asegurar visibilidad en menú móvil */
+    font-weight: 700;
+}
+
+/* Pequeña mejora visual de las cards */
+.product-card, .store-card {
+    border-radius: 0.8rem;
+    overflow: hidden;
+}
+
+/* --- Stores carousel --- */
+.stores-carousel {
+    position: relative;
+}
+.stores-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 1rem 0.5rem;
+}
+.stores-track::-webkit-scrollbar { display: none; }
+/* Make track draggable and indicate grip */
+.stores-track { cursor: grab; }
+.stores-track.dragging { cursor: grabbing; }
+/* Allow pointer-based horizontal dragging while preserving vertical scroll */
+.stores-track { touch-action: pan-y; }
+
+.store-card {
+    min-width: 240px;
+    max-width: 260px;
+    background: var(--primary-white);
+    border: 1px solid rgba(15,23,42,0.04);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+    display: flex;
+    flex-direction: column;
+}
+.store-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+}
+.store-card .store-body {
+    padding: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.store-card .store-title {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1rem;
+}
+.store-card .store-meta {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+.store-card .store-actions {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.btn-follow { flex: 1; }
+.btn-visit { flex: 1; }
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(15,23,42,0.06);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+    z-index: 40; /* ensure arrows sit above cards */
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.carousel-arrow.left { left: 6px; }
+.carousel-arrow.right { right: 6px; }
+
+.carousel-arrow:hover {
+    transform: translateY(-50%) scale(1.04);
+}
+
+.carousel-arrow:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+/* Ensure store cards remain below arrows even when they are transformed on hover */
+.stores-track .store-card {
+    position: relative;
+    z-index: 1;
+}
+
+.store-card:hover {
+    z-index: 1; /* keep at low z-index so arrows remain on top */
+}
+
+/* Increase hit area for touch devices without changing visual size */
+.carousel-arrow {
+    /* ensure pseudo-element can expand beyond the button box */
+    overflow: visible;
+    touch-action: manipulation; /* prefer taps over pans on touch devices */
+}
+
+.carousel-arrow::after {
+    content: "";
+    position: absolute;
+    inset: -10px; /* expands hit area by 10px on all sides */
+    border-radius: 50%;
+    background: transparent;
+    pointer-events: auto; /* allow the expanded area to capture taps */
+    z-index: 39; /* slightly below the arrow visual (arrow has z-index:40) */
+}
+
+/* Make the icon itself non-blocking so expanded area handles events */
+.carousel-arrow i {
+    position: relative;
+    z-index: 41;
+    pointer-events: none; /* clicks handled by the button area/pseudo element */
+}
+
+/* Modal styles for stores full-view */
+#stores-modal { display: none; }
+#stores-modal.fixed { display: block; }
+#stores-modal .max-w-5xl { width: calc(100% - 2rem); }
+#stores-modal .p-6 { padding: 1.5rem; }
+#stores-modal .grid { padding-bottom: 1.5rem; }
+#stores-modal .store-card { max-width: none; min-width: 0; }
+
+/* responsive modal tweaks */
+@media (max-width: 640px) {
+    #stores-modal .relative { margin: 1rem; }
+    #stores-modal .max-w-5xl { width: calc(100% - 2rem); }
+}
+
+/* --- Product cards grid --- */
+.products-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.product-card {
+    background: var(--primary-white);
+    border: 1px solid rgba(15,23,42,0.04);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.product-card img { width: 100%; height: 200px; object-fit: cover; }
+.product-body { padding: 0.75rem; display:flex; flex-direction:column; gap:0.5rem; }
+.product-title { font-weight:700; color:var(--text-dark); }
+.product-price { color:var(--primary-green); font-weight:700; }
+.product-actions { display:flex; gap:0.5rem; margin-top:auto; }
+.btn-add { background: linear-gradient(90deg,var(--primary-green),var(--primary-blue)); color:var(--primary-white); border:none; padding:0.6rem 0.9rem; border-radius:8px; }
+.btn-details { background:transparent; border:1px solid rgba(15,23,42,0.06); padding:0.5rem 0.75rem; border-radius:8px; }
+
+@media (min-width:1024px){
+    .stores-track { gap: 1.25rem; padding: 1.25rem 0.5rem; }
+}
+
+
+/* pequeña pulida a footer gradient contrast */
+footer { background: linear-gradient(90deg, rgba(2,6,23,0.08), rgba(255,255,255,0.02)), linear-gradient(to right, var(--primary-blue), var(--primary-green)); }
+
+
+.product-card, .store-card, .dashboard-card {
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover, .store-card:hover, .dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+
+.category-btn.active {
+    background-color: var(--primary-blue);
+    color: var(--primary-white);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+
+.stat-card {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+    color: var(--primary-white);
+}
+
+
+.spinner {
+    border-top-color: var(--primary-blue);
+}
+
+
+.whatsapp-btn {
+    background: #25D366;
+}
+
+.whatsapp-btn:hover {
+    background: #128C7E;
+    transform: scale(1.05);
+}
+
+
+.status-pending {
+    background-color: var(--secondary-blue);
+    color: var(--primary-blue);
+}
+
+.status-approved {
+    background-color: var(--secondary-green);
+    color: var(--primary-green);
+}
+
+.status-rejected {
+    background-color: #FEE2E2;
+    color: #DC2626;
+}
+
+
+.user-order-item {
+    border-left: 4px solid var(--primary-blue);
+}
+
+.user-order-item:hover {
+    border-left-color: var(--primary-green);
+    transform: translateX(4px);
+}
+
+
+.payment-option.selected {
+    border-color: var(--primary-blue);
+    background-color: var(--secondary-blue);
+}
+
+.payment-option:hover {
+    border-color: var(--primary-blue);
+}
+
+/* === Botones elegantes y finos (slim) === */
+.btn-slim {
+    padding: 0.45rem 0.95rem;
+    border-radius: 0.6rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 40px; /* uniform height to keep buttons same size */
+    line-height: 1;
+    box-sizing: border-box; /* include borders in size calculations */
+    transition: transform .14s ease, box-shadow .14s ease, background-color .14s ease, color .14s ease;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+}
+
+/* Outline / blanco fino (para "Iniciar Sesión") */
+.btn-slim--outline {
+    background-color: var(--primary-white);
+    color: var(--primary-blue);
+    border-color: rgba(0, 103, 192, 0.18);
+    box-shadow: 0 2px 8px rgba(30,64,175,0.04);
+    transition: transform .14s ease, box-shadow .14s ease, background-color .14s ease, color .14s ease, border-color .14s ease;
+}
+.btn-slim--outline:hover {
+    /* Mantener fondo blanco para evitar efecto de "desaparición" visual */
+    background-color: var(--primary-white);
+    color: var(--primary-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(2,6,23,0.12);
+    border-color: rgba(0, 103, 192, 0.26);
+}
+
+/* Focus accesible */
+.btn-slim--outline:focus {
+    outline: none;
+    box-shadow: 0 0 0 6px rgba(0,103,192,0.12);
+}
+
+/* Accent lleno y fino (para "Registrarse") */
+.btn-slim--accent {
+    background: linear-gradient(90deg, rgba(26,127,63,1) 0%, rgba(0,103,192,0.95) 100%);
+    color: var(--primary-white);
+    border-color: rgba(255,255,255,0.06);
+    box-shadow: 0 6px 18px rgba(16,185,129,0.12);
+}
+.btn-slim--accent:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(16,185,129,0.14);
+}
+
+/* Ensure both variants reserve same inner space */
+.btn-slim--outline,
+.btn-slim--accent {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+}
+
+/* Icono pequeño dentro del botón */
+.btn-slim i {
+    font-size: 0.95rem;
+}
+
+/* Focus accesible */
+.btn-slim:focus {
+    outline: none;
+    box-shadow: 0 0 0 6px rgba(0,103,192,0.12);
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 640px) {
+    .btn-slim { padding: 0.4rem 0.7rem; min-height: 36px; font-size: 0.92rem; }
+}
