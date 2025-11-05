@@ -1,13 +1,10 @@
 {
-  "devDependencies": {
-    "nodemon": "^3.1.10",
-    "tailwindcss": "^4.1.16"
-  },
+  "name": "artesanica",
+  "version": "1.0.0",
   "scripts": {
-    "start": "nodemon server.js",
-    "build": "npx tailwindcss -i public/css/styles.css -o public/css/output.css"
+    "build": "tailwindcss -i ./public/css/styles.css -o ./public/dist/output.css"
   },
-  "dependencies": {
-    "express": "^5.1.0"
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
   }
 }
