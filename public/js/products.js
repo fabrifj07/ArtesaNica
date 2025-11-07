@@ -382,49 +382,32 @@ class ProductSystem {
 
     createProductCard(product) {
         const div = document.createElement('div');
-        div.className = 'product-card bg-white rounded-xl overflow-hidden shadow-lg animate-slide-up';
-        
+        div.className = 'product-card bg-white rounded-2xl overflow-hidden shadow-lg flex flex-col h-full';
+
         const store = this.stores.find(s => s.id === product.storeId);
-        
+
         div.innerHTML = `
             <div class="relative">
-                <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
-                ${product.originalPrice ? `
-                    <div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-lg text-sm font-bold">
-                        -${Math.round((1 - product.price / product.originalPrice) * 100)}%
-                    </div>
-                ` : ''}
-                ${product.featured ? `
-                    <div class="absolute top-2 left-2 bg-yellow-400 text-blue-800 px-2 py-1 rounded-lg text-sm font-bold">
-                        <i class="fas fa-star mr-1"></i>Destacado
-                    </div>
-                ` : ''}
+                <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-center object-cover">
+                </div>
+                <button class="absolute top-4 right-4 w-10 h-10 bg-white/50 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-800 hover:bg-white/75 transition-colors duration-300">
+                    <i class="far fa-star text-xl"></i>
+                </button>
             </div>
-            <div class="p-4">
-                <div class="flex justify-between items-start mb-2">
-                    <h3 class="font-bold text-lg text-gray-800">${product.name}</h3>
-                    <span class="text-green-600 font-bold">C$ ${product.price}</span>
-                </div>
-                ${product.originalPrice ? `
-                    <div class="text-sm text-gray-500 line-through mb-1">C$ ${product.originalPrice}</div>
-                ` : ''}
-                <p class="text-gray-600 text-sm mb-3 line-clamp-2">${product.description}</p>
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center">
-                        <span class="text-yellow-400 mr-1">
-                            <i class="fas fa-star"></i>
-                        </span>
-                        <span class="text-sm text-gray-600">${product.rating} (${product.reviews})</span>
-                    </div>
-                    <span class="text-sm text-gray-500 truncate">${store?.name}</span>
-                </div>
-                <div class="flex space-x-2">
+            
+            <div class="p-5 flex flex-col flex-grow">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">${product.name}</h3>
+                <p class="text-gray-600 text-sm mb-4 flex-grow line-clamp-3">${product.description}</p>
+                
+                <div class="flex justify-between items-center mt-auto">
+                    <span class="text-3xl font-bold text-blue-600">
+                        C$ ${product.price}
+                    </span>
                     <button onclick="addToCart('${product.id}')" 
-                            class="flex-1 bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex items-center justify-center">
-                        <i class="fas fa-cart-plus mr-2"></i>Agregar
-                    </button>
-                    <button class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-300 transition duration-300">
-                        <i class="fas fa-heart text-gray-600"></i>
+                            class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:opacity-90 transition duration-300 flex items-center space-x-2">
+                        <span>Agregar</span>
+                        <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
             </div>

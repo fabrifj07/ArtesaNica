@@ -2,7 +2,7 @@
   "name": "artesanica",
   "version": "1.0.0",
   "scripts": {
-    "build": "tailwindcss -i ./styles.css -o ./public/dist/output.css"
+    "build": "npx tailwindcss -o ./public/css/styles.css --content './public/**/*.html'"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.1"
