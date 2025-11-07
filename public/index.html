@@ -88,22 +88,22 @@
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h2 id="auth-title" class="text-2xl font-bold text-gray-800"></h2>
-                    <button onclick="hideAuthModal()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+                    <button onclick="hideAuthModal()" class="text-gray-500 hover:text-gray-700" title="Cerrar modal"><i class="fas fa-times text-xl"></i></button>
                 </div>
                 <form id="login-form" class="auth-form space-y-4">
-                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Email</label><input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label><input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Email</label><input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su correo electrónico" title="Correo electrónico"></div>
+                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label><input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su contraseña" title="Contraseña"></div>
                     <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Iniciar Sesión</button>
                 </form>
                 <form id="register-form" class="auth-form hidden space-y-4">
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Nombre</label><input type="text" id="register-name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Teléfono</label><input type="tel" id="register-phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2" for="register-name">Nombre</label><input type="text" id="register-name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su nombre" title="Nombre"></div>
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2" for="register-phone">Teléfono</label><input type="tel" id="register-phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su teléfono" title="Teléfono"></div>
                     </div>
-                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Email</label><input type="email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                    <div><label class="block text-gray-700 text-sm font-bold mb-2">Email</label><input type="email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su correo electrónico" title="Correo electrónico"></div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label><input type="password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Confirmar</label><input type="password" id="register-confirm" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label><input type="password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ingrese su contraseña" title="Contraseña"></div>
+                        <div><label class="block text-gray-700 text-sm font-bold mb-2">Confirmar</label><input type="password" id="register-confirm" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Confirme su contraseña" title="Confirmar contraseña"></div>
                     </div>
                     <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition duration-300">Registrarse</button>
                 </form>
@@ -144,9 +144,9 @@
                     Descubre los emprendimientos locales de Niquinohomo. Cada tienda ofrece productos únicos y auténticos.
                 </p>
                 <div class="stores-carousel">
-                    <button class="carousel-arrow left"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-arrow left" title="Anterior" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
                     <div class="stores-track" id="stores-container"></div>
-                    <button class="carousel-arrow right"><i class="fas fa-chevron-right"></i></button>
+                    <button class="carousel-arrow right" title="Siguiente" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
         </section>
@@ -222,9 +222,9 @@
                 <div>
                     <h4 class="font-bold mb-4">Síguenos</h4>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-blue-100 hover:text-white transition duration-300"><i class="fab fa-facebook text-xl"></i></a>
-                        <a href="#" class="text-blue-100 hover:text-white transition duration-300"><i class="fab fa-instagram text-xl"></i></a>
-                        <a href="#" class="text-blue-100 hover:text-white transition duration-300"><i class="fab fa-whatsapp text-xl"></i></a>
+                        <a href="#" class="text-blue-100 hover:text-white transition duration-300" title="Facebook"><i class="fab fa-facebook text-xl"></i></a>
+                        <a href="#" class="text-blue-100 hover:text-white transition duration-300" title="Instagram"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-blue-100 hover:text-white transition duration-300" title="WhatsApp"><i class="fab fa-whatsapp text-xl"></i></a>
                     </div>
                 </div>
             </div>

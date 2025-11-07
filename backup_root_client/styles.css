@@ -1,0 +1,28 @@
+:root {
+    --primary-blue: #0067C0;
+    --primary-green: #1A7F3F;
+    --primary-white: #FFFFFF;
+    --secondary-blue: #E0F2FE;
+    --secondary-green: #D1FAE5;
+    --text-dark: #1F2937;
+    --text-light: #6B7280;
+    --border-color: #E5E7EB;
+}
+
+/* Botones */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+    color: var(--primary-white);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* (rest of styles omitted in backup to save space) */
