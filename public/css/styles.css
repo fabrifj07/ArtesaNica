@@ -220,12 +220,38 @@ footer { padding-top: 3rem; padding-bottom: 3rem; }
 }
 
 /* Mobile menu overlay panel styles */
-#mobile-menu-overlay { background: rgba(0,0,0,0.32); }
-#mobile-menu-panel { background: #fff; transform-origin: top center; }
+#mobile-menu-overlay { background: rgba(0,0,0,0.32); z-index: 9999; }
+/* Ensure the panel sits above other page elements (navbar, headers) */
+#mobile-menu-panel {
+    position: fixed; /* fill viewport reliably */
+    inset: 0;
+    background: #fff;
+    transform-origin: top center;
+    z-index: 10000;
+    overflow: auto;
+}
+#mobile-menu-panel {
+    /* Force overrides in case utility classes or other rules interfere */
+    position: fixed !important;
+    inset: 0 !important;
+    background: #ffffff !important;
+    z-index: 11000 !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    border-left: none !important;
+}
+
+#mobile-menu-panel > * {
+    color: var(--text-dark) !important;
+}
 #mobile-menu-overlay.hidden { display: none; }
 #mobile-menu-overlay .nav-link {
     display: block; /* Asegurar visibilidad en menú móvil */
     font-weight: 700;
+    /* Ensure mobile menu links are readable (override global .nav-link white color) */
+    color: var(--text-dark) !important;
 }
 
 /* Pequeña mejora visual de las cards */
@@ -397,6 +423,31 @@ footer { padding-top: 3rem; padding-bottom: 3rem; }
 
 /* pequeña pulida a footer gradient contrast */
 footer { background: linear-gradient(90deg, rgba(2,6,23,0.08), rgba(255,255,255,0.02)), linear-gradient(to right, var(--primary-blue), var(--primary-green)); }
+
+/* Mobile visibility fix: ensure hero text and main sections are legible on small screens
+   This is a non-destructive, reversible probe to rule out contrast/visibility issues. */
+@media (max-width: 640px) {
+    .hero-section,
+    main,
+    footer {
+        color: var(--text-dark) !important;
+    }
+
+    /* In case some elements force white text, override for hero-specific selectors */
+    .hero-section .text-white {
+        color: var(--text-dark) !important;
+    }
+
+    /* Ensure nothing inside hero is accidentally invisible */
+    .hero-section * {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Make sure mobile overlay visibility follows the JS-managed `hidden` class */
+    #mobile-menu-overlay.hidden { display: none; }
+    #mobile-menu-overlay:not(.hidden) { display: block; }
+}
 
 
 .product-card, .store-card, .dashboard-card {
