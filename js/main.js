@@ -208,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateUI() {
         switch(currentSection) {
             case 'inicio':
+                renderCategoriesAndFilters();
                 renderProducts(products, 'productos-container');
                 renderStores(stores);
                 break;
@@ -501,6 +502,40 @@ document.addEventListener('DOMContentLoaded', () => {
             notif.classList.remove('show');
             setTimeout(() => notif.remove(), 500);
         }, 3000);
+    }
+
+    function renderCategoriesAndFilters() {
+        const container = document.getElementById('categorias-container');
+        if (!container) return;
+
+        const categories = window.categoriasData || [];
+        container.innerHTML = categories.map(cat => `
+            <a href="#" class="card category-card" data-categoria="${cat.id}">
+                <i class="${cat.icono} category-icon"></i>
+                <span class="category-name">${cat.nombre}</span>
+            </a>
+        `).join('') + `
+            <a href="#" class="card category-card active" data-categoria="todas">
+                <i class="fas fa-border-all category-icon"></i>
+                <span class="category-name">Todas</span>
+            </a>
+        `;
+
+        container.addEventListener('click', e => {
+            e.preventDefault();
+            const targetCard = e.target.closest('.category-card');
+            if (!targetCard) return;
+
+            container.querySelectorAll('.category-card').forEach(card => card.classList.remove('active'));
+            targetCard.classList.add('active');
+
+            const categoryId = targetCard.dataset.categoria;
+            const filteredProducts = categoryId === 'todas'
+                ? products
+                : products.filter(p => p.categoria === categoryId);
+            
+            renderProducts(filteredProducts, 'productos-container');
+        });
     }
 
     window.app = { toggleFavorite, addToCart, updateCartQuantity, logout, processPayment, navigateTo, navigateToStore, login, register };
