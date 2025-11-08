@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const newUser = { id: `user_${Date.now()}`, nombre: name, email, password, fechaRegistro: new Date().toISOString(), favoritos: [], carrito: [], historialCompras: [] };
         users.push(newUser);
         saveUsersToStorage();
-        showNotification('¡Registro exitoso! Ahora puedes iniciar sesión');
-        showAuthModal('login'); // Switch to login tab after successful registration
+        showNotification('¡Registro exitoso! Iniciando sesión...', 'exito');
+        login(email, password);
     }
 
     function login(email, password) {
@@ -432,7 +432,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function hideAuthModal() { 
-        document.getElementById('auth-modal')?.classList.remove('show'); 
+        document.getElementById('auth-modal')?.classList.remove('show');
+        document.getElementById('login-form')?.reset();
+        document.getElementById('register-form')?.reset();
     }
 
     function updateAuthUI() {
