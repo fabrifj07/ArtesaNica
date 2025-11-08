@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artesanica - Productos Artesanales de Niquinohomo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-primary {
+            background-color: #4CAF50; /* Verde tierno */
+        }
+        .text-primary {
+            color: #4CAF50;
+        }
+        .border-primary {
+            border-color: #4CAF50;
+        }
+        .bg-secondary {
+            background-color: #2196F3; /* Azul */
+        }
+        .text-secondary {
+            color: #2196F3;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        /* Estilos para la barra de navegación inferior */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 50;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        
+        /* Estilos para las secciones */
+        .seccion-principal {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 1;
+            padding-bottom: 70px; /* Espacio para la barra de navegación */
+        }
+        
+        .seccion-principal.hidden {
+            display: none;
+            opacity: 0;
+        }
+        
+        /* Estilos para los botones de navegación */
+        .nav-item {
+            transition: all 0.2s ease-in-out;
+            padding: 8px 0;
+            flex: 1;
+            text-align: center;
+            color: #6b7280; /* text-gray-600 */
+        }
+        
+        .nav-item:hover {
+            color: #4CAF50; /* text-primary */
+        }
+        
+        .nav-item.text-primary {
+            color: #4CAF50; /* text-primary */
+        }
+        
+        .nav-item i {
+            margin-bottom: 4px;
+            display: block;
+            font-size: 1.25rem;
+        }
+        
+        .nav-item span {
+            font-size: 0.75rem;
+            display: block;
+        }
+        
+        /* Asegurar que el contenido no se oculte detrás de la barra de navegación */
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 60px;
+            }
+            
+            .seccion-principal {
+                padding-bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Barra de navegación superior -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold text-primary">Artesanica</div>
+                
+                <!-- Búsqueda en pantallas grandes -->
+                <div class="hidden md:block w-1/3">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Buscar productos..." 
+                               class="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <button class="absolute right-3 top-2 text-gray-500">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Iconos visibles solo en pantallas medianas y grandes -->
+                    <div class="hidden md:flex items-center space-x-4">
+                        <a href="#" id="desktop-perfil" class="text-gray-700 hover:text-primary">
+                            <i class="fas fa-user text-xl"></i>
+                        </a>
+                        <a href="#" id="desktop-favoritos" class="text-gray-700 hover:text-primary relative">
+                            <i class="fas fa-heart text-xl"></i>
+                            <span id="contador-favoritos-desk" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                        </a>
+                        <a href="#" id="desktop-carrito" class="text-gray-700 hover:text-primary relative">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span id="contador-carrito-desk" class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                        </a>
+                    </div>
+                    <!-- Botón de menú móvil -->
+                    <button class="md:hidden text-gray-700" id="mobileMenuButton">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Menú móvil -->
+            <div class="md:hidden hidden mt-4" id="mobileMenu">
+                <div class="mb-4">
+                    <input type="text" placeholder="Buscar productos..." 
+                           class="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <a href="#" class="block py-2 text-gray-700 hover:text-primary">Inicio</a>
+                <a href="#tiendas" class="block py-2 text-gray-700 hover:text-primary">Tiendas</a>
+                <a href="#categorias" class="block py-2 text-gray-700 hover:text-primary">Categorías</a>
+                <a href="#contacto" class="block py-2 text-gray-700 hover:text-primary">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-green-50 to-blue-50 py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Artesanía de Niquinohomo</h1>
+                    <p class="text-lg text-gray-600 mb-6">Descubre productos artesanales únicos, hechos con amor y tradición por talentosos artesanos de nuestra comunidad.</p>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <a href="#productos" class="bg-primary hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-full text-center transition duration-300">
+                            Ver Productos
+                        </a>
+                        <a href="#tiendas" class="bg-white hover:bg-gray-100 text-primary font-semibold py-3 px-6 rounded-full border-2 border-primary text-center transition duration-300">
+                            Conoce a los Artesanos
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                         alt="Productos artesanales" 
+                         class="rounded-lg shadow-xl w-full h-auto max-h-96 object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categorías -->
+    <section id="categorias" class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Explora por Categoría</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <a href="#" class="category-card bg-white p-4 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-2 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-tshirt text-2xl text-primary"></i>
+                    </div>
+                    <span class="font-medium">Textiles</span>
+                </a>
+                <a href="#" class="category-card bg-white p-4 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-2 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-mug-hot text-2xl text-blue-500"></i>
+                    </div>
+                    <span class="font-medium">Cerámica</span>
+                </a>
+                <a href="#" class="category-card bg-white p-4 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-2 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-rings-wedding text-2xl text-yellow-500"></i>
+                    </div>
+                    <span class="font-medium">Joyería</span>
+                </a>
+                <a href="#" class="category-card bg-white p-4 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-2 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-couch text-2xl text-purple-500"></i>
+                    </div>
+                    <span class="font-medium">Muebles</span>
+                </a>
+                <a href="#" class="category-card bg-white p-4 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-2 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-home text-2xl text-red-500"></i>
+                    </div>
+                    <span class="font-medium">Decoración</span>
+                </a>
+                <a href="#" class="category-card bg-white p-4 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-2 bg-pink-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-gift text-2xl text-pink-500"></i>
+                    </div>
+                    <span class="font-medium">Regalos</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos Destacados -->
+    <section id="productos" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Productos Destacados</h2>
+                <a href="#" class="text-primary font-medium hover:underline">Ver todos</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="productos-container">
+                <!-- Los productos se cargarán dinámicamente con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Tiendas Destacadas -->
+    <section id="tiendas" class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Tiendas Destacadas</h2>
+                <a href="#" class="text-primary font-medium hover:underline">Ver todas</a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tiendas-container">
+                <!-- Las tiendas se cargarán dinámicamente con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Lo que dicen nuestros clientes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Cliente" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">María G.</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Los productos son de excelente calidad y el servicio al cliente es excepcional. ¡Volveré a comprar sin duda!"</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Cliente" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Carlos M.</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Me encanta apoyar a los artesanos locales. La plataforma es fácil de usar y los productos llegan en perfecto estado."</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Cliente" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Ana L.</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Excelente variedad de productos artesanales. El proceso de compra fue muy sencillo y el envío llegó antes de lo esperado."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suscripción -->
+    <section class="py-12 bg-gradient-to-r from-primary to-blue-500 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">¡No te pierdas nuestras novedades!</h2>
+            <p class="text-lg mb-6 max-w-2xl mx-auto">Suscríbete a nuestro boletín para recibir ofertas exclusivas y estar al día con los nuevos productos artesanales.</p>
+            <div class="max-w-md mx-auto flex">
+                <input type="email" placeholder="Tu correo electrónico" 
+                       class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-800">
+                <button class="bg-blue-700 hover:bg-blue-800 px-6 py-3 rounded-r-lg font-medium transition duration-300">
+                    Suscribirse
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Artesanica</h3>
+                    <p class="text-gray-400">Promoviendo la artesanía de Niquinohomo y apoyando a nuestros talentosos artesanos locales.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Inicio</a></li>
+                        <li><a href="#productos" class="text-gray-400 hover:text-white">Productos</a></li>
+                        <li><a href="#tiendas" class="text-gray-400 hover:text-white">Tiendas</a></li>
+                        <li><a href="#categorias" class="text-gray-400 hover:text-white">Categorías</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Sobre Nosotros</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Mi Cuenta</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Mi Perfil</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Mis Pedidos</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Lista de Deseos</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Seguimiento de Pedido</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contacto</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-2"></i>
+                            <span>Niquinohomo, Masaya, Nicaragua</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2"></i>
+                            <span>+505 1234 5678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <span>info@artesanica.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Artesanica. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Barra de navegación inferior (solo móvil) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
+        <div class="flex justify-around py-2 relative">
+            <a href="#" id="nav-inicio" class="flex flex-col items-center justify-center py-1 px-2 text-primary nav-item">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">Inicio</span>
+            </a>
+            <a href="#" id="nav-buscar" class="flex flex-col items-center justify-center py-1 px-2 text-gray-600 nav-item">
+                <i class="fas fa-search text-xl"></i>
+                <span class="text-xs mt-1">Buscar</span>
+            </a>
+            <a href="#" id="nav-favoritos" class="flex flex-col items-center justify-center py-1 px-2 text-gray-600 nav-item relative">
+                <i class="fas fa-heart text-xl"></i>
+                <span class="text-xs mt-1">Favoritos</span>
+                <span id="contador-favoritos" class="absolute top-0 right-0 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+            </a>
+            <a href="#" id="nav-carrito" class="flex flex-col items-center justify-center py-1 px-2 text-gray-600 nav-item relative">
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span class="text-xs mt-1">Carrito</span>
+                <span id="contador-carrito" class="absolute top-0 right-0 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+            </a>
+            <a href="#" id="nav-perfil" class="flex flex-col items-center justify-center py-1 px-2 text-gray-600 nav-item">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">Perfil</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Secciones de la aplicación -->
+    <div class="secciones">
+        <!-- Sección de Inicio (visible por defecto) -->
+        <div id="seccion-inicio" class="seccion-principal">
+            <!-- El contenido actual de la página principal irá aquí -->
+        </div>
+
+        <!-- Sección de Búsqueda -->
+        <div id="seccion-buscar" class="seccion-principal hidden">
+            <div class="container mx-auto px-4 py-8">
+                <h2 class="text-2xl font-bold mb-6">Buscar productos</h2>
+                <div class="relative mb-6">
+                    <input type="text" id="buscar-productos" placeholder="Buscar productos..." 
+                           class="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <button class="absolute right-3 top-3 text-gray-500">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div id="resultados-busqueda" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Los resultados de búsqueda se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Favoritos -->
+        <div id="seccion-favoritos" class="seccion-principal hidden">
+            <div class="container mx-auto px-4 py-8">
+                <h2 class="text-2xl font-bold mb-6">Tus favoritos</h2>
+                <div id="lista-favoritos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Los productos favoritos se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección de Carrito (oculta por defecto) -->
+        <div id="seccion-carrito" class="seccion-principal hidden">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold">Mi Carrito</h1>
+                    <span id="contador-items" class="bg-gray-200 text-gray-700 text-sm font-medium px-3 py-1 rounded-full">0 items</span>
+                </div>
+                
+                <!-- Contenido del carrito se cargará aquí dinámicamente -->
+                <div id="contenido-carrito" class="mb-8"></div>
+                
+                <!-- Resumen del pedido -->
+                <div id="resumen-carrito" class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-4">Resumen del pedido</h3>
+                    <div class="flex justify-between mb-2">
+                        <span>Subtotal</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <span>Envío</span>
+                        <span id="envio">$0.00</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-lg border-t border-gray-200 pt-4">
+                        <span>Total</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                    <button class="w-full mt-6 bg-primary text-white py-3 rounded-lg font-medium hover:bg-green-600 transition">
+                        Proceder al pago
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Perfil -->
+        <div id="seccion-perfil" class="seccion-principal hidden">
+            <!-- El contenido se cargará dinámicamente mediante JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal de Autenticación -->
+    <div id="auth-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4 overflow-hidden">
+            <!-- Pestañas de Login/Registro -->
+            <div class="flex border-b">
+                <button id="login-tab" class="flex-1 py-3 font-medium text-primary border-b-2 border-primary">Iniciar Sesión</button>
+                <button id="register-tab" class="flex-1 py-3 font-medium text-gray-500">Registrarse</button>
+            </div>
+            
+            <!-- Contenido del Login -->
+            <div id="login-content" class="p-6">
+                <h3 class="text-xl font-bold mb-6 text-center">Bienvenido de nuevo</h3>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+                        <input type="email" id="login-email" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                        <div class="relative">
+                            <input type="password" id="login-password" required
+                                   class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none" id="toggle-login-password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <a href="#" class="text-sm text-primary hover:underline">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <button type="submit" class="w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-green-600 transition">
+                        Iniciar sesión
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-600">¿No tienes una cuenta? 
+                        <a href="#" id="show-register" class="text-primary font-medium">Regístrate</a>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Contenido del Registro -->
+            <div id="register-content" class="p-6 hidden">
+                <h3 class="text-xl font-bold mb-6 text-center">Crear una cuenta</h3>
+                <form id="register-form" class="space-y-4">
+                    <div>
+                        <label for="register-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+                        <input type="text" id="register-name" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
+                        <input type="email" id="register-email" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="register-phone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                        <input type="tel" id="register-phone"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="register-address" class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                        <input type="text" id="register-address"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                        <div class="relative">
+                            <input type="password" id="register-password" required
+                                   class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none" id="toggle-register-password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="register-confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirmar contraseña</label>
+                        <div class="relative">
+                            <input type="password" id="register-confirm-password" required
+                                   class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none" id="toggle-register-confirm-password">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-primary text-white py-2 rounded-md font-medium hover:bg-green-600 transition">
+                        Registrarse
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-600">¿Ya tienes una cuenta? 
+                        <a href="#" id="show-login" class="text-primary font-medium">Inicia sesión</a>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="px-6 py-4 bg-gray-50 text-right">
+                <button id="close-auth-modal" class="text-gray-500 hover:text-gray-700">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
