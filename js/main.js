@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let products = [];
     let stores = [];
     let currentSection = 'inicio';
+    let currentStoreId = null; // ID de la tienda que se está viendo
 
     // --- SELECTORES CACHEADOS ---
     const logoLink = document.getElementById('logo-link');
@@ -29,21 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
         products = window.productosData || [];
         stores = window.tiendasData || [];
         const storedUsers = JSON.parse(localStorage.getItem('artesanica_users')) || [];
-        // Merge initial data with stored data, giving precedence to stored data
         users = [...(window.usersData || [])];
         storedUsers.forEach(storedUser => {
             const index = users.findIndex(u => u.id === storedUser.id);
             if (index !== -1) {
-                users[index] = storedUser; // Update existing user
+                users[index] = storedUser;
             } else {
-                users.push(storedUser); // Add new user
+                users.push(storedUser);
             }
         });
     }
 
     function saveUsersToStorage() {
         localStorage.setItem('artesanica_users', JSON.stringify(users));
-        // Update session storage if current user is modified
         if (currentUser) {
             const updatedUser = users.find(u => u.id === currentUser.id);
             if (updatedUser) {
@@ -56,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkActiveSession() {
         const sessionUser = JSON.parse(localStorage.getItem('artesanica_session'));
         if (sessionUser) {
-            // Make sure the user from session exists in our main user list
             const foundUser = users.find(u => u.id === sessionUser.id);
             currentUser = foundUser ? foundUser : null;
         }
@@ -98,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
         navigateTo('inicio');
     }
 
-    // Función que asegura que el usuario esté autenticado para ciertas acciones
     function ensureAuth() {
         if (currentUser) return true;
         showNotification('Por favor, inicia sesión para continuar', 'info');
@@ -111,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================================
     function performSearch(query) {
         const lowerCaseQuery = query.trim().toLowerCase();
-        
         if (lowerCaseQuery) {
             const results = products.filter(p =>
                 p.nombre.toLowerCase().includes(lowerCaseQuery) ||
@@ -120,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             renderProducts(results, 'resultados-busqueda');
         } else {
-            // Si la búsqueda está vacía, no mostrar nada o un mensaje
             renderProducts([], 'resultados-busqueda');
         }
     }
@@ -136,14 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
             showNotification('Eliminado de favoritos');
         }
         saveUsersToStorage();
-        updateUI(); // Actualiza la UI para reflejar el cambio
+        updateUI();
     }
 
     function addToCart(productId) {
         if (!ensureAuth()) return;
         const product = products.find(p => p.id === productId);
         if (!product) return;
-
         const existingItem = currentUser.carrito.find(item => item.id === productId);
         if (existingItem) {
             existingItem.cantidad++;
@@ -162,36 +156,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (newQuantity > 0) {
                 item.cantidad = newQuantity;
             } else {
-                // Remove item if quantity is 0 or less
                 currentUser.carrito = currentUser.carrito.filter(i => i.id !== productId);
             }
             saveUsersToStorage();
-            updateUI(); // Re-render cart
+            updateUI();
         }
     }
 
     function processPayment() {
         if (!ensureAuth() || currentUser.carrito.length === 0) return;
-
         const subtotal = currentUser.carrito.reduce((sum, item) => {
             const product = products.find(p => p.id === item.id);
             return sum + (product ? product.precio * item.cantidad : 0);
         }, 0);
-        const envio = 5; // Costo de envío fijo
-
-        const newOrder = {
-            id: `order_${Date.now()}`,
-            fecha: new Date().toISOString(),
-            items: [...currentUser.carrito],
-            total: subtotal + envio,
-            estado: 'Completado'
-        };
-
+        const envio = 5;
+        const newOrder = { id: `order_${Date.now()}`, fecha: new Date().toISOString(), items: [...currentUser.carrito], total: subtotal + envio, estado: 'Completado' };
         currentUser.historialCompras.unshift(newOrder);
-        currentUser.carrito = []; // Vaciar carrito
+        currentUser.carrito = [];
         saveUsersToStorage();
         showNotification('¡Gracias por tu compra!', 'exito');
-        navigateTo('perfil'); // Ir al perfil para ver el historial
+        navigateTo('perfil');
     }
 
     // =================================================================================
@@ -199,9 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================================
     function navigateTo(sectionId) {
         const protectedSections = ['favoritos', 'carrito', 'perfil'];
-        if (protectedSections.includes(sectionId) && !ensureAuth()) {
-            return; // Detener la navegación si la autenticación falla
-        }
+        if (protectedSections.includes(sectionId) && !ensureAuth()) return;
 
         currentSection = sectionId;
         document.querySelectorAll('.seccion-principal').forEach(s => s.classList.add('hidden'));
@@ -217,9 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo(0, 0);
         updateUI();
     }
+    
+    function navigateToStore(storeId) {
+        currentStoreId = storeId;
+        navigateTo('tienda');
+    }
 
     function updateUI() {
-        // Renderiza el contenido de la sección actual
         switch(currentSection) {
             case 'inicio':
                 renderProducts(products, 'productos-container');
@@ -237,8 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'carrito':
                 renderCartSection();
                 break;
+            case 'tienda':
+                renderStorePage(currentStoreId);
+                break;
         }
-        // Actualiza elementos comunes de la UI (contadores, estado de login, etc.)
         updateAuthUI();
         updateActiveNav(currentSection);
     }
@@ -270,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let emptyMessage = '<p>No hay productos para mostrar.</p>';
         if (containerId === 'resultados-busqueda') {
-            emptyMessage = '<p style="text-align:center; grid-column: 1 / -1;">Busca productos, artesanos o descripciones.</p>';
+            emptyMessage = '<p style="text-align:center; grid-column: 1 / -1;">Busca productos o artesanos.</p>';
             if (searchInputSection.value) {
                  emptyMessage = '<p style="text-align:center; grid-column: 1 / -1;">No se encontraron productos.</p>';
             }
@@ -283,16 +271,71 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('tiendas-container');
         if (!container) return;
         container.innerHTML = (storesToDisplay || []).map(store => `
-        <div class="card">
+        <div class="card" onclick="app.navigateToStore('${store.id}')" style="cursor: pointer;">
             <img src="${store.imagen}" alt="${store.nombre}" style="height: 10rem; object-fit: cover;">
-            <div style="padding: 1rem;"><h3 style="font-weight: 600;">${store.nombre}</h3></div>
+            <div style="padding: 1rem;">
+                <h3 style="font-weight: 600;">${store.nombre}</h3>
+            </div>
         </div>`).join('');
+    }
+
+    function renderStorePage(storeId) {
+        const store = stores.find(s => s.id === storeId);
+        if (!store) {
+            navigateTo('inicio');
+            showNotification('Tienda no encontrada', 'error');
+            return;
+        }
+
+        // Renderizar encabezado de la tienda
+        const headerContainer = document.getElementById('tienda-detalle-header');
+        if (headerContainer) {
+            headerContainer.innerHTML = `
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                <img src="${store.foto_perfil}" alt="${store.nombre}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;">
+                <div style="flex: 1;">
+                    <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">${store.nombre}</h2>
+                    <p style="margin-bottom: 1rem;">${store.descripcion}</p>
+                    <p><i class="fas fa-map-marker-alt fa-fw"></i> ${store.direccion}, ${store.ubicacion}</p>
+                    <p><i class="fas fa-phone fa-fw"></i> ${store.contacto}</p>
+                    <p><i class="fas fa-clock fa-fw"></i> ${store.horarios}</p>
+                </div>
+            </div>`;
+        }
+
+        const storeProducts = products.filter(p => p.tienda.id === storeId);
+        const categories = ['Todas', ...new Set(storeProducts.map(p => p.categoria))];
+        
+        // Renderizar filtros
+        const filtersContainer = document.getElementById('tienda-filtros-container');
+        if (filtersContainer) {
+            filtersContainer.innerHTML = categories.map((cat, index) => `
+                <button class="btn ${index === 0 ? 'btn-primary' : 'btn-secondary'} btn-sm filter-btn" data-category="${cat}">${cat}</button>
+            `).join('');
+        }
+
+        // Renderizar productos de la tienda
+        renderProducts(storeProducts, 'tienda-productos-grid');
+        
+        // Añadir event listeners a los filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const category = e.target.dataset.category;
+                // Actualizar estilo de botones de filtro
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.replace('btn-primary', 'btn-secondary'));
+                e.target.classList.replace('btn-secondary', 'btn-primary');
+
+                const filteredProducts = category === 'Todas' 
+                    ? storeProducts 
+                    : storeProducts.filter(p => p.categoria === category);
+                renderProducts(filteredProducts, 'tienda-productos-grid');
+            });
+        });
     }
 
     function renderProfileSection() {
         const container = document.getElementById('perfil-contenido');
         if (!container || !currentUser) return;
-
         const ordersHtml = currentUser.historialCompras.length > 0 
             ? currentUser.historialCompras.map(order => `
                 <div class="card" style="padding: 1rem; margin-bottom: 1rem;">
@@ -379,19 +422,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // MANEJADORES DE EVENTOS
     // =================================================================================
     function setupEventListeners() {
-        // --- Navegación Principal y de Escritorio ---
         const navMapping = {
-            'nav-inicio': 'inicio', 'nav-buscar': 'buscar', 'nav-favoritos': 'favoritos', 'nav-carrito': 'carrito',
-            'desktop-buscar': 'buscar', 'desktop-favoritos': 'favoritos', 'desktop-carrito': 'carrito'
+            'nav-inicio': 'inicio', 'nav-buscar': 'buscar', 'nav-favoritos': 'favoritos', 'nav-carrito': 'carrito', 'desktop-buscar': 'buscar', 'desktop-favoritos': 'favoritos', 'desktop-carrito': 'carrito'
         };
         Object.keys(navMapping).forEach(id => {
-            document.getElementById(id)?.addEventListener('click', e => { 
-                e.preventDefault(); 
-                navigateTo(navMapping[id]); 
-            });
+            document.getElementById(id)?.addEventListener('click', e => { e.preventDefault(); navigateTo(navMapping[id]); });
         });
 
-        // --- Lógica Especial para el Botón de Perfil ---
         ['nav-perfil', 'desktop-perfil'].forEach(id => {
             document.getElementById(id)?.addEventListener('click', e => {
                 e.preventDefault();
@@ -403,12 +440,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // --- Otros Eventos ---
         logoLink?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('inicio'); });
         backButton?.addEventListener('click', (e) => { e.preventDefault(); navigateTo('inicio'); });
         searchInputSection?.addEventListener('input', (e) => performSearch(e.target.value));
         
-        // --- Modal de Autenticación ---
         document.getElementById('login-form')?.addEventListener('submit', e => { e.preventDefault(); login(e.target.elements[0].value, e.target.elements[1].value); });
         document.getElementById('register-form')?.addEventListener('submit', e => { e.preventDefault(); register(e.target.elements[0].value, e.target.elements[1].value, e.target.elements[2].value); });
         document.getElementById('close-auth-modal')?.addEventListener('click', hideAuthModal);
@@ -418,13 +453,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================================================
-    // UI HELPERS (MODAL, NOTIFICACIONES, CONTADORES, ETC.)
+    // UI HELPERS
     // =================================================================================
     function showAuthModal(tab = 'login') {
         const modal = document.getElementById('auth-modal');
         if (!modal) return;
         modal.classList.add('show');
-        // Tab switching
         document.getElementById('login-tab').classList.toggle('active', tab === 'login');
         document.getElementById('register-tab').classList.toggle('active', tab !== 'login');
         document.getElementById('login-content').classList.toggle('hidden', tab !== 'login');
@@ -452,14 +486,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateActiveNav(activeSection) {
-        // Actualiza la navegación móvil
-        document.querySelectorAll('.bottom-nav .nav-item a').forEach(a => {
-            a.classList.remove('active');
-        });
+        document.querySelectorAll('.bottom-nav .nav-item a').forEach(a => a.classList.remove('active'));
         const activeEl = document.getElementById(`nav-${activeSection}`);
-        if (activeEl) {
-             activeEl.classList.add('active');
-        }
+        if (activeEl) activeEl.classList.add('active');
     }
 
     function showNotification(message, type = 'info') {
@@ -467,20 +496,14 @@ document.addEventListener('DOMContentLoaded', () => {
         notif.className = `notification ${type}`;
         notif.textContent = message;
         document.body.appendChild(notif);
-
-        // Animar la entrada
-        setTimeout(() => { notif.classList.add('show'); }, 10); // Pequeño delay para asegurar que la transición se aplique
-
-        // Ocultar y eliminar después de un tiempo
+        setTimeout(() => { notif.classList.add('show'); }, 10);
         setTimeout(() => {
             notif.classList.remove('show');
-            setTimeout(() => notif.remove(), 500); // Eliminar del DOM después de la transición
-        }, 3000); // La notificación es visible por 3 segundos
+            setTimeout(() => notif.remove(), 500);
+        }, 3000);
     }
 
-    // Exponer funciones globales que se usan en el HTML (onclick)
-    window.app = { toggleFavorite, addToCart, updateCartQuantity, logout, processPayment, navigateTo, login, register };
+    window.app = { toggleFavorite, addToCart, updateCartQuantity, logout, processPayment, navigateTo, navigateToStore, login, register };
 
-    // --- Iniciar la aplicación ---
     initialize();
 });

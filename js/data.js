@@ -105,28 +105,44 @@ window.tiendasData = [
         nombre: 'Artesanías Nica',
         descripcion: 'Especialistas en artesanías tradicionales de Niquinohomo, ofrecemos productos de alta calidad y diseños únicos.',
         imagen: 'https://images.unsplash.com/photo-1602810319428-019690571b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Niquinohomo, Masaya'
+        foto_perfil: 'https://images.unsplash.com/photo-1555529933-7e6de73405c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+        ubicacion: 'Niquinohomo, Masaya',
+        direccion: 'Del parque central, 2 cuadras al sur.',
+        contacto: '+505 8888 1111',
+        horarios: 'Lunes a Sábado: 9am - 5pm'
     },
     {
         id: 't2',
         nombre: 'Cerámicas del Sol',
         descripcion: 'Creamos piezas de cerámica únicas, pintadas a mano por artistas locales. Tradición y arte en cada jarrón.',
         imagen: 'https://images.unsplash.com/photo-1565551842819-0b32966c986c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Catarina, Masaya'
+        foto_perfil: 'https://images.unsplash.com/photo-1528965851608-54ef0a4a8244?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+        ubicacion: 'Catarina, Masaya',
+        direccion: 'Mirador de Catarina, Módulo #3.',
+        contacto: '+505 8888 2222',
+        horarios: 'Lunes a Domingo: 10am - 6pm'
     },
     {
         id: 't3',
         nombre: 'Joyas del Pueblo',
         descripcion: 'Diseñamos y fabricamos joyas de autor con plata y piedras semipreciosas. Diseños exclusivos y modernos.',
         imagen: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Masatepe, Masaya'
+        foto_perfil: 'https://images.unsplash.com/photo-1596422846932-a13b4c10c144?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+        ubicacion: 'Masatepe, Masaya',
+        direccion: 'Frente a la iglesia San Juan Bautista.',
+        contacto: '+505 8888 3333',
+        horarios: 'Martes a Domingo: 10am - 7pm'
     },
     {
         id: 't4',
         nombre: 'Muebles El Artesano',
         descripcion: 'Muebles de madera sólida, construidos para durar toda la vida con técnicas tradicionales.',
         imagen: 'https://images.unsplash.com/photo-1618220179428-22790b461013?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Pueblos Blancos, Masaya'
+        foto_perfil: 'https://images.unsplash.com/photo-1593113646772-2d8c39c87932?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+        ubicacion: 'Pueblos Blancos, Masaya',
+        direccion: 'Carretera a Masaya, Km 35.',
+        contacto: '+505 8888 4444',
+        horarios: 'Lunes a Viernes: 8am - 5pm'
     }
 ];
 
