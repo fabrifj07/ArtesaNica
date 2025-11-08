@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const product = products.find(p => p.id === item.id);
             return sum + (product ? product.precio * item.cantidad : 0);
         }, 0);
-        const envio = 5;
+        const envio = 150;
         const newOrder = { id: `order_${Date.now()}`, fecha: new Date().toISOString(), items: [...currentUser.carrito], total: subtotal + envio, estado: 'Completado' };
         currentUser.historialCompras.unshift(newOrder);
         currentUser.carrito = [];
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${product.nombre}</h3>
                     <p class="store-name">${product.tienda.nombre}</p>
                     <div class="card-footer">
-                        <span class="price">$${product.precio.toFixed(2)}</span>
+                        <span class="price">C$${product.precio.toFixed(2)}</span>
                         <button class="btn btn-primary btn-sm" onclick="app.addToCart('${product.id}')">Agregar</button>
                     </div>
                 </div>
@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card" style="padding: 1rem; margin-bottom: 1rem;">
                     <div style="display:flex; justify-content: space-between; font-weight: bold;">
                         <span>Pedido #${order.id.slice(-6)}</span>
-                        <span>$${order.total.toFixed(2)}</span>
+                        <span>C$${order.total.toFixed(2)}</span>
                     </div>
                     <p style="font-size: 0.8rem; color: var(--color-texto-secundario);">${new Date(order.fecha).toLocaleDateString()}</p>
                     <p style="font-size: 0.9rem; margin-top: 0.5rem;">Estado: ${order.estado}</p>
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${product.imagen}" alt="${product.nombre}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
                 <div style="flex: 1;">
                     <h3 style="font-weight: 600;">${product.nombre}</h3>
-                    <p class="price">$${product.precio.toFixed(2)}</p>
+                    <p class="price">C$${product.precio.toFixed(2)}</p>
                 </div>
                 <div style="text-align: right;">
                      <input type="number" min="1" value="${item.cantidad}" onchange="app.updateCartQuantity('${item.id}', this.valueAsNumber)" class="form-input" style="width: 70px; text-align: center; margin-bottom: 0.5rem;">
@@ -408,13 +408,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
         itemsContainer.innerHTML = itemsHtml;
 
-        const envio = 5.00;
+        const envio = 150.00;
         summaryContainer.innerHTML = `
             <div style="padding: 1.5rem;">
                 <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Resumen del Pedido</h3>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>$${subtotal.toFixed(2)}</span></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--color-borde); padding-bottom: 1rem;"><span>Envío:</span><span>$${envio.toFixed(2)}</span></div>
-                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;"><span>Total:</span><span>$${(subtotal + envio).toFixed(2)}</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>C$${subtotal.toFixed(2)}</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--color-borde); padding-bottom: 1rem;"><span>Envío:</span><span>C$${envio.toFixed(2)}</span></div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;"><span>Total:</span><span>C$${(subtotal + envio).toFixed(2)}</span></div>
                 <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="app.processPayment()">Proceder al Pago</button>
             </div>`;
     }
