@@ -4,41 +4,17 @@
   "description": "Plataforma de comercio electrónico para productos artesanales de Niquinohomo",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "dev:https": "node scripts/generate-cert.js && cross-env NODE_ENV=development nodemon server.js",
-    "generate-cert": "node scripts/generate-cert.js",
-    "start:https": "cross-env NODE_ENV=production node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "keywords": [
     "ecommerce",
     "artesanias",
     "niquinohomo",
-    "nodejs",
-    "mongodb"
+    "nodejs"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "connect-mongo": "^5.0.0",
-    "cookie-parser": "^1.4.6",
-    "dotenv": "^16.0.3",
-    "ejs": "^3.1.8",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "express-validator": "^6.15.0",
-    "jsonwebtoken": "^9.0.0",
-    "method-override": "^3.0.0",
-    "mongoose": "^7.0.3",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "stripe": "^11.15.0"
-  },
-  "devDependencies": {
-    "cross-env": "^10.1.0",
-    "nodemon": "^2.0.22",
-    "selfsigned": "^4.0.0"
+    "express": "^4.18.2"
   }
 }

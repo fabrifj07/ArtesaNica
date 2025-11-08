@@ -8,117 +8,93 @@ window.productosData = [
         imagen: 'https://images.unsplash.com/photo-1556909114-44e2aed3f589?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         categoria: 'textiles',
         stock: 15,
-        tienda: {
-            id: 't1',
-            nombre: 'Artesanías Nica'
-        },
+        tienda: { id: 't1', nombre: 'Artesanías Nica' },
         calificacion: 4.5,
         reseñas: 28
     },
     {
         id: 'p2',
-        nombre: 'Jarrón de barro',
-        descripcion: 'Jarrón de barro cocido con diseños tradicionales, ideal para decoración de interiores.',
-        precio: 32.50,
-        imagen: 'https://images.unsplash.com/photo-1583524505974-6facd53f4593?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        nombre: 'Jarrón de cerámica',
+        descripcion: 'Jarrón de barro pintado a mano con motivos florales, ideal para decorar cualquier espacio del hogar.',
+        precio: 29.99,
+        imagen: 'https://images.unsplash.com/photo-1578899805908-a3951f4c7512?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         categoria: 'ceramica',
-        stock: 10,
-        tienda: {
-            id: 't2',
-            nombre: 'Barro y Tradición'
-        },
+        stock: 25,
+        tienda: { id: 't2', nombre: 'Cerámicas del Sol' },
         calificacion: 4.8,
         reseñas: 42
     },
     {
         id: 'p3',
-        nombre: 'Pulsera de semillas',
-        descripcion: 'Pulsera artesanal hecha con semillas naturales y cuentas de colores, ajustable.',
-        precio: 12.99,
-        imagen: 'https://images.unsplash.com/photo-1602173577009-8d7d7fdcf9bb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        nombre: 'Aretes de plata',
+        descripcion: 'Elegantes aretes de plata 925 con incrustaciones de piedras naturales de la región.',
+        precio: 65.00,
+        imagen: 'https://images.unsplash.com/photo-1611652022417-a57c5a340d8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         categoria: 'joyeria',
-        stock: 25,
-        tienda: {
-            id: 't3',
-            nombre: 'Arte Nativo'
-        },
-        calificacion: 4.7,
-        reseñas: 35
+        stock: 10,
+        tienda: { id: 't3', nombre: 'Joyas del Pueblo' },
+        calificacion: 4.9,
+        reseñas: 55
     },
     {
         id: 'p4',
-        nombre: 'Mesa de madera rústica',
-        descripcion: 'Mesa de centro hecha a mano con madera de pino, acabado rústico y natural.',
-        precio: 189.99,
-        imagen: 'https://images.unsplash.com/photo-1533090161767-a6bede912b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        nombre: 'Silla de madera y cuero',
+        descripcion: 'Silla robusta hecha con madera de cedro y asiento de cuero genuino, un toque rústico para tu sala.',
+        precio: 120.00,
+        imagen: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         categoria: 'muebles',
-        stock: 5,
-        tienda: {
-            id: 't4',
-            nombre: 'Maderas del Sur'
-        },
-        calificacion: 4.9,
-        reseñas: 18
+        stock: 8,
+        tienda: { id: 't4', nombre: 'Muebles El Artesano' },
+        calificacion: 4.7,
+        reseñas: 30
     },
     {
         id: 'p5',
-        nombre: 'Máscara de madera tallada',
-        descripcion: 'Máscara tradicional tallada a mano en madera de cedro, pintada a mano con tintes naturales.',
-        precio: 28.75,
-        imagen: 'https://images.unsplash.com/photo-1595475203958-910f4c5d0e5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        nombre: 'Máscara decorativa',
+        descripcion: 'Máscara de madera tallada a mano, inspirada en el folclore local. Perfecta para colgar en la pared.',
+        precio: 35.50,
+        imagen: 'https://images.unsplash.com/photo-1541480601026-db84a82a17a4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         categoria: 'decoracion',
-        stock: 12,
-        tienda: {
-            id: 't1',
-            nombre: 'Artesanías Nica'
-        },
+        stock: 20,
+        tienda: { id: 't1', nombre: 'Artesanías Nica' },
         calificacion: 4.6,
-        reseñas: 31
+        reseñas: 18
     },
     {
         id: 'p6',
-        nombre: 'Juego de tazas de barro',
-        descripcion: 'Juego de 4 tazas de barro cocido con diseño tradicional, ideales para café o chocolate caliente.',
-        precio: 38.50,
-        imagen: 'https://images.unsplash.com/photo-1550581190-9c1c48d21d6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        categoria: 'ceramica',
-        stock: 8,
-        tienda: {
-            id: 't2',
-            nombre: 'Barro y Tradición'
-        },
-        calificacion: 4.4,
-        reseñas: 22
+        nombre: 'Caja de madera tallada',
+        descripcion: 'Pequeña caja de madera con tapa, tallada con diseños geométricos. Ideal para guardar joyas o secretos.',
+        precio: 22.00,
+        imagen: 'https://images.unsplash.com/photo-1588622612984-3a5b672a91a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        categoria: 'regalos',
+        stock: 30,
+        tienda: { id: 't4', nombre: 'Muebles El Artesano' },
+        calificacion: 4.8,
+        reseñas: 25
     },
     {
         id: 'p7',
-        nombre: 'Cartera de cuero',
-        descripcion: 'Cartera de cuero genuino con detalles grabados a mano, múltiples compartimientos.',
-        precio: 55.25,
-        imagen: 'https://images.unsplash.com/photo-1543076447-215ad9ba6923?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        categoria: 'accesorios',
-        stock: 7,
-        tienda: {
-            id: 't5',
-            nombre: 'Cuero Artesanal'
-        },
-        calificacion: 4.9,
-        reseñas: 47
+        nombre: 'Bolso de tela bordado',
+        descripcion: 'Bolso de tela resistente con bordados florales hechos a mano. Espacioso y con cierre.',
+        precio: 39.99,
+        imagen: 'https://images.unsplash.com/photo-1584917865415-38521a0862a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        categoria: 'textiles',
+        stock: 12,
+        tienda: { id: 't1', nombre: 'Artesanías Nica' },
+        calificacion: 4.7,
+        reseñas: 33
     },
     {
         id: 'p8',
-        nombre: 'Atrapasueños',
-        descripcion: 'Atrapasueños tejido a mano con hilos de colores, plumas y cuentas de madera.',
-        precio: 22.99,
-        imagen: 'https://images.unsplash.com/photo-1584270354945-01b5e0e1a6a9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        categoria: 'decoracion',
-        stock: 14,
-        tienda: {
-            id: 't3',
-            nombre: 'Arte Nativo'
-        },
-        calificacion: 4.7,
-        reseñas: 29
+        nombre: 'Plato de cerámica pintado',
+        descripcion: 'Plato decorativo de cerámica, pintado a mano con la figura de un tucán. No apto para alimentos.',
+        precio: 25.00,
+        imagen: 'https://images.unsplash.com/photo-1605898342415-b51e6268c173?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        categoria: 'ceramica',
+        stock: 18,
+        tienda: { id: 't2', nombre: 'Cerámicas del Sol' },
+        calificacion: 4.9,
+        reseñas: 38
     }
 ];
 
@@ -127,78 +103,53 @@ window.tiendasData = [
     {
         id: 't1',
         nombre: 'Artesanías Nica',
-        descripcion: 'Especialistas en artesanías tradicionales de Niquinohomo, ofreciendo productos hechos a mano con técnicas ancestrales.',
+        descripcion: 'Especialistas en artesanías tradicionales de Niquinohomo, ofrecemos productos de alta calidad y diseños únicos.',
         imagen: 'https://images.unsplash.com/photo-1602810319428-019690571b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Niquinohomo, Masaya',
-        calificacion: 4.5,
-        resenas: 28,
-        productos: ['p1', 'p5'],
-        horario: 'Lunes a Sábado: 9:00 AM - 6:00 PM',
-        telefono: '+505 8888 7777',
-        correo: 'artesaniasnica@example.com'
+        ubicacion: 'Niquinohomo, Masaya'
     },
     {
         id: 't2',
-        nombre: 'Barro y Tradición',
-        descripcion: 'Expertos en cerámica tradicional, creando piezas únicas que mantienen viva la herencia cultural de nuestra región.',
-        imagen: 'https://images.unsplash.com/photo-1587351029978-35bfdc8cad3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Niquinohomo, Masaya',
-        calificacion: 4.8,
-        resenas: 42,
-        productos: ['p2', 'p6'],
-        horario: 'Martes a Domingo: 8:00 AM - 5:00 PM',
-        telefono: '+505 8888 6666',
-        correo: 'barroytradicion@example.com'
+        nombre: 'Cerámicas del Sol',
+        descripcion: 'Creamos piezas de cerámica únicas, pintadas a mano por artistas locales. Tradición y arte en cada jarrón.',
+        imagen: 'https://images.unsplash.com/photo-1565551842819-0b32966c986c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        ubicacion: 'Catarina, Masaya'
     },
     {
         id: 't3',
-        nombre: 'Arte Nativo',
-        descripcion: 'Artesanías que representan la riqueza cultural de Nicaragua, con énfasis en joyería y decoración étnica.',
-        imagen: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Niquinohomo, Masaya',
-        calificacion: 4.7,
-        resenas: 35,
-        productos: ['p3', 'p8'],
-        horario: 'Miércoles a Lunes: 10:00 AM - 7:00 PM',
-        telefono: '+505 8888 5555',
-        correo: 'artenativo@example.com'
+        nombre: 'Joyas del Pueblo',
+        descripcion: 'Diseñamos y fabricamos joyas de autor con plata y piedras semipreciosas. Diseños exclusivos y modernos.',
+        imagen: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        ubicacion: 'Masatepe, Masaya'
     },
     {
         id: 't4',
-        nombre: 'Maderas del Sur',
-        descripcion: 'Especialistas en muebles y tallados en madera, creando piezas únicas con madera de la región.',
-        imagen: 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Niquinohomo, Masaya',
-        calificacion: 4.9,
-        resenas: 18,
-        productos: ['p4'],
-        horario: 'Lunes a Viernes: 8:30 AM - 5:30 PM',
-        telefono: '+505 8888 4444',
-        correo: 'maderasdelsur@example.com'
-    },
+        nombre: 'Muebles El Artesano',
+        descripcion: 'Muebles de madera sólida, construidos para durar toda la vida con técnicas tradicionales.',
+        imagen: 'https://images.unsplash.com/photo-1618220179428-22790b461013?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        ubicacion: 'Pueblos Blancos, Masaya'
+    }
+];
+
+// DATOS DE USUARIOS INICIALES
+window.usersData = [
     {
-        id: 't5',
-        nombre: 'Cuero Artesanal',
-        descripcion: 'Productos de cuero de la más alta calidad, elaborados a mano con técnicas tradicionales.',
-        imagen: 'https://images.unsplash.com/photo-1548036328-c8fa833d4c0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-        ubicacion: 'Niquinohomo, Masaya',
-        calificacion: 4.9,
-        resenas: 47,
-        productos: ['p7'],
-        horario: 'Lunes a Sábado: 9:00 AM - 6:30 PM',
-        telefono: '+505 8888 3333',
-        correo: 'cueroartesanal@example.com'
+        id: 'user_comprador_1',
+        nombre: 'Juan Comprador',
+        email: 'comprador@correo.com',
+        password: 'comprador123',
+        fechaRegistro: '2023-01-15T10:00:00Z',
+        favoritos: ['p1', 'p3'],
+        carrito: [],
+        historialCompras: []
     }
 ];
 
 // Categorías para el filtrado
 window.categoriasData = [
-    { id: 'textiles', nombre: 'Textiles', icono: 'tshirt' },
-    { id: 'ceramica', nombre: 'Cerámica', icono: 'mug-hot' },
-    { id: 'joyeria', nombre: 'Joyería', icono: 'ring' },
-    { id: 'muebles', nombre: 'Muebles', icono: 'couch' },
-    { id: 'decoracion', nombre: 'Decoración', icono: 'home' },
-    { id: 'accesorios', nombre: 'Accesorios', icono: 'scarf' },
-    { id: 'regalos', nombre: 'Regalos', icono: 'gift' },
-    { id: 'otros', nombre: 'Otros', icono: 'ellipsis-h' }
+    { id: 'textiles', nombre: 'Textiles' },
+    { id: 'ceramica', nombre: 'Cerámica' },
+    { id: 'joyeria', nombre: 'Joyería' },
+    { id: 'muebles', nombre: 'Muebles' },
+    { id: 'decoracion', nombre: 'Decoración' },
+    { id: 'regalos', nombre: 'Regalos' }
 ];
