@@ -76,6 +76,10 @@ body {
         grid-template-columns: repeat(3, 1fr);
     }
 
+    .grid-stores {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     /* Ajustes del Hero Section */
     .hero-section .container {
         flex-direction: row;
@@ -111,5 +115,9 @@ body {
 
     .grid-categories {
         grid-template-columns: repeat(6, 1fr);
+    }
+
+    .grid-stores {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
