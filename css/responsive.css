@@ -8,12 +8,15 @@
 .bottom-nav {
     display: block;
 }
+
 .navbar-search,
 .navbar-icons {
     display: none;
 }
+
+/* El botón de menú hamburguesa no se muestra en NINGUNA vista */
 .mobile-menu-button {
-    display: block;
+    display: none;
 }
 
 /* Por defecto, padding para la barra inferior */
@@ -40,57 +43,54 @@ body {
     grid-template-columns: repeat(1, 1fr);
     text-align: center;
 }
+
 .footer .social-links {
     justify-content: center;
 }
 
-/* --- TABLETS (A partir de 768px) --- */
+/* ===================================================================
+   TABLET Y ESCRITORIO (min-width: 768px)
+   =================================================================== */
 @media (min-width: 768px) {
-    /* Ocultar barra inferior y mostrar elementos de escritorio */
+    /* Ocultar la barra de navegación inferior y el padding del body */
     .bottom-nav {
         display: none;
     }
+
     body {
         padding-bottom: 0;
     }
+
+    /* Mostrar los iconos de navegación superiores y la barra de búsqueda */
     .navbar-search,
     .navbar-icons {
         display: flex;
     }
-    .mobile-menu-button {
-        display: none;
+
+    /* Ajustar grids para pantallas más grandes */
+    .grid-products {
+        grid-template-columns: repeat(3, 1fr);
     }
 
-    /* Ajustes de layout */
+    .grid-categories {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Ajustes del Hero Section */
     .hero-section .container {
         flex-direction: row;
         text-align: left;
     }
+
     .hero-content {
-        width: 50%;
         text-align: left;
     }
+
     .hero-buttons {
         flex-direction: row;
-        justify-content: flex-start;
-    }
-    .hero-image {
-        width: 50%;
     }
 
-    /* Ajustes de Grid */
-    .grid-products {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-    }
-    .grid-categories {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
-    }
-    .grid-stores {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
+    /* Ajustes del Footer */
     .footer .grid-container {
         grid-template-columns: repeat(4, 1fr);
         text-align: left;
@@ -100,24 +100,16 @@ body {
     }
 }
 
-/* --- DESKTOPS (A partir de 1024px) --- */
+/* ===================================================================
+   ESCRITORIO GRANDE (min-width: 1024px)
+   =================================================================== */
 @media (min-width: 1024px) {
-    .section {
-        padding: 4rem 0;
-    }
-    
-    .hero-content h1 {
-        font-size: 3rem; /* Más grande en escritorio */
-    }
-
-    /* Ajustes de Grid para pantallas más grandes */
+    /* Ajustar grids para pantallas aún más grandes */
     .grid-products {
         grid-template-columns: repeat(4, 1fr);
     }
+
     .grid-categories {
         grid-template-columns: repeat(6, 1fr);
-    }
-    .grid-stores {
-        grid-template-columns: repeat(3, 1fr);
     }
 }
