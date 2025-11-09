@@ -1128,8 +1128,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i class="fas fa-check-circle"></i> Marcar como Recibido
                             </button>
                             ` : ''}
-                            <button id="contactSeller" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-comment-alt"></i> Contactar al Vendedor
+                            <button id="contactSeller" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem; background-color: #25D366; border: none;">
+                                <i class="fab fa-whatsapp"></i> Contactar al Vendedor
                             </button>
                         </div>
                     </div>
@@ -1167,8 +1167,92 @@ document.addEventListener('DOMContentLoaded', () => {
         const contactButton = modal.querySelector('#contactSeller');
         if (contactButton) {
             contactButton.addEventListener('click', () => {
-                // Aquí iría la lógica para contactar al vendedor
-                showNotification('Función de contacto con el vendedor en desarrollo', 'info');
+                if (!order || !order.storeId) {
+                    showNotification('No se encontró la información del vendedor', 'error');
+                    return;
+                }
+
+                // Obtener información del vendedor (asumiendo que está en la tienda correspondiente)
+                const store = window.tiendasData.find(t => t.id === order.storeId);
+                if (!store || !store.contacto) {
+                    console.error('No se encontró la tienda o el contacto:', { storeId: order.storeId, store });
+                    showNotification('No se encontró la información de contacto del vendedor', 'error');
+                    return;
+                }
+
+                // Formatear el mensaje con los detalles del pedido
+                let message = `*¡Hola!* 👋\n\n`;
+                message += `Soy *${currentUser.nombre || 'Cliente'}* y quiero confirmar mi pedido.\n\n`;
+                message += `*📋 Detalles del Pedido*\n\n`;
+                message += `*N° de Factura:* ${order.facturaId || order.id.slice(-6)}\n`;
+                message += `*Fecha:* ${new Date(order.fecha).toLocaleDateString('es-ES', { 
+                    day: '2-digit', 
+                    month: 'long', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}\n`;
+                message += `*Estado:* ${order.estado.charAt(0).toUpperCase() + order.estado.slice(1)}\n\n`;
+                
+                // Agregar productos
+                message += `*🛍️ Productos Solicitados:*\n\n`;
+                order.items.forEach((item, index) => {
+                    const productName = item.productData?.nombre || 'Producto';
+                    const price = (item.productData?.precio * item.cantidad).toFixed(2);
+                    message += `${index + 1}. *${productName}*\n`;
+                    message += `   Cantidad: ${item.cantidad}\n`;
+                    message += `   Precio unitario: C$${item.productData?.precio?.toFixed(2) || '0.00'}\n`;
+                    message += `   Subtotal: C$${price}\n\n`;
+                });
+                
+                // Resumen del pedido
+                message += `*💰 Resumen del Pedido*\n\n`;
+                message += `*Subtotal (${order.items?.length} productos):* C$${order.subtotal?.toFixed(2) || '0.00'}\n`;
+                message += `*Costo de envío:* C$${order.envio?.toFixed(2) || '0.00'}\n`;
+                message += `*Total a pagar:* C$${order.total?.toFixed(2) || '0.00'}\n\n`;
+                
+                // Información de entrega
+                message += `*🚚 Información de Entrega*\n\n`;
+                message += `*Método de entrega:* ${order.metodoEntrega === 'domicilio' ? 'A domicilio' : 'Retiro en tienda'}\n`;
+                
+                if (order.metodoEntrega === 'domicilio' && order.direccionEnvio) {
+                    message += `*Dirección de envío:*\n${order.direccionEnvio}\n\n`;
+                }
+                
+                // Mensaje de cierre
+                message += `¡Gracias por tu atención! Por favor, confírmame la disponibilidad de los productos y las opciones de pago.\n\n`;
+                message += `*${currentUser.nombre || 'Cliente'}\n`;
+                message += `${currentUser.telefono ? '📱 ' + currentUser.telefono + '\n' : ''}`;
+                message += `📧 ${currentUser.email || ''}*`;
+                
+                // Codificar el mensaje para URL
+                const encodedMessage = encodeURIComponent(message);
+                
+                // Formatear número de teléfono (eliminar cualquier carácter que no sea dígito)
+                const phoneNumber = store.contacto.replace(/\D/g, '');
+                
+                // Verificar si el número tiene el formato correcto (al menos 8 dígitos)
+                if (!phoneNumber || phoneNumber.length < 8) {
+                    console.error('Número de teléfono no válido:', store.contacto);
+                    showNotification('El número de teléfono del vendedor no es válido', 'error');
+                    return;
+                }
+                
+                // Agregar el código de país si no está presente (asumiendo Nicaragua +505)
+                const fullPhoneNumber = phoneNumber.startsWith('505') ? phoneNumber : 
+                                      (phoneNumber.startsWith('8') ? '505' + phoneNumber : phoneNumber);
+                
+                // Crear la URL de WhatsApp
+                const whatsappUrl = `https://wa.me/${fullPhoneNumber}?text=${encodedMessage}`;
+                console.log('Abriendo WhatsApp con URL:', whatsappUrl);
+                
+                // Abrir en una nueva pestaña
+                const newWindow = window.open(whatsappUrl, '_blank');
+                
+                // Si la ventana no se abrió (posible bloqueador de ventanas emergentes)
+                if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                    showNotification('No se pudo abrir WhatsApp. Por favor, verifica si tienes un bloqueador de ventanas emergentes.', 'error');
+                }
             });
         }
 
