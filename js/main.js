@@ -175,17 +175,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function processPayment() {
         if (!ensureAuth() || currentUser.carrito.length === 0) return;
-         if (deliveryMethod === 'domicilio' && !deliveryAddress.trim()) {
+        if (deliveryMethod === 'domicilio' && !deliveryAddress.trim()) {
             showNotification('Por favor, introduce una dirección de envío.', 'error');
             return;
         }
-        const subtotal = currentUser.carrito.reduce((sum, item) => {
+
+        const cartByStore = currentUser.carrito.reduce((acc, item) => {
             const product = products.find(p => p.id === item.id);
-            return sum + (product ? product.precio * item.cantidad : 0);
-        }, 0);
-        const envio = deliveryMethod === 'domicilio' ? 150 : 0;
-        const newOrder = { id: `order_${Date.now()}`, fecha: new Date().toISOString(), items: [...currentUser.carrito], total: subtotal + envio, estado: 'Completado', deliveryMethod, deliveryAddress };
-        currentUser.historialCompras.unshift(newOrder);
+            if (product) {
+                const storeId = product.tienda.id;
+                if (!acc[storeId]) {
+                    acc[storeId] = {
+                        storeName: product.tienda.nombre,
+                        items: []
+                    };
+                }
+                acc[storeId].items.push(item);
+            }
+            return acc;
+        }, {});
+
+        Object.values(cartByStore).forEach(storeOrder => {
+            const subtotal = storeOrder.items.reduce((sum, item) => {
+                const product = products.find(p => p.id === item.id);
+                return sum + (product ? product.precio * item.cantidad : 0);
+            }, 0);
+
+            const envio = deliveryMethod === 'domicilio' ? 150 : 0; // Assuming a fixed shipping cost for simplicity
+            const newOrder = {
+                id: `order_${Date.now()}_${storeOrder.storeName.replace(/\s+/g, '')}`,
+                fecha: new Date().toISOString(),
+                items: [...storeOrder.items],
+                total: subtotal + envio,
+                estado: 'Completado',
+                deliveryMethod,
+                deliveryAddress,
+                storeName: storeOrder.storeName
+            };
+            currentUser.historialCompras.unshift(newOrder);
+        });
+
         currentUser.carrito = [];
         saveUsersToStorage();
         showNotification('¡Gracias por tu compra!', 'exito');
@@ -361,6 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <p style="font-size: 0.8rem; color: var(--color-texto-secundario);">${new Date(order.fecha).toLocaleDateString()}</p>
                     <p style="font-size: 0.9rem; margin-top: 0.5rem;">Estado: ${order.estado}</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Vendido por: ${order.storeName}</p>
                 </div>`).join('') 
             : '<p>No tienes compras anteriores.</p>';
 
@@ -403,24 +433,54 @@ function renderCartSection() {
     }
 
     summaryContainer.classList.remove('hidden');
-    let subtotal = 0;
-    const itemsHtml = currentUser.carrito.map(item => {
+
+    const cartByStore = currentUser.carrito.reduce((acc, item) => {
         const product = products.find(p => p.id === item.id);
-        if (!product) return '';
-        subtotal += product.precio * item.cantidad;
+        if (product) {
+            const storeId = product.tienda.id;
+            if (!acc[storeId]) {
+                acc[storeId] = {
+                    storeName: product.tienda.nombre,
+                    items: []
+                };
+            }
+            acc[storeId].items.push(item);
+        }
+        return acc;
+    }, {});
+
+    let overallSubtotal = 0;
+    let itemsHtml = Object.values(cartByStore).map(storeOrder => {
+        let storeSubtotal = 0;
+        const storeItemsHtml = storeOrder.items.map(item => {
+            const product = products.find(p => p.id === item.id);
+            if (!product) return '';
+            const itemTotal = product.precio * item.cantidad;
+            storeSubtotal += itemTotal;
+            overallSubtotal += itemTotal;
+            return `
+            <div class="card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem;">
+                <img src="${product.imagen}" alt="${product.nombre}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
+                <div style="flex: 1;">
+                    <h3 style="font-weight: 600;">${product.nombre}</h3>
+                    <p class="price">C$${product.precio.toFixed(2)}</p>
+                </div>
+                <div style="text-align: right;">
+                     <input type="number" min="1" value="${item.cantidad}" onchange="app.updateCartQuantity('${item.id}', this.valueAsNumber)" class="form-input" style="width: 70px; text-align: center; margin-bottom: 0.5rem;">
+                     <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="Eliminar"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`;
+        }).join('');
+
         return `
-        <div class="card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem;">
-            <img src="${product.imagen}" alt="${product.nombre}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
-            <div style="flex: 1;">
-                <h3 style="font-weight: 600;">${product.nombre}</h3>
-                <p class="price">C$${product.precio.toFixed(2)}</p>
+            <div class="store-cart-group" style="margin-bottom: 2rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-borde);">${storeOrder.storeName}</h3>
+                ${storeItemsHtml}
+                <div style="text-align: right; font-weight: bold;">Subtotal Tienda: C$${storeSubtotal.toFixed(2)}</div>
             </div>
-            <div style="text-align: right;">
-                 <input type="number" min="1" value="${item.cantidad}" onchange="app.updateCartQuantity('${item.id}', this.valueAsNumber)" class="form-input" style="width: 70px; text-align: center; margin-bottom: 0.5rem;">
-                 <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="Eliminar"><i class="fas fa-trash"></i></button>
-            </div>
-        </div>`;
+        `;
     }).join('');
+
     itemsContainer.innerHTML = itemsHtml;
 
     const envio = deliveryMethod === 'domicilio' ? 150.00 : 0;
@@ -452,13 +512,14 @@ function renderCartSection() {
 
             <!-- Resumen de Costos -->
             <div style="margin-top: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>C$${subtotal.toFixed(2)}</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>C$${overallSubtotal.toFixed(2)}</span></div>
                 <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--color-borde); padding-bottom: 1rem;"><span>Envío:</span><span id="costo-envio">C$${envio.toFixed(2)}</span></div>
-                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;"><span>Total:</span><span id="total-pedido">C$${(subtotal + envio).toFixed(2)}</span></div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;"><span>Total:</span><span id="total-pedido">C$${(overallSubtotal + envio).toFixed(2)}</span></div>
             </div>
             <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="app.processPayment()">Proceder al Pago</button>
         </div>`;
 }
+
 
 
     // =================================================================================
