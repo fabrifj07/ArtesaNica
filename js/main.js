@@ -885,12 +885,51 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCartSection();
     }
 
+    function markAsDelivered(orderId) {
+        if (!currentUser) {
+            showNotification('Debes iniciar sesión para marcar el pedido como recibido', 'error');
+            return;
+        }
+
+        // Encontrar el pedido en el historial del usuario
+        const orderIndex = currentUser.historialCompras.findIndex(o => o.id === orderId);
+        if (orderIndex === -1) {
+            showNotification('No se encontró el pedido', 'error');
+            return;
+        }
+
+        // Actualizar el estado del pedido
+        currentUser.historialCompras[orderIndex].estado = 'completado';
+        
+        // Guardar cambios
+        const userIndex = users.findIndex(u => u.id === currentUser.id);
+        if (userIndex !== -1) {
+            users[userIndex] = currentUser;
+            saveUsersToStorage();
+            
+            // Cerrar el modal actual
+            const modal = document.querySelector('.modal');
+            if (modal) {
+                document.body.removeChild(modal);
+            }
+            
+            // Mostrar notificación
+            showNotification('¡Producto marcado como recibido correctamente!', 'exito');
+            
+            // Actualizar la vista del perfil
+            if (currentSection === 'perfil') {
+                renderProfileSection();
+            }
+        }
+    }
+
     function getStatusColor(status) {
         const statusColors = {
             'pendiente': '#ffc107',  // Amarillo
             'procesando': '#17a2b8', // Azul claro
             'enviado': '#007bff',    // Azul
             'entregado': '#28a745',  // Verde
+            'completado': '#28a745', // Verde (mismo que entregado)
             'cancelado': '#dc3545'   // Rojo
         };
         return statusColors[status.toLowerCase()] || '#6c757d'; // Gris por defecto
@@ -1079,13 +1118,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
 
                     <!-- Botones de acción -->
-                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
-                        <button id="printReceipt" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-print"></i> Imprimir Recibo
-                        </button>
-                        <button id="contactSeller" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-comment-alt"></i> Contactar al Vendedor
-                        </button>
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #eee; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: flex-end; width: 100%;">
+                            <button id="printReceipt" class="btn btn-outline" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-print"></i> Imprimir Recibo
+                            </button>
+                            ${['enviado', 'pendiente', 'procesando'].includes(order.estado) ? `
+                            <button id="markAsDelivered" class="btn btn-success" style="display: flex; align-items: center; gap: 0.5rem; background-color: #28a745; color: white; border: none;">
+                                <i class="fas fa-check-circle"></i> Marcar como Recibido
+                            </button>
+                            ` : ''}
+                            <button id="contactSeller" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-comment-alt"></i> Contactar al Vendedor
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1125,6 +1171,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 showNotification('Función de contacto con el vendedor en desarrollo', 'info');
             });
         }
+
+        // Configurar botón de marcar como recibido
+        const markDeliveredButton = modal.querySelector('#markAsDelivered');
+        if (markDeliveredButton) {
+            markDeliveredButton.addEventListener('click', () => {
+                markAsDelivered(order.id);
+            });
+        }
     }
 
     window.app = {
@@ -1141,7 +1195,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setDeliveryAddress,
         payForStore,
         returnToCartView,
-        showOrderDetails
+        showOrderDetails,
+        markAsDelivered
     };
 
     initialize();
