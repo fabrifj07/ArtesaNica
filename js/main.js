@@ -923,16 +923,60 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function getStatusColor(status) {
+    function getStatusColor(status, type = 'background') {
         const statusColors = {
-            'pendiente': '#ffc107',  // Amarillo
-            'procesando': '#17a2b8', // Azul claro
-            'enviado': '#007bff',    // Azul
-            'entregado': '#28a745',  // Verde
-            'completado': '#28a745', // Verde (mismo que entregado)
-            'cancelado': '#dc3545'   // Rojo
+            'pendiente': {
+                background: '#ffc107',  // Amarillo
+                text: '#000',
+                buttonBg: '#ffc107',
+                buttonText: '#000'
+            },
+            'procesando': {
+                background: '#17a2b8', // Azul claro
+                text: '#fff',
+                buttonBg: '#17a2b8',
+                buttonText: '#fff'
+            },
+            'enviado': {
+                background: '#007bff',  // Azul
+                text: '#fff',
+                buttonBg: '#007bff',
+                buttonText: '#fff'
+            },
+            'entregado': {
+                background: '#28a745',  // Verde
+                text: '#fff',
+                buttonBg: '#6c757d',   // Gris para botón
+                buttonText: '#fff'
+            },
+            'completado': {
+                background: '#28a745',  // Verde
+                text: '#fff',
+                buttonBg: '#6c757d',   // Gris para botón
+                buttonText: '#fff'
+            },
+            'cancelado': {
+                background: '#dc3545',  // Rojo
+                text: '#fff',
+                buttonBg: '#dc3545',
+                buttonText: '#fff',
+                disabled: true
+            }
         };
-        return statusColors[status.toLowerCase()] || '#6c757d'; // Gris por defecto
+        
+        const statusLower = status.toLowerCase();
+        const colorInfo = statusColors[statusLower] || {
+            background: '#6c757d',
+            text: '#fff',
+            buttonBg: '#6c757d',
+            buttonText: '#fff'
+        };
+        
+        return type === 'buttonBg' ? colorInfo.buttonBg : 
+               type === 'buttonText' ? colorInfo.buttonText :
+               type === 'text' ? colorInfo.text :
+               type === 'background' ? colorInfo.background :
+               colorInfo.background;
     }
 
     function showOrderDetails(orderId) {
@@ -1128,7 +1172,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i class="fas fa-check-circle"></i> Marcar como Recibido
                             </button>
                             ` : ''}
-                            <button id="contactSeller" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem; background-color: #25D366; border: none;">
+                            <button id="contactSeller" class="btn" style="display: flex; align-items: center; gap: 0.5rem; 
+                                background-color: ${getStatusColor(order.estado, 'buttonBg')}; 
+                                color: ${getStatusColor(order.estado, 'buttonText')}; 
+                                border: none;
+                                ${['entregado', 'completado'].includes(order.estado) ? 'opacity: 0.8;' : ''}">
                                 <i class="fab fa-whatsapp"></i> Contactar al Vendedor
                             </button>
                         </div>
@@ -1172,7 +1220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Obtener información del vendedor (asumiendo que está en la tienda correspondiente)
+                // Obtener información del vendedor
                 const store = window.tiendasData.find(t => t.id === order.storeId);
                 if (!store || !store.contacto) {
                     console.error('No se encontró la tienda o el contacto:', { storeId: order.storeId, store });
@@ -1180,50 +1228,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Formatear el mensaje con los detalles del pedido
                 let message = `*¡Hola!* 👋\n\n`;
-                message += `Soy *${currentUser.nombre || 'Cliente'}* y quiero confirmar mi pedido.\n\n`;
-                message += `*📋 Detalles del Pedido*\n\n`;
-                message += `*N° de Factura:* ${order.facturaId || order.id.slice(-6)}\n`;
-                message += `*Fecha:* ${new Date(order.fecha).toLocaleDateString('es-ES', { 
-                    day: '2-digit', 
-                    month: 'long', 
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}\n`;
-                message += `*Estado:* ${order.estado.charAt(0).toUpperCase() + order.estado.slice(1)}\n\n`;
+                message += `Soy *${currentUser.nombre || 'Cliente'}* `;
                 
-                // Agregar productos
-                message += `*🛍️ Productos Solicitados:*\n\n`;
-                order.items.forEach((item, index) => {
-                    const productName = item.productData?.nombre || 'Producto';
-                    const price = (item.productData?.precio * item.cantidad).toFixed(2);
-                    message += `${index + 1}. *${productName}*\n`;
-                    message += `   Cantidad: ${item.cantidad}\n`;
-                    message += `   Precio unitario: C$${item.productData?.precio?.toFixed(2) || '0.00'}\n`;
-                    message += `   Subtotal: C$${price}\n\n`;
-                });
+                // Personalizar mensaje según el estado del pedido
+                const estado = order.estado.toLowerCase();
                 
-                // Resumen del pedido
-                message += `*💰 Resumen del Pedido*\n\n`;
-                message += `*Subtotal (${order.items?.length} productos):* C$${order.subtotal?.toFixed(2) || '0.00'}\n`;
-                message += `*Costo de envío:* C$${order.envio?.toFixed(2) || '0.00'}\n`;
-                message += `*Total a pagar:* C$${order.total?.toFixed(2) || '0.00'}\n\n`;
-                
-                // Información de entrega
-                message += `*🚚 Información de Entrega*\n\n`;
-                message += `*Método de entrega:* ${order.metodoEntrega === 'domicilio' ? 'A domicilio' : 'Retiro en tienda'}\n`;
-                
-                if (order.metodoEntrega === 'domicilio' && order.direccionEnvio) {
-                    message += `*Dirección de envío:*\n${order.direccionEnvio}\n\n`;
+                if (estado === 'pendiente') {
+                    message += `y quiero confirmar mi pedido.\n\n`;
+                    message += `*📋 Detalles del Pedido*\n\n`;
+                    message += `*N° de Factura:* ${order.facturaId || order.id.slice(-6)}\n`;
+                    message += `*Estado:* ${order.estado.charAt(0).toUpperCase() + order.estado.slice(1)}\n\n`;
+                    
+                    // Productos
+                    message += `*🛍️ Productos Solicitados:*\n\n`;
+                    order.items.forEach((item, index) => {
+                        const productName = item.productData?.nombre || 'Producto';
+                        message += `${index + 1}. *${productName}* (${item.cantidad} x C$${item.productData?.precio?.toFixed(2) || '0.00'})\n`;
+                    });
+                    
+                    message += `\n*💰 Total: C$${order.total?.toFixed(2) || '0.00'}*\n\n`;
+                    message += `Por favor, confírmame la disponibilidad de los productos y las opciones de pago.`;
+                    
+                } else if (estado === 'procesando') {
+                    message += `y quiero consultar el estado de mi pedido.\n\n`;
+                    message += `*N° de Pedido:* ${order.facturaId || order.id.slice(-6)}\n`;
+                    message += `*Realizado el:* ${new Date(order.fecha).toLocaleDateString('es-ES', { 
+                        day: '2-digit', 
+                        month: 'long', 
+                        year: 'numeric'
+                    })}\n\n`;
+                    message += `¿Podrían indicarme en qué estado se encuentra mi pedido y cuándo podría estar listo para envío?`;
+                    
+                } else if (estado === 'enviado') {
+                    message += `y necesito información sobre el envío de mi pedido.\n\n`;
+                    message += `*N° de Pedido:* ${order.facturaId || order.id.slice(-6)}\n`;
+                    message += `*Método de envío:* ${order.metodoEntrega === 'domicilio' ? 'A domicilio' : 'Recoger en tienda'}\n\n`;
+                    
+                    if (order.metodoEntrega === 'domicilio') {
+                        message += `¿Podrían proporcionarme el número de seguimiento o información sobre la entrega?\n\n`;
+                        if (order.direccionEnvio) {
+                            message += `*Dirección de envío:*\n${order.direccionEnvio}\n\n`;
+                        }
+                    } else {
+                        message += `¿Podrían indicarme si ya está listo para ser recogido en tienda?\n\n`;
+                    }
+                    
+                } else if (['entregado', 'completado'].includes(estado)) {
+                    message += `¡Espero que se encuentre bien! \n\n`;
+                    message += `Me comunico para realizar una consulta sobre un pedido anterior.\n\n`;
+                    message += `¿Podrían ayudarme por favor?`;
                 }
                 
-                // Mensaje de cierre
-                message += `¡Gracias por tu atención! Por favor, confírmame la disponibilidad de los productos y las opciones de pago.\n\n`;
-                message += `*${currentUser.nombre || 'Cliente'}\n`;
-                message += `${currentUser.telefono ? '📱 ' + currentUser.telefono + '\n' : ''}`;
-                message += `📧 ${currentUser.email || ''}*`;
+                // Información de contacto del cliente
+                message += `\n\n*Mis datos de contacto:*\n`;
+                message += `📱 ${currentUser.telefono || 'Sin teléfono registrado'}\n`;
+                message += `📧 ${currentUser.email || 'Sin correo registrado'}`;
                 
                 // Codificar el mensaje para URL
                 const encodedMessage = encodeURIComponent(message);
