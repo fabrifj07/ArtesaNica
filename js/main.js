@@ -276,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <img src="${store.imagen}" alt="${store.nombre}" style="height: 10rem; object-fit: cover;">
             <div style="padding: 1rem;">
                 <h3 style="font-weight: 600;">${store.nombre}</h3>
+                <p style="color: var(--color-primary); font-weight: 500; margin-top: 0.5rem;">Ver Tienda</p>
             </div>
         </div>`).join('');
     }
