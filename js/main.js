@@ -344,20 +344,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const productsHtml = (productsToDisplay || []).map(product => {
             const isFavorite = currentUser?.favoritos.includes(product.id);
             return `
-            <div class="card product-card">
-                <div class="card-image">
-                    <img src="${product.imagen}" alt="${product.nombre}">
-                    <button class="favorite-btn" onclick="app.toggleFavorite('${product.id}')">
+            <div class="product-card" onclick="app.navigateToProduct('${product.id}')">
+                <div class="product-image-container">
+                    <img src="${product.imagen}" alt="${product.nombre}" class="product-image">
+                    <button class="favorite-btn" onclick="event.stopPropagation(); app.toggleFavorite('${product.id}')">
                         <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
                     </button>
                 </div>
-                <div class="card-content">
-                    <h3>${product.nombre}</h3>
-                    <p class="store-name">${product.tienda.nombre}</p>
-                    <div class="card-footer">
-                        <span class="price">C$${product.precio.toFixed(2)}</span>
-                        <button class="btn btn-primary btn-sm" onclick="app.addToCart('${product.id}')">Agregar</button>
-                    </div>
+                <div class="product-content">
+                    <h3 class="product-name">${product.nombre}</h3>
+                    <p class="store-name">${product.tienda?.nombre || 'Tienda'}</p>
+                    <p class="product-price">C$${product.precio.toFixed(2)}</p>
+                    <button class="btn btn-primary add-to-cart" 
+                            onclick="event.stopPropagation(); app.addToCart('${product.id}')">
+                        <i class="fas fa-shopping-cart"></i> Agregar
+                    </button>
                 </div>
             </div>`;
         }).join('');
@@ -376,14 +377,35 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderStores(storesToDisplay) {
         const container = document.getElementById('tiendas-container');
         if (!container) return;
+        
+        // Asegurarse de que el contenedor tenga la clase correcta
+        container.className = 'stores-grid';
+        
         container.innerHTML = (storesToDisplay || []).map(store => `
-        <div class="card" onclick="app.navigateToStore('${store.id}')" style="cursor: pointer;">
-            <img src="${store.imagen}" alt="${store.nombre}" style="height: 10rem; object-fit: cover;">
-            <div style="padding: 1rem;">
-                <h3 style="font-weight: 600;">${store.nombre}</h3>
-                 <p style="color: var(--color-primary); font-weight: 500; margin-top: 0.5rem;">Ver Tienda</p>
-            </div>
-        </div>`).join('');
+            <div class="store-card" onclick="app.navigateToStore('${store.id}')">
+                <div class="store-image-container">
+                    <img src="${store.imagen || 'img/default-store.jpg'}" 
+                         alt="${store.nombre}" 
+                         class="store-image">
+                </div>
+                <div class="store-content">
+                    <h3 class="store-name">${store.nombre}</h3>
+                    <p class="store-description">${store.descripcion || 'Tienda de artesanías'}</p>
+                    <div class="store-button">
+                        <span>Ver Tienda</span>
+                        <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                    </div>
+                </div>
+            </div>`).join('');
+            
+        // Si no hay tiendas para mostrar
+        if ((!storesToDisplay || storesToDisplay.length === 0) && container) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                    <i class="fas fa-store-slash" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <p>No hay tiendas disponibles en este momento.</p>
+                </div>`;
+        }
     }
 
     function renderStorePage(storeId) {
