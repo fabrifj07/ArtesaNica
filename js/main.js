@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DE LA APLICACIÓN ---
     let currentUser = null;
@@ -6,7 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let products = [];
     let stores = [];
     let currentSection = 'inicio';
-    let currentStoreId = null; // ID de la tienda que se está viendo
+    let currentStoreId = null; 
+    let deliveryMethod = 'retiro'; // 'retiro' o 'domicilio'
+    let deliveryAddress = '';
 
     // --- SELECTORES CACHEADOS ---
     const logoLink = document.getElementById('logo-link');
@@ -106,6 +107,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================================
     // LÓGICA DE NEGOCIO
     // =================================================================================
+     function setDeliveryMethod(method) {
+        deliveryMethod = method;
+        updateUI();
+    }
+
+    function setDeliveryAddress(address) {
+        deliveryAddress = address;
+    }
+    
     function performSearch(query) {
         const lowerCaseQuery = query.trim().toLowerCase();
         if (lowerCaseQuery) {
@@ -165,12 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function processPayment() {
         if (!ensureAuth() || currentUser.carrito.length === 0) return;
+         if (deliveryMethod === 'domicilio' && !deliveryAddress.trim()) {
+            showNotification('Por favor, introduce una dirección de envío.', 'error');
+            return;
+        }
         const subtotal = currentUser.carrito.reduce((sum, item) => {
             const product = products.find(p => p.id === item.id);
             return sum + (product ? product.precio * item.cantidad : 0);
         }, 0);
-        const envio = 150;
-        const newOrder = { id: `order_${Date.now()}`, fecha: new Date().toISOString(), items: [...currentUser.carrito], total: subtotal + envio, estado: 'Completado' };
+        const envio = deliveryMethod === 'domicilio' ? 150 : 0;
+        const newOrder = { id: `order_${Date.now()}`, fecha: new Date().toISOString(), items: [...currentUser.carrito], total: subtotal + envio, estado: 'Completado', deliveryMethod, deliveryAddress };
         currentUser.historialCompras.unshift(newOrder);
         currentUser.carrito = [];
         saveUsersToStorage();
@@ -276,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <img src="${store.imagen}" alt="${store.nombre}" style="height: 10rem; object-fit: cover;">
             <div style="padding: 1rem;">
                 <h3 style="font-weight: 600;">${store.nombre}</h3>
-                <p style="color: var(--color-primary); font-weight: 500; margin-top: 0.5rem;">Ver Tienda</p>
+                 <p style="color: var(--color-primary); font-weight: 500; margin-top: 0.5rem;">Ver Tienda</p>
             </div>
         </div>`).join('');
     }
@@ -377,48 +391,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderCartSection() {
-        const itemsContainer = document.getElementById('contenido-carrito');
-        const summaryContainer = document.getElementById('resumen-carrito');
-        if (!itemsContainer || !summaryContainer || !currentUser) return;
+function renderCartSection() {
+    const itemsContainer = document.getElementById('contenido-carrito');
+    const summaryContainer = document.getElementById('resumen-carrito');
+    if (!itemsContainer || !summaryContainer || !currentUser) return;
 
-        if (currentUser.carrito.length === 0) {
-            itemsContainer.innerHTML = '<div class="card" style="padding: 2rem; text-align: center;">Tu carrito está vacío.</div>';
-            summaryContainer.classList.add('hidden');
-            return;
-        }
-
-        summaryContainer.classList.remove('hidden');
-        let subtotal = 0;
-        const itemsHtml = currentUser.carrito.map(item => {
-            const product = products.find(p => p.id === item.id);
-            if (!product) return '';
-            subtotal += product.precio * item.cantidad;
-            return `
-            <div class="card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem;">
-                <img src="${product.imagen}" alt="${product.nombre}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
-                <div style="flex: 1;">
-                    <h3 style="font-weight: 600;">${product.nombre}</h3>
-                    <p class="price">C$${product.precio.toFixed(2)}</p>
-                </div>
-                <div style="text-align: right;">
-                     <input type="number" min="1" value="${item.cantidad}" onchange="app.updateCartQuantity('${item.id}', this.valueAsNumber)" class="form-input" style="width: 70px; text-align: center; margin-bottom: 0.5rem;">
-                     <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="Eliminar"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>`;
-        }).join('');
-        itemsContainer.innerHTML = itemsHtml;
-
-        const envio = 150.00;
-        summaryContainer.innerHTML = `
-            <div style="padding: 1.5rem;">
-                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Resumen del Pedido</h3>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>C$${subtotal.toFixed(2)}</span></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--color-borde); padding-bottom: 1rem;"><span>Envío:</span><span>C$${envio.toFixed(2)}</span></div>
-                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;"><span>Total:</span><span>C$${(subtotal + envio).toFixed(2)}</span></div>
-                <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="app.processPayment()">Proceder al Pago</button>
-            </div>`;
+    if (currentUser.carrito.length === 0) {
+        itemsContainer.innerHTML = '<div class="card" style="padding: 2rem; text-align: center;">Tu carrito está vacío.</div>';
+        summaryContainer.classList.add('hidden');
+        return;
     }
+
+    summaryContainer.classList.remove('hidden');
+    let subtotal = 0;
+    const itemsHtml = currentUser.carrito.map(item => {
+        const product = products.find(p => p.id === item.id);
+        if (!product) return '';
+        subtotal += product.precio * item.cantidad;
+        return `
+        <div class="card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem;">
+            <img src="${product.imagen}" alt="${product.nombre}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
+            <div style="flex: 1;">
+                <h3 style="font-weight: 600;">${product.nombre}</h3>
+                <p class="price">C$${product.precio.toFixed(2)}</p>
+            </div>
+            <div style="text-align: right;">
+                 <input type="number" min="1" value="${item.cantidad}" onchange="app.updateCartQuantity('${item.id}', this.valueAsNumber)" class="form-input" style="width: 70px; text-align: center; margin-bottom: 0.5rem;">
+                 <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="Eliminar"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>`;
+    }).join('');
+    itemsContainer.innerHTML = itemsHtml;
+
+    const envio = deliveryMethod === 'domicilio' ? 150.00 : 0;
+    const addressInputHTML = `
+        <div id="direccion-container" class="form-group" style="margin-top: 1rem; ${deliveryMethod !== 'domicilio' ? 'display: none;' : ''}">
+            <label for="direccion-envio" class="form-label">Dirección de Envío</label>
+            <input type="text" id="direccion-envio" class="form-input" value="${deliveryAddress}" oninput="app.setDeliveryAddress(this.value)" placeholder="Escribe tu dirección completa">
+        </div>`;
+
+    summaryContainer.innerHTML = `
+        <div style="padding: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Resumen del Pedido</h3>
+            
+            <!-- Opciones de Entrega -->
+            <div class="form-group">
+                <label class="form-label">Método de Entrega</label>
+                <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="radio" name="deliveryMethod" value="retiro" onchange="app.setDeliveryMethod('retiro')" ${deliveryMethod === 'retiro' ? 'checked' : ''}>
+                        <span style="margin-left: 0.5rem;">Retiro en Local</span>
+                    </label>
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="radio" name="deliveryMethod" value="domicilio" onchange="app.setDeliveryMethod('domicilio')" ${deliveryMethod === 'domicilio' ? 'checked' : ''}>
+                        <span style="margin-left: 0.5rem;">A Domicilio</span>
+                    </label>
+                </div>
+            </div>
+            ${addressInputHTML}
+
+            <!-- Resumen de Costos -->
+            <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;"><span>Subtotal:</span><span>C$${subtotal.toFixed(2)}</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--color-borde); padding-bottom: 1rem;"><span>Envío:</span><span id="costo-envio">C$${envio.toFixed(2)}</span></div>
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;"><span>Total:</span><span id="total-pedido">C$${(subtotal + envio).toFixed(2)}</span></div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" onclick="app.processPayment()">Proceder al Pago</button>
+        </div>`;
+}
+
 
     // =================================================================================
     // MANEJADORES DE EVENTOS
@@ -539,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.app = { toggleFavorite, addToCart, updateCartQuantity, logout, processPayment, navigateTo, navigateToStore, login, register };
+    window.app = { toggleFavorite, addToCart, updateCartQuantity, logout, processPayment, navigateTo, navigateToStore, login, register, setDeliveryMethod, setDeliveryAddress };
 
     initialize();
 });
