@@ -146,6 +146,7 @@
     margin: 0 0 1rem 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -497,6 +498,38 @@
     .notification.show {
         transform: translateY(0);
     }
+}
+
+/* Estilos adicionales para elementos específicos */
+.navbar-brand-img {
+    height: 1.2em;
+}
+
+.back-button {
+    font-size: 1rem;
+}
+
+.search-bar-modal {
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+}
+
+.store-detail-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+}
+
+.store-filters-container {
+    margin-bottom: 2rem;
+}
+
+.section-title-left {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.btn-full-width {
+    width: 100%;
 }
 
 .notification.exito {

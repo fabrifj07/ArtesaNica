@@ -23,22 +23,22 @@
        =================================================================== -->
     <nav class="navbar">
         <div class="container">
-            <a href="#" id="back-button" class="navbar-brand hidden" style="font-size: 1rem;"><i class="fas fa-arrow-left"></i> Volver</a>
-            <a href="#" id="logo-link" class="navbar-brand">Artesanica<img src="https://i.postimg.cc/hj4kQDvb/logo-Artesanica-1.png" alt="Artesanica Logo" style="height: 1.2em;"></a>
+            <a href="#" id="back-button" class="navbar-brand hidden back-button" title="Volver a la página anterior"><i class="fas fa-arrow-left"></i> Volver</a>
+            <a href="#" id="logo-link" class="navbar-brand" title="Ir a la página de inicio">Artesanica<img src="https://i.postimg.cc/hj4kQDvb/logo-Artesanica-1.png" alt="Artesanica Logo" class="navbar-brand-img"></a>
             
             <div class="navbar-icons">
-                <a href="#" id="desktop-buscar" class="nav-icon"><i class="fas fa-search"></i></a>
-                <a href="#" id="desktop-perfil" class="nav-icon"><i class="fas fa-user"></i></a>
-                <a href="#" id="desktop-favoritos" class="nav-icon">
+                <a href="#" id="desktop-buscar" class="nav-icon" title="Buscar productos"><i class="fas fa-search"></i></a>
+                <a href="#" id="desktop-perfil" class="nav-icon" title="Ver mi perfil"><i class="fas fa-user"></i></a>
+                <a href="#" id="desktop-favoritos" class="nav-icon" title="Ver mis favoritos">
                     <i class="fas fa-heart"></i>
                     <span id="contador-favoritos-desk" class="nav-counter hidden">0</span>
                 </a>
-                <a href="#" id="desktop-carrito" class="nav-icon">
+                <a href="#" id="desktop-carrito" class="nav-icon" title="Ver mi carrito de compras">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="contador-carrito-desk" class="nav-counter hidden">0</span>
                 </a>
             </div>
-            <button class="mobile-menu-button btn-icon" id="mobileMenuButton"><i class="fas fa-bars"></i></button>
+            <button class="mobile-menu-button btn-icon" id="mobileMenuButton" title="Abrir menú móvil"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
 
@@ -81,7 +81,7 @@
                 </div>
             </section>
         </div>
-        <div id="seccion-buscar" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Buscar productos</h2><div class="search-bar" style="max-width: 600px; margin: 0 auto 2rem auto;"><input type="text" id="buscar-productos" placeholder="Escribe aquí para buscar..." class="form-input"><i class="fas fa-search search-icon"></i></div><div id="resultados-busqueda" class="grid-container grid-products"></div></div></div>
+        <div id="seccion-buscar" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Buscar productos</h2><div class="search-bar search-bar-modal"><input type="text" id="buscar-productos" placeholder="Escribe aquí para buscar..." class="form-input"><i class="fas fa-search search-icon"></i></div><div id="resultados-busqueda" class="grid-container grid-products"></div></div></div>
         <div id="seccion-favoritos" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Tus Favoritos</h2><div id="lista-favoritos" class="grid-container grid-products"></div></div></div>
         <div id="seccion-carrito" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Mi Carrito</h2><div class="carrito-layout"><div id="contenido-carrito"></div><div id="resumen-carrito" class="card"></div></div></div></div>
         <div id="seccion-perfil" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Mi Perfil</h2><div id="perfil-contenido"></div></div></div>
@@ -89,12 +89,12 @@
         <!-- Nueva sección para la vista de tienda individual -->
         <div id="seccion-tienda" class="seccion-principal hidden">
             <div class="container section">
-                <div id="tienda-detalle-header" class="card" style="margin-bottom: 2rem; padding: 1.5rem;">
+                <div id="tienda-detalle-header" class="card store-detail-header">
                     <!-- El encabezado de la tienda se renderizará aquí -->
                 </div>
 
-                <div style="margin-bottom: 2rem;">
-                    <h2 class="section-title" style="text-align: left; margin-bottom: 1rem;">Productos de la Tienda</h2>
+                <div class="store-filters-container">
+                    <h2 class="section-title section-title-left">Productos de la Tienda</h2>
                     <div id="tienda-filtros-container">
                         <!-- Los filtros se renderizarán aquí -->
                     </div>
@@ -151,7 +151,7 @@
                         <label for="login-password" class="form-label">Contraseña</label>
                         <input type="password" id="login-password" class="form-input" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Iniciar sesión</button>
+                    <button type="submit" class="btn btn-primary btn-full-width">Iniciar sesión</button>
                 </form>
             </div>
             
@@ -171,7 +171,7 @@
                         <label for="register-password" class="form-label">Contraseña</label>
                         <input type="password" id="register-password" class="form-input" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Registrarme</button>
+                    <button type="submit" class="btn btn-primary btn-full-width">Registrarme</button>
                 </form>
             </div>
 
