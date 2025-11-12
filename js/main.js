@@ -868,12 +868,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return;
 
         const categories = window.categoriasData || [];
-        container.innerHTML = categories.map(cat => `
-            <a href="#" class="card category-card" data-categoria="${cat.id}">
-                <i class="${cat.icono} category-icon"></i>
-                <span class="category-name">${cat.nombre}</span>
-            </a>
-        `).join('') + `
+        container.innerHTML = categories.map(cat => {
+            // Ícono especial para hamacas
+            if (cat.id === 'hamacas') {
+                return `
+                    <a href="#" class="card category-card" data-categoria="${cat.id}">
+                        <svg class="category-icon hammock-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 7C4 5.34315 5.34315 4 7 4H17C18.6569 4 20 5.34315 20 7V17C20 18.6569 18.6569 20 17 20H7C5.34315 20 4 18.6569 4 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="category-name">${cat.nombre}</span>
+                    </a>
+                `;
+            }
+            
+            // Para las demás categorías
+            return `
+                <a href="#" class="card category-card" data-categoria="${cat.id}">
+                    <i class="${cat.icono} category-icon"></i>
+                    <span class="category-name">${cat.nombre}</span>
+                </a>
+            `;
+        }).join('') + `
             <a href="#" class="card category-card active" data-categoria="todas">
                 <i class="fas fa-border-all category-icon"></i>
                 <span class="category-name">Todas</span>
