@@ -22,7 +22,35 @@ document.addEventListener('DOMContentLoaded', () => {
         loadMasterData();
         checkActiveSession();
         setupEventListeners();
-        navigateTo('inicio');
+        
+        // Manejar el evento de retroceso/avance del navegador
+        window.addEventListener('popstate', (event) => {
+            const url = new URL(window.location);
+            const section = url.searchParams.get('section') || 'inicio';
+            const storeId = url.searchParams.get('store');
+            
+            if (section === 'tienda' && storeId) {
+                navigateToStore(storeId, false);
+            } else {
+                navigateTo(section, false);
+            }
+        });
+
+        // Restaurar el estado desde la URL
+        const url = new URL(window.location);
+        const section = url.searchParams.get('section');
+        const storeId = url.searchParams.get('store');
+        
+        if (section === 'tienda' && storeId) {
+            // Restaurar la vista de la tienda específica
+            navigateToStore(storeId, false);
+        } else if (section) {
+            // Navegar a la sección guardada
+            navigateTo(section, false);
+        } else {
+            // Por defecto, ir al inicio
+            navigateTo('inicio', false);
+        }
     }
 
     // =================================================================================
@@ -286,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================================
     // NAVEGACIÓN Y RENDERIZADO
     // =================================================================================
-    function navigateTo(sectionId) {
+    function navigateTo(sectionId, updateHistory = true) {
         const protectedSections = ['favoritos', 'carrito', 'perfil'];
         if (protectedSections.includes(sectionId) && !ensureAuth()) return;
 
@@ -301,13 +329,29 @@ document.addEventListener('DOMContentLoaded', () => {
         logoLink?.classList.toggle('hidden', !isHomePage);
         backButton?.classList.toggle('hidden', isHomePage);
 
+        // Actualizar la URL sin recargar la página
+        if (updateHistory) {
+            const url = new URL(window.location);
+            if (sectionId === 'inicio') {
+                history.pushState({ section: 'inicio' }, '', url.pathname);
+            } else {
+                url.searchParams.set('section', sectionId);
+                history.pushState({ section: sectionId }, '', url);
+            }
+        }
+
         window.scrollTo(0, 0);
         updateUI();
     }
     
-    function navigateToStore(storeId) {
+    function navigateToStore(storeId, updateHistory = true) {
         currentStoreId = storeId;
-        navigateTo('tienda');
+        if (updateHistory) {
+            const url = new URL(window.location);
+            url.searchParams.set('store', storeId);
+            history.pushState({ section: 'tienda', storeId: storeId }, '', url);
+        }
+        navigateTo('tienda', updateHistory);
     }
 
     function updateUI() {
