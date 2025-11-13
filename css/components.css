@@ -647,3 +647,128 @@
     border-color: var(--color-secondary);
     color: #1d4ed8; /* blue-700 */
 }
+
+/* ==================== TARJETA DE PERFIL DE TIENDA ==================== */
+.store-profile-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-borde);
+}
+
+.store-profile-header {
+    position: relative;
+    text-align: center;
+    padding: 1.5rem 1.5rem 0;
+}
+
+.store-profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 1rem;
+    display: block;
+}
+
+.store-profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    color: var(--color-texto-primario);
+}
+
+.store-rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.store-rating .fa-star {
+    color: #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.store-rating .fa-star.filled {
+    color: #f59e0b;
+}
+
+.rating-text {
+    margin-left: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-texto-secundario);
+}
+
+.store-details {
+    padding: 0 1.5rem 1.5rem;
+}
+
+.store-detail-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    align-items: flex-start;
+}
+
+.store-detail-item i {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    margin-top: 0.25rem;
+}
+
+.store-detail-item > div {
+    flex: 1;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+    margin: 0 0 0.25rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.store-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-texto-secundario);
+    margin: 0;
+}
+
+.store-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 0 1.5rem 1.5rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .store-profile-card {
+        border-radius: 0;
+        margin: -1rem -1.5rem 1.5rem;
+        box-shadow: none;
+        border-left: none;
+        border-right: none;
+    }
+    
+    .store-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .store-detail-item {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .store-detail-item i {
+        margin-top: 0;
+    }
+}

@@ -661,19 +661,65 @@ document.addEventListener('DOMContentLoaded', () => {
         // Renderizar encabezado de la tienda
         const headerContainer = document.getElementById('tienda-detalle-header');
         if (headerContainer) {
-            const headerName = getText(store, 'nombre', 'nombre_en');
-            const headerDesc = getText(store, 'descripcion', 'descripcion_en');
+            const storeName = getText(store, 'nombre', 'nombre_en');
+            const storeDesc = getText(store, 'descripcion', 'descripcion_en');
+            
             headerContainer.innerHTML = `
-            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-                <img src="${store.foto_perfil}" alt="${store.nombre}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;">
-                <div style="flex: 1;">
-                    <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">${headerName}</h2>
-                    <p style="margin-bottom: 1rem;">${headerDesc}</p>
-                    <p><i class="fas fa-map-marker-alt fa-fw"></i> ${store.direccion}, ${store.ubicacion}</p>
-                    <p><i class="fas fa-phone fa-fw"></i> ${store.contacto}</p>
-                    <p><i class="fas fa-clock fa-fw"></i> ${store.horarios}</p>
-                </div>
-            </div>`;
+                <div class="store-profile-card">
+                    <div class="store-profile-header">
+                        <img src="${store.foto_perfil || 'img/default-store.jpg'}" 
+                             alt="${storeName}" 
+                             class="store-profile-image">
+                        <h2 class="store-profile-name">${storeName}</h2>
+                        <div class="store-rating">
+                            ${Array(5).fill(0).map((_, i) => 
+                                `<i class="fas fa-star ${i < 4 ? 'filled' : ''}"></i>`
+                            ).join('')}
+                            <span class="rating-text">4.8 (124)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="store-details">
+                        <div class="store-detail-item">
+                            <i class="fas fa-info-circle"></i>
+                            <p class="store-description">${storeDesc}</p>
+                        </div>
+                        
+                        <div class="store-detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <p class="detail-label">Ubicación</p>
+                                <p>${store.direccion}, ${store.ubicacion}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="store-detail-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <p class="detail-label">Contacto</p>
+                                <p>${store.contacto}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="store-detail-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <p class="detail-label">Horario</p>
+                                <p>${store.horarios || 'Lunes a Viernes: 9:00 AM - 6:00 PM'}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="store-actions">
+                        <button class="btn btn-outline" onclick="window.open('tel:${store.contacto.replace(/\D/g, '')}')">
+                            <i class="fas fa-phone"></i> Llamar
+                        </button>
+                        <button class="btn btn-primary" 
+                                onclick="window.open('https://maps.google.com/?q=${encodeURIComponent(store.direccion + ', ' + store.ubicacion)}')">
+                            <i class="fas fa-directions"></i> Cómo llegar
+                        </button>
+                    </div>
+                </div>`;
         }
 
         const storeProducts = products.filter(p => p.tienda.id === storeId);
