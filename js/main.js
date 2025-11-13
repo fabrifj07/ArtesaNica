@@ -500,6 +500,28 @@ document.addEventListener('DOMContentLoaded', () => {
         navigateTo('tienda', updateHistory);
     }
 
+    // Escuchar cambios de idioma para actualizar la interfaz
+    window.addEventListener('i18n:lang-changed', () => {
+        // Forzar actualización de la sección actual
+        const container = document.querySelector(`#${currentSection}-container`);
+        if (container) {
+            // Volver a traducir el DOM
+            if (window.i18n?.translateDOM) {
+                window.i18n.translateDOM(container);
+            }
+            
+            // Volver a renderizar la sección actual
+            if (currentSection === 'productos') {
+                const extended = getExtendedProducts();
+                renderProducts(extended, 'todos-productos');
+            } else if (currentSection === 'inicio') {
+                const homeProducts = getHomeProducts();
+                renderProducts(homeProducts, 'productos-container');
+                renderStores(stores);
+            }
+        }
+    });
+
     function updateUI() {
         switch(currentSection) {
             case 'inicio':
@@ -571,8 +593,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="store-name">${storeName}</p>
                     <p class="product-price">${formatCurrency(product.precio)}</p>
                     <button class="btn btn-primary add-to-cart" 
-                            onclick="event.stopPropagation(); app.addToCart('${product.id}')">
-                        <i class="fas fa-shopping-cart"></i> ${window.i18n?.t?.('actions.addToCart') || 'Agregar'}
+                            onclick="event.stopPropagation(); app.addToCart('${product.id}')"
+                            data-i18n-attr="title=actions.addToCart">
+                        <i class="fas fa-shopping-cart"></i> <span class="add-to-cart-text" data-i18n="actions.addToCart">${window.i18n?.t?.('actions.addToCart') || 'Agregar'}</span>
                     </button>
                 </div>
             </div>`;

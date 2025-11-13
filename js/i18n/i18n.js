@@ -64,11 +64,28 @@
   }
 
   function setLang(lang) {
-    if (!SUPPORTED.includes(lang)) return;
+    if (!SUPPORTED.includes(lang) || currentLang === lang) return;
     currentLang = lang;
     localStorage.setItem(STORAGE_KEY, lang);
+    
+    // Traducir el contenido del DOM
     translateDOM();
-    try { window.dispatchEvent(new CustomEvent('i18n:lang-changed', { detail: { lang } })); } catch(_) {}
+    
+    // Actualizar manualmente los botones de agregar al carrito
+    document.querySelectorAll('.add-to-cart span[data-i18n="actions.addToCart"]').forEach(span => {
+      const translation = t('actions.addToCart');
+      if (translation) span.textContent = translation;
+    });
+    
+    // Notificar a la aplicación principal para que actualice la interfaz
+    try { 
+      window.dispatchEvent(new CustomEvent('i18n:lang-changed', { detail: { lang } })); 
+    } catch(_) {}
+    
+    // Forzar actualización de la sección actual
+    if (window.app && window.app.updateUI) {
+      window.app.updateUI();
+    }
   }
 
   function getLang() {
