@@ -236,9 +236,9 @@ window.usersData = [
 
 // Categorías para el filtrado
 window.categoriasData = [
-    { id: 'barro', nombre: 'Barro', icono: 'fas fa-palette' },
-    { id: 'bambu', nombre: 'Bambú', icono: 'fas fa-leaf' },
-    { id: 'madera', nombre: 'Madera', icono: 'fas fa-tree' },
-    { id: 'hamacas', nombre: 'Hamacas', icono: 'fas fa-bed' },
-    { id: 'repujado', nombre: 'Repujado', icono: 'fas fa-hammer' }
+    { id: 'barro', i18nKey: 'categories.barro', icono: 'fas fa-palette' },
+    { id: 'bambu', i18nKey: 'categories.bambu', icono: 'fas fa-leaf' },
+    { id: 'madera', i18nKey: 'categories.madera', icono: 'fas fa-tree' },
+    { id: 'hamacas', i18nKey: 'categories.hamacas', icono: 'fas fa-bed' },
+    { id: 'repujado', i18nKey: 'categories.repujado', icono: 'fas fa-hammer' }
 ];
