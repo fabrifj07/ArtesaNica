@@ -27,6 +27,9 @@
     const dict = dictionaries[currentLang] || {};
     const fallback = dictionaries.es || {};
     let str = getByPath(dict, key) ?? getByPath(fallback, key) ?? key;
+    if (str === key) {
+      return undefined;
+    }
     if (params && typeof str === 'string') {
       Object.keys(params).forEach(k => {
         str = str.replace(new RegExp('{' + k + '}', 'g'), params[k]);
