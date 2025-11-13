@@ -14,6 +14,16 @@
     display: none;
 }
 
+/* Idioma: móvil por defecto */
+#lang-selector { /* selector de escritorio: oculto en móvil */
+    display: none;
+}
+#lang-selector-mobile { /* visible en móvil */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
 body {
     padding-bottom: 70px;
 }
@@ -138,6 +148,16 @@ body {
     .navbar-search,
     .navbar-icons {
         display: flex;
+    }
+
+    /* Idioma: escritorio */
+    #lang-selector { /* visible en escritorio */
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    #lang-selector-mobile { /* oculto en escritorio */
+        display: none;
     }
 
     .grid-products {

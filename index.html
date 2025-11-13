@@ -23,21 +23,29 @@
        =================================================================== -->
     <nav class="navbar">
         <div class="container">
-            <a href="#" id="back-button" class="navbar-brand hidden back-button" title="Volver a la página anterior"><i class="fas fa-arrow-left"></i> Volver</a>
+            <a href="#" id="back-button" class="navbar-brand hidden back-button" title="Volver a la página anterior" data-i18n-attr="title=nav.back"><i class="fas fa-arrow-left"></i> <span data-i18n="nav.back">Volver</span></a>
             <a href="#" id="logo-link" class="navbar-brand" title="Ir a la página de inicio">Artesanica<img src="https://i.postimg.cc/hj4kQDvb/logo-Artesanica-1.png" alt="Artesanica Logo" class="navbar-brand-img"></a>
             
             <div class="navbar-icons">
-                <a href="#" id="desktop-buscar" class="nav-icon" title="Buscar productos"><i class="fas fa-search"></i></a>
-                <a href="#" id="desktop-perfil" class="nav-icon" title="Ver mi perfil"><i class="fas fa-user"></i></a>
-                <a href="#" id="desktop-favoritos" class="nav-icon" title="Ver mis favoritos">
+                <a href="#" id="desktop-buscar" class="nav-icon" title="Buscar productos" data-i18n-attr="title=nav.search"><i class="fas fa-search"></i></a>
+                <a href="#" id="desktop-perfil" class="nav-icon" title="Ver mi perfil" data-i18n-attr="title=nav.profile"><i class="fas fa-user"></i></a>
+                <a href="#" id="desktop-favoritos" class="nav-icon" title="Ver mis favoritos" data-i18n-attr="title=nav.favorites">
                     <i class="fas fa-heart"></i>
                     <span id="contador-favoritos-desk" class="nav-counter hidden">0</span>
                 </a>
-                <a href="#" id="desktop-carrito" class="nav-icon" title="Ver mi carrito de compras">
+                <a href="#" id="desktop-carrito" class="nav-icon" title="Ver mi carrito de compras" data-i18n-attr="title=nav.cart">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="contador-carrito-desk" class="nav-counter hidden">0</span>
                 </a>
+                <a href="#" id="lang-selector" class="nav-icon" title="Cambiar idioma" data-i18n-attr="title=nav.changeLanguage">
+                    <i class="fas fa-globe"></i>
+                    <span id="lang-code-desktop">ES</span>
+                </a>
             </div>
+            <a href="#" id="lang-selector-mobile" class="nav-icon" title="Cambiar idioma" data-i18n-attr="title=nav.changeLanguage" style="margin-left:auto;">
+                <i class="fas fa-globe"></i>
+                <span id="lang-code-mobile">ES</span>
+            </a>
         </div>
     </nav>
 
@@ -50,12 +58,12 @@
                 <div class="container">
                     <div class="hero-text-wrapper">
                         <div class="hero-content">
-                            <h1>Artesanía de Niquinohomo</h1>
-                            <p>Descubre productos artesanales únicos, hechos con amor y tradición.</p>
+                            <h1 data-i18n="home.hero.title">Artesanía de Niquinohomo</h1>
+                            <p data-i18n="home.hero.subtitle">Descubre productos artesanales únicos, hechos con amor y tradición.</p>
                         </div>
                         <div class="hero-buttons">
-                            <a href="#productos" class="btn btn-primary">Ver Productos</a>
-                            <a href="#tiendas" class="btn btn-secondary">Ver Artesanos</a>
+                            <a href="#productos" class="btn btn-primary" data-i18n="home.hero.ctaProducts">Ver Productos</a>
+                            <a href="#tiendas" class="btn btn-secondary" data-i18n="home.hero.ctaStores">Ver Artesanos</a>
                         </div>
                     </div>
                     <div class="hero-image"><img src="https://www.visitcentroamerica.com/wp-content/uploads/2025/04/Masaya-Arts-and-Crafts-Nicaragua-Centroamerica-06.webp" alt="Artesanías de Masaya, Nicaragua"></div>
@@ -63,7 +71,7 @@
             </section>
             <section id="categorias" class="section">
                 <div class="container">
-                    <h2 class="section-title">Explora por Categoría</h2>
+                    <h2 class="section-title" data-i18n="sections.categories">Explora por Categoría</h2>
                     <div id="categorias-container" class="grid-container grid-categories">
                         <!-- Las categorías se renderizarán aquí dinámicamente -->
                     </div>
@@ -71,27 +79,27 @@
             </section>
             <section id="productos" class="section">
                 <div class="container">
-                    <h2 class="section-title">Productos Destacados</h2>
+                    <h2 class="section-title" data-i18n="sections.featuredProducts">Productos Destacados</h2>
                     <div id="productos-container" class="grid-container grid-products"></div>
                     <div style="text-align: right; margin-top: 1rem;">
-                        <a class="btn btn-text ver-mas-link" href="#" onclick="app.navigateTo('productos'); return false;">Ver más productos <i class="fas fa-arrow-right" style="margin-left: 0.25rem;"></i></a>
+                        <a class="btn btn-text ver-mas-link" href="#" onclick="app.navigateTo('productos'); return false;"><span data-i18n="actions.seeMoreProducts">Ver más productos</span> <i class="fas fa-arrow-right" style="margin-left: 0.25rem;"></i></a>
                     </div>
                 </div>
             </section>
             <section id="tiendas" class="section">
                 <div class="container">
-                    <h2 class="section-title">Tiendas Destacadas</h2>
+                    <h2 class="section-title" data-i18n="sections.featuredStores">Tiendas Destacadas</h2>
                     <div id="tiendas-container" class="grid-container grid-stores"></div>
                     <div style="text-align: right; margin-top: 1rem;">
-                        <a class="btn btn-text ver-mas-link" href="#" onclick="app.navigateTo('mas-tiendas'); return false;">Ver más tiendas <i class="fas fa-arrow-right" style="margin-left: 0.25rem;"></i></a>
+                        <a class="btn btn-text ver-mas-link" href="#" onclick="app.navigateTo('mas-tiendas'); return false;"><span data-i18n="actions.seeMoreStores">Ver más tiendas</span> <i class="fas fa-arrow-right" style="margin-left: 0.25rem;"></i></a>
                     </div>
                 </div>
             </section>
         </div>
-        <div id="seccion-buscar" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Buscar productos</h2><div class="search-bar search-bar-modal"><input type="text" id="buscar-productos" placeholder="Escribe aquí para buscar..." class="form-input"><i class="fas fa-search search-icon"></i></div><div id="resultados-busqueda" class="grid-container grid-products"></div></div></div>
-        <div id="seccion-favoritos" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Tus Favoritos</h2><div id="lista-favoritos" class="grid-container grid-products"></div></div></div>
-        <div id="seccion-carrito" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Mi Carrito</h2><div class="carrito-layout"><div id="contenido-carrito"></div><div id="resumen-carrito" class="card"></div></div></div></div>
-        <div id="seccion-perfil" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Mi Perfil</h2><div id="perfil-contenido"></div></div></div>
+        <div id="seccion-buscar" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.search">Buscar productos</h2><div class="search-bar search-bar-modal"><input type="text" id="buscar-productos" placeholder="Escribe aquí para buscar..." class="form-input"><i class="fas fa-search search-icon"></i></div><div id="resultados-busqueda" class="grid-container grid-products"></div></div></div>
+        <div id="seccion-favoritos" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.favorites">Tus Favoritos</h2><div id="lista-favoritos" class="grid-container grid-products"></div></div></div>
+        <div id="seccion-carrito" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.cart">Mi Carrito</h2><div class="carrito-layout"><div id="contenido-carrito"></div><div id="resumen-carrito" class="card"></div></div></div></div>
+        <div id="seccion-perfil" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.profile">Mi Perfil</h2><div id="perfil-contenido"></div></div></div>
         <div id="seccion-productos" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Todos los Productos</h2><div id="todos-productos" class="grid-container grid-products"></div></div></div>
         <div id="seccion-mas-tiendas" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Más Tiendas</h2><div id="mas-tiendas-container" class="grid-container grid-stores"></div></div></div>
         
@@ -197,6 +205,7 @@
        =================================================================== -->
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/i18n/i18n.js"></script>
     <script>
         // Asegurarse de que la sección de tienda sea accesible
         document.addEventListener('DOMContentLoaded', function() {

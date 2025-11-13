@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "name": "Artesanica"
+  },
+  "home": {
+    "hero": {
+      "title": "Artesanía de Niquinohomo",
+      "subtitle": "Descubre productos artesanales únicos, hechos con amor y tradición.",
+      "ctaProducts": "Ver Productos",
+      "ctaStores": "Ver Artesanos"
+    }
+  },
+  "sections": {
+    "categories": "Explora por Categoría",
+    "featuredProducts": "Productos Destacados",
+    "featuredStores": "Tiendas Destacadas",
+    "search": "Buscar productos",
+    "favorites": "Tus Favoritos",
+    "cart": "Mi Carrito",
+    "profile": "Mi Perfil",
+    "allProducts": "Todos los Productos",
+    "moreStores": "Más Tiendas"
+  },
+  "nav": {
+    "back": "Volver",
+    "changeLanguage": "Cambiar idioma",
+    "search": "Buscar productos",
+    "profile": "Ver mi perfil",
+    "favorites": "Ver mis favoritos",
+    "cart": "Ver mi carrito de compras"
+  },
+  "actions": {
+    "seeMoreProducts": "Ver más productos",
+    "seeMoreStores": "Ver más tiendas"
+  }
+}

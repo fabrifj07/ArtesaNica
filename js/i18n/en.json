@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "name": "Artesanica"
+  },
+  "home": {
+    "hero": {
+      "title": "Handcrafts from Niquinohomo",
+      "subtitle": "Discover unique handcrafted products, made with love and tradition.",
+      "ctaProducts": "View Products",
+      "ctaStores": "View Artisans"
+    }
+  },
+  "sections": {
+    "categories": "Browse by Category",
+    "featuredProducts": "Featured Products",
+    "featuredStores": "Featured Stores",
+    "search": "Search products",
+    "favorites": "Your Favorites",
+    "cart": "My Cart",
+    "profile": "My Profile",
+    "allProducts": "All Products",
+    "moreStores": "More Stores"
+  },
+  "nav": {
+    "back": "Back",
+    "changeLanguage": "Change language",
+    "search": "Search products",
+    "profile": "View my profile",
+    "favorites": "View my favorites",
+    "cart": "View my shopping cart"
+  },
+  "actions": {
+    "seeMoreProducts": "See more products",
+    "seeMoreStores": "See more stores"
+  }
+}

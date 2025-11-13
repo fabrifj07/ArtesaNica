@@ -14,7 +14,7 @@
 
 .navbar .container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -36,6 +36,7 @@
     display: none; /* Oculto en móvil por defecto */
     align-items: center;
     gap: 1.5rem;
+    margin-left: auto; /* Empuja los íconos a la derecha en escritorio */
 }
 
 .navbar-icons .nav-icon {
