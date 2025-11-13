@@ -65,6 +65,7 @@
     currentLang = lang;
     localStorage.setItem(STORAGE_KEY, lang);
     translateDOM();
+    try { window.dispatchEvent(new CustomEvent('i18n:lang-changed', { detail: { lang } })); } catch(_) {}
   }
 
   function getLang() {
@@ -95,6 +96,7 @@
     updateLangBadges();
     setupLangSelectors();
     translateDOM();
+    try { window.dispatchEvent(new CustomEvent('i18n:lang-changed', { detail: { lang: currentLang } })); } catch(_) {}
   }
 
   window.i18n = { t, setLang, getLang, translateDOM };

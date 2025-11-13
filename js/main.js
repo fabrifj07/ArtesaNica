@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         syncKnownProductsAndExtendNew();
         checkActiveSession();
         setupEventListeners();
+        try { window.addEventListener('i18n:lang-changed', () => updateUI()); } catch(_) {}
         
         // Manejar el evento de retroceso/avance del navegador
         window.addEventListener('popstate', (event) => {
@@ -246,6 +247,27 @@ document.addEventListener('DOMContentLoaded', () => {
     function notify(key, fallback, type = 'info', params = {}) {
         const msg = window.i18n?.t?.(key, params) || fallback;
         showNotification(msg, type);
+    }
+    function getLocale() {
+        const lang = window.i18n?.getLang?.() || 'es';
+        return lang === 'en' ? 'en-US' : 'es-ES';
+    }
+    function formatCurrency(value) {
+        try {
+            const nf = new Intl.NumberFormat(getLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return `C$${nf.format(Number(value || 0))}`;
+        } catch(_) {
+            return `C$${Number(value || 0).toFixed(2)}`;
+        }
+    }
+    function formatDate(dateISO, options) {
+        try {
+            const d = new Date(dateISO);
+            const fmt = new Intl.DateTimeFormat(getLocale(), options || { year:'numeric', month:'long', day:'numeric' });
+            return fmt.format(d);
+        } catch(_) {
+            return new Date(dateISO).toLocaleDateString();
+        }
     }
     
     function performSearch(query) {
@@ -535,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const productsHtml = (productsToDisplay || []).map(product => {
             const isFavorite = currentUser?.favoritos.includes(product.id);
             const name = getText(product, 'nombre', 'nombre_en');
-            const storeName = getText(product?.tienda || {}, 'nombre', 'nombre_en') || 'Tienda';
+            const storeName = getText(product?.tienda || {}, 'nombre', 'nombre_en') || (window.i18n?.t?.('stores.generic') || 'Tienda');
             return `
             <div class="product-card" onclick="app.navigateToProduct('${product.id}')">
                 <div class="product-image-container">
@@ -547,10 +569,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="product-content">
                     <h3 class="product-name">${name}</h3>
                     <p class="store-name">${storeName}</p>
-                    <p class="product-price">C$${product.precio.toFixed(2)}</p>
+                    <p class="product-price">${formatCurrency(product.precio)}</p>
                     <button class="btn btn-primary add-to-cart" 
                             onclick="event.stopPropagation(); app.addToCart('${product.id}')">
-                        <i class="fas fa-shopping-cart"></i> Agregar
+                        <i class="fas fa-shopping-cart"></i> ${window.i18n?.t?.('actions.addToCart') || 'Agregar'}
                     </button>
                 </div>
             </div>`;
@@ -576,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         container.innerHTML = (storesToDisplay || []).map(store => {
             const sName = getText(store, 'nombre', 'nombre_en');
-            const sDesc = getText(store, 'descripcion', 'descripcion_en') || 'Tienda de artesanías';
+            const sDesc = getText(store, 'descripcion', 'descripcion_en') || (window.i18n?.t?.('stores.defaultDescription') || 'Tienda de artesanías');
             return `
             <div class="store-card" onclick="app.navigateToStore('${store.id}')">
                 <div class="store-image-container">
@@ -709,13 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                             Factura #${order.facturaId || order.id.slice(-6)}
                                         </div>
                                         <div style="font-size: 0.9rem; color: var(--color-texto-secundario);">
-                                            ${new Date(order.fecha).toLocaleDateString('es-ES', { 
-                                                year: 'numeric', 
-                                                month: 'long', 
-                                                day: 'numeric',
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            })}
+                                            ${formatDate(order.fecha, {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'})}
                                         </div>
                                     </div>
                                     <div style="text-align: right;">
@@ -959,16 +975,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <!-- Resumen de Costos -->
                 <div style="margin-top: 1.5rem;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Subtotal (${storeOrder.items.length} productos):</span>
-                        <span>C$${subtotal.toFixed(2)}</span>
+                        <span>${window.i18n?.t?.('cart.summary.subtotal', { count: storeOrder.items.length }) || `Subtotal (${storeOrder.items.length} productos):`}</span>
+                        <span id="subtotal">${formatCurrency(subtotal)}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--color-borde); padding-bottom: 1rem;">
-                        <span>Envío:</span>
-                        <span id="costo-envio">C$${envio.toFixed(2)}</span>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>${window.i18n?.t?.('cart.summary.shipping') || 'Costo de envío:'}</span>
+                        <span id="costo-envio">${formatCurrency(envio)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;">
-                        <span>Total:</span>
-                        <span id="total-pedido">C$${total.toFixed(2)}</span>
+                        <span>${window.i18n?.t?.('cart.summary.total') || 'Total:'}</span>
+                        <span id="total-pedido">${formatCurrency(total)}</span>
                     </div>
                 </div>
                 
