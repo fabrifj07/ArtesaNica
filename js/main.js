@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================================
     function initialize() {
         loadMasterData();
+        initializeExtendedProducts();
+        syncKnownProductsAndExtendNew();
         checkActiveSession();
         setupEventListeners();
         
@@ -69,6 +71,93 @@ document.addEventListener('DOMContentLoaded', () => {
                 users.push(storedUser);
             }
         });
+    }
+
+    // ---------------------------------------------------------------------------------
+    // Productos extendidos (persistencia de los movidos a la nueva vista)
+    // ---------------------------------------------------------------------------------
+    let extendedProductIds = new Set();
+    let knownProductIds = new Set();
+
+    function initializeExtendedProducts() {
+        try {
+            const saved = JSON.parse(localStorage.getItem('artesanica_extended_products')) || [];
+            if (Array.isArray(saved) && saved.length > 0) {
+                extendedProductIds = new Set(saved);
+                // Saneamiento: si por error se guardaron casi todos los productos como extendidos,
+                // restablecer a los últimos 4 para no vaciar la página de inicio
+                const total = (products || []).length;
+                if (total > 0 && extendedProductIds.size >= total) {
+                    const lastFourFix = (products || []).slice(-4).map(p => p.id);
+                    extendedProductIds = new Set(lastFourFix);
+                    syncExtendedProductsStorage();
+                }
+            } else {
+                // Inicial: tomar los últimos 4 productos actuales
+                const lastFour = (products || []).slice(-4).map(p => p.id);
+                extendedProductIds = new Set(lastFour);
+                syncExtendedProductsStorage();
+            }
+        } catch (e) {
+            // En caso de error, fallback a últimos 4
+            const lastFour = (products || []).slice(-4).map(p => p.id);
+            extendedProductIds = new Set(lastFour);
+            syncExtendedProductsStorage();
+        }
+    }
+
+    function syncExtendedProductsStorage() {
+        localStorage.setItem('artesanica_extended_products', JSON.stringify(Array.from(extendedProductIds)));
+    }
+
+    function syncKnownProductsAndExtendNew() {
+        const currentIds = (products || []).map(p => p.id);
+
+        // Si es la primera vez, solo inicializamos known con los actuales y no movemos nada
+        if (savedKnownNeedsInit()) {
+            knownProductIds = new Set(currentIds);
+            localStorage.setItem('artesanica_known_products', JSON.stringify(currentIds));
+            return;
+        }
+
+        // Cargar conocidos previamente
+        try {
+            const savedKnown = JSON.parse(localStorage.getItem('artesanica_known_products')) || [];
+            knownProductIds = new Set(Array.isArray(savedKnown) ? savedKnown : []);
+        } catch (_) {
+            knownProductIds = new Set(currentIds);
+        }
+
+        // Detectar solo productos realmente nuevos para moverlos a extendidos
+        let changed = false;
+        currentIds.forEach(id => {
+            if (!knownProductIds.has(id)) {
+                extendedProductIds.add(id);
+                knownProductIds.add(id);
+                changed = true;
+            }
+        });
+
+        if (changed) {
+            syncExtendedProductsStorage();
+            localStorage.setItem('artesanica_known_products', JSON.stringify(Array.from(knownProductIds)));
+        }
+    }
+
+    function savedKnownNeedsInit() {
+        try {
+            return !localStorage.getItem('artesanica_known_products');
+        } catch (_) {
+            return true;
+        }
+    }
+
+    function getHomeProducts() {
+        return (products || []).filter(p => !extendedProductIds.has(p.id));
+    }
+
+    function getExtendedProducts() {
+        return (products || []).filter(p => extendedProductIds.has(p.id));
     }
 
     function saveUsersToStorage() {
@@ -303,11 +392,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveUsersToStorage();
             }
             
-            // 4. Actualizar UI
-            showNotification('¡Pago exitoso! Tu pedido ha sido procesado.', 'exito');
+            // 4. Actualizar la interfaz de usuario
             updateCartCounter();
-            currentStoreForPayment = null; // Resetear la tienda seleccionada
-            renderCartSection(); // Actualizar la vista del carrito
+            
+            // 5. Mostrar notificación de éxito
+            showNotification('¡Pago exitoso! Tu pedido ha sido procesado.', 'exito');
+            
+            // 6. Actualizar la vista actual
+            if (currentSection === 'carrito' || currentSection === 'tienda') {
+                // Si estamos en el carrito o en una tienda, actualizar la vista
+                if (storeId) {
+                    // Si es un pago de tienda específica, volver a la vista del carrito
+                    navigateTo('carrito');
+                } else {
+                    // Si es un pago general, actualizar la vista actual
+                    updateUI();
+                }
+            } else {
+                // Si estamos en otra sección, solo actualizar el contador
+                updateCartCounter();
+            }
+            
+            // 7. Resetear estado de pago
+            currentStoreForPayment = null;
         }, 1500);
     }
 
@@ -358,8 +465,13 @@ document.addEventListener('DOMContentLoaded', () => {
         switch(currentSection) {
             case 'inicio':
                 renderCategoriesAndFilters();
-                renderProducts(products, 'productos-container');
+                const homeProducts = getHomeProducts();
+                renderProducts(homeProducts, 'productos-container');
                 renderStores(stores);
+                break;
+            case 'productos':
+                const extended = getExtendedProducts();
+                renderProducts(extended, 'todos-productos');
                 break;
             case 'buscar':
                 performSearch(searchInputSection.value || '');
@@ -375,6 +487,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'tienda':
                 renderStorePage(currentStoreId);
+                break;
+            case 'mas-tiendas':
+                const moreStoresContainer = document.getElementById('mas-tiendas-container');
+                if (moreStoresContainer) {
+                    moreStoresContainer.innerHTML = '';
+                }
                 break;
         }
         updateAuthUI();

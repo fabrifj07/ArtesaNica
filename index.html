@@ -74,12 +74,18 @@
                 <div class="container">
                     <h2 class="section-title">Productos Destacados</h2>
                     <div id="productos-container" class="grid-container grid-products"></div>
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <a class="btn btn-text ver-mas-link" href="#" onclick="app.navigateTo('productos'); return false;">Ver más productos <i class="fas fa-arrow-right" style="margin-left: 0.25rem;"></i></a>
+                    </div>
                 </div>
             </section>
             <section id="tiendas" class="section">
                 <div class="container">
                     <h2 class="section-title">Tiendas Destacadas</h2>
                     <div id="tiendas-container" class="grid-container grid-stores"></div>
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <a class="btn btn-text ver-mas-link" href="#" onclick="app.navigateTo('mas-tiendas'); return false;">Ver más tiendas <i class="fas fa-arrow-right" style="margin-left: 0.25rem;"></i></a>
+                    </div>
                 </div>
             </section>
         </div>
@@ -87,6 +93,8 @@
         <div id="seccion-favoritos" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Tus Favoritos</h2><div id="lista-favoritos" class="grid-container grid-products"></div></div></div>
         <div id="seccion-carrito" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Mi Carrito</h2><div class="carrito-layout"><div id="contenido-carrito"></div><div id="resumen-carrito" class="card"></div></div></div></div>
         <div id="seccion-perfil" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Mi Perfil</h2><div id="perfil-contenido"></div></div></div>
+        <div id="seccion-productos" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Todos los Productos</h2><div id="todos-productos" class="grid-container grid-products"></div></div></div>
+        <div id="seccion-mas-tiendas" class="seccion-principal hidden"><div class="container section"><h2 class="section-title">Más Tiendas</h2><div id="mas-tiendas-container" class="grid-container grid-stores"></div></div></div>
         
         <!-- Nueva sección para la vista de tienda individual -->
         <div id="seccion-tienda" class="seccion-principal hidden">
@@ -107,6 +115,8 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Se eliminaron los botones de ver más -->
     </main>
     
     <!-- ===================================================================
@@ -188,5 +198,32 @@
        =================================================================== -->
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        // Asegurarse de que la sección de tienda sea accesible
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mostrar la sección de tienda si hay un parámetro en la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const section = urlParams.get('section');
+            const storeId = urlParams.get('store');
+
+            if (section === 'tienda' && storeId) {
+                // Si estamos en la sección de tienda, mostrarla
+                document.getElementById('seccion-tienda').classList.remove('hidden');
+                document.getElementById('seccion-inicio').classList.add('hidden');
+                
+                // Actualizar la navegación
+                document.querySelectorAll('.nav-item a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.getElementById('nav-inicio').classList.add('active');
+            }
+
+            // Asegurarse de que el enlace "Ver más..." sea visible
+            const verMasLink = document.querySelector('.ver-mas-link');
+            if (verMasLink) {
+                verMasLink.style.display = 'inline-block';
+            }
+        });
+    </script>
 </body>
 </html>
