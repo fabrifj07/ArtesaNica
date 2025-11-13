@@ -21,6 +21,13 @@
     "allProducts": "All Products",
     "moreStores": "More Stores"
   },
+  "bottom": {
+    "home": "Home",
+    "search": "Search",
+    "favorites": "Favorites",
+    "cart": "Cart",
+    "profile": "Profile"
+  },
   "nav": {
     "back": "Back",
     "changeLanguage": "Change language",
@@ -31,6 +38,57 @@
   },
   "actions": {
     "seeMoreProducts": "See more products",
-    "seeMoreStores": "See more stores"
+    "seeMoreStores": "See more stores",
+    "viewStore": "View Store"
+  },
+  "common": {
+    "emptyProducts": "No products to display."
+  },
+  "search": {
+    "placeholder": "Type here to search...",
+    "emptyPrompt": "Search products or artisans.",
+    "noResults": "No products found."
+  },
+  "stores": {
+    "empty": "No stores available at this time."
+  },
+  "favorites": {
+    "empty": "Your favorites list is empty."
+  },
+  "auth": {
+    "loginTab": "Sign In",
+    "registerTab": "Sign Up",
+    "welcomeTitle": "Welcome back",
+    "registerTitle": "Create an account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "loginButton": "Sign in",
+    "registerButton": "Register",
+    "close": "Close",
+    "emailExists": "An account with this email already exists",
+    "registerSuccess": "Registration successful! Signing in...",
+    "welcomeBack": "Welcome back, {name}!",
+    "badCredentials": "Incorrect email or password",
+    "goodbye": "See you soon, {name}",
+    "loginRequired": "Please sign in to continue"
+  },
+  "cart": {
+    "empty": "Your cart is empty.",
+    "payStore": "Pay Order",
+    "backToCart": "Back to cart",
+    "delivery": {
+      "pickup": "Pickup at Store",
+      "home": "Home Delivery",
+      "address": "Shipping Address"
+    },
+    "proceedPayment": "Proceed to Payment"
+  },
+  "categories": {
+    "barro": "Clay",
+    "bambu": "Bamboo",
+    "madera": "Wood",
+    "hamacas": "Hammocks",
+    "repujado": "Repoussé"
   }
 }

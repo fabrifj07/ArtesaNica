@@ -184,13 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================================
     function register(name, email, password) {
         if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-            showNotification('Ya existe una cuenta con este correo', 'error');
+            notify('auth.emailExists', 'Ya existe una cuenta con este correo', 'error');
             return;
         }
         const newUser = { id: `user_${Date.now()}`, nombre: name, email, password, fechaRegistro: new Date().toISOString(), favoritos: [], carrito: [], historialCompras: [] };
         users.push(newUser);
         saveUsersToStorage();
-        showNotification('¡Registro exitoso! Iniciando sesión...', 'exito');
+        notify('auth.registerSuccess', '¡Registro exitoso! Iniciando sesión...', 'exito');
         login(email, password);
     }
 
@@ -200,16 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUser = user;
             localStorage.setItem('artesanica_session', JSON.stringify(currentUser));
             hideAuthModal();
-            showNotification(`¡Bienvenido de nuevo, ${currentUser.nombre}!`, 'exito');
+            notify('auth.welcomeBack', `¡Bienvenido de nuevo, ${currentUser.nombre}!`, 'exito', { name: currentUser.nombre });
             navigateTo('inicio');
             return true;
         }
-        showNotification('Correo o contraseña incorrectos', 'error');
+        notify('auth.badCredentials', 'Correo o contraseña incorrectos', 'error');
         return false;
     }
 
     function logout() {
-        showNotification(`Hasta pronto, ${currentUser.nombre}`, 'info');
+        notify('auth.goodbye', `Hasta pronto, ${currentUser?.nombre || ''}`, 'info', { name: currentUser?.nombre || '' });
         currentUser = null;
         localStorage.removeItem('artesanica_session');
         navigateTo('inicio');
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function ensureAuth() {
         if (currentUser) return true;
-        showNotification('Por favor, inicia sesión para continuar', 'info');
+        notify('auth.loginRequired', 'Por favor, inicia sesión para continuar', 'info');
         showAuthModal('login');
         return false;
     }
@@ -233,15 +233,31 @@ document.addEventListener('DOMContentLoaded', () => {
     function setDeliveryAddress(address) {
         deliveryAddress = address;
     }
+    function getText(obj, esKey, enKey) {
+        const lang = window.i18n?.getLang?.() || 'es';
+        if (lang === 'en' && obj && obj[enKey]) return obj[enKey];
+        return obj ? obj[esKey] : '';
+    }
+    function getCategoryLabel(catId) {
+        const key = `categories.${catId}`;
+        const val = window.i18n?.t?.(key);
+        return (val && val !== key) ? val : catId;
+    }
+    function notify(key, fallback, type = 'info', params = {}) {
+        const msg = window.i18n?.t?.(key, params) || fallback;
+        showNotification(msg, type);
+    }
     
     function performSearch(query) {
         const lowerCaseQuery = query.trim().toLowerCase();
         if (lowerCaseQuery) {
-            const results = products.filter(p =>
-                p.nombre.toLowerCase().includes(lowerCaseQuery) ||
-                p.descripcion.toLowerCase().includes(lowerCaseQuery) ||
-                p.tienda.nombre.toLowerCase().includes(lowerCaseQuery)
-            );
+            const results = products.filter(p => {
+                const fields = [
+                    p.nombre, p.descripcion, p?.tienda?.nombre,
+                    p.nombre_en, p.descripcion_en, p?.tienda?.nombre_en
+                ].filter(Boolean).map(s => String(s).toLowerCase());
+                return fields.some(f => f.includes(lowerCaseQuery));
+            });
             renderProducts(results, 'resultados-busqueda');
         } else {
             renderProducts([], 'resultados-busqueda');
@@ -253,10 +269,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const index = currentUser.favoritos.indexOf(productId);
         if (index === -1) {
             currentUser.favoritos.push(productId);
-            showNotification('Añadido a favoritos');
+            notify('favorites.added', 'Añadido a favoritos', 'exito');
         } else {
             currentUser.favoritos.splice(index, 1);
-            showNotification('Eliminado de favoritos');
+            notify('favorites.removed', 'Eliminado de favoritos', 'info');
         }
         saveUsersToStorage();
         updateUI();
@@ -273,7 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUser.carrito.push({ id: productId, cantidad: 1 });
         }
         saveUsersToStorage();
-        showNotification(`'${product.nombre}' fue añadido al carrito.`, 'exito');
+        const name = getText(product, 'nombre', 'nombre_en');
+        notify('cart.added', `'${name}' fue añadido al carrito.`, 'exito', { name });
         updateUI();
     }
     
@@ -293,14 +310,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function processPayment(storeId = null) {
         if (!currentUser) {
-            showNotification('Debes iniciar sesión para realizar un pago', 'error');
+            notify('pay.loginRequired', 'Debes iniciar sesión para realizar un pago', 'error');
             showAuthModal();
             return;
         }
 
         // Validar dirección de envío si es necesario
         if (deliveryMethod === 'domicilio' && !deliveryAddress.trim()) {
-            showNotification('Por favor ingresa una dirección de envío', 'error');
+            notify('pay.addressRequired', 'Por favor ingresa una dirección de envío', 'error');
             document.getElementById('direccion-envio')?.focus();
             return;
         }
@@ -319,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (itemsToPay.length === 0) {
-            showNotification('No hay productos para pagar', 'error');
+            notify('pay.noItems', 'No hay productos para pagar', 'error');
             return;
         }
 
@@ -371,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Aquí iría la lógica de procesamiento de pago
         // Por ahora, simulamos un pago exitoso después de 1.5 segundos
-        showNotification('Procesando pago...', 'info');
+        notify('pay.processing', 'Procesando pago...', 'info');
         
         setTimeout(() => {
             // 1. Agregar la orden al historial
@@ -396,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCartCounter();
             
             // 5. Mostrar notificación de éxito
-            showNotification('¡Pago exitoso! Tu pedido ha sido procesado.', 'exito');
+            notify('pay.success', '¡Pago exitoso! Tu pedido ha sido procesado.', 'exito');
             
             // 6. Actualizar la vista actual
             if (currentSection === 'carrito' || currentSection === 'tienda') {
@@ -499,23 +516,37 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActiveNav(currentSection);
     }
 
+    function renderCategoriesAndFilters() {
+        const container = document.getElementById('categorias-container');
+        if (!container) return;
+        const cats = (window.categoriasData || []).map(c => `
+            <div class="category-card" data-category="${c.id}">
+                <div class="category-icon"><i class="${c.icono}"></i></div>
+                <div class="category-name">${getCategoryLabel(c.id)}</div>
+            </div>
+        `).join('');
+        container.innerHTML = cats || '';
+    }
+
     function renderProducts(productsToDisplay, containerId) {
         const container = document.getElementById(containerId);
         if (!container) return;
         
         const productsHtml = (productsToDisplay || []).map(product => {
             const isFavorite = currentUser?.favoritos.includes(product.id);
+            const name = getText(product, 'nombre', 'nombre_en');
+            const storeName = getText(product?.tienda || {}, 'nombre', 'nombre_en') || 'Tienda';
             return `
             <div class="product-card" onclick="app.navigateToProduct('${product.id}')">
                 <div class="product-image-container">
-                    <img src="${product.imagen}" alt="${product.nombre}" class="product-image">
+                    <img src="${product.imagen}" alt="${name}" class="product-image">
                     <button class="favorite-btn" onclick="event.stopPropagation(); app.toggleFavorite('${product.id}')">
                         <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
                     </button>
                 </div>
                 <div class="product-content">
-                    <h3 class="product-name">${product.nombre}</h3>
-                    <p class="store-name">${product.tienda?.nombre || 'Tienda'}</p>
+                    <h3 class="product-name">${name}</h3>
+                    <p class="store-name">${storeName}</p>
                     <p class="product-price">C$${product.precio.toFixed(2)}</p>
                     <button class="btn btn-primary add-to-cart" 
                             onclick="event.stopPropagation(); app.addToCart('${product.id}')">
@@ -525,11 +556,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
         }).join('');
 
-        let emptyMessage = '<p>No hay productos para mostrar.</p>';
+        let emptyMessage = `<p>${window.i18n?.t?.('common.emptyProducts') || 'No hay productos para mostrar.'}</p>`;
         if (containerId === 'resultados-busqueda') {
-            emptyMessage = '<p style="text-align:center; grid-column: 1 / -1;">Busca productos o artesanos.</p>';
+            emptyMessage = `<p style="text-align:center; grid-column: 1 / -1;">${window.i18n?.t?.('search.emptyPrompt') || 'Busca productos o artesanos.'}</p>`;
             if (searchInputSection.value) {
-                 emptyMessage = '<p style="text-align:center; grid-column: 1 / -1;">No se encontraron productos.</p>';
+                 emptyMessage = `<p style="text-align:center; grid-column: 1 / -1;">${window.i18n?.t?.('search.noResults') || 'No se encontraron productos.'}</p>`;
             }
         }
 
@@ -543,29 +574,33 @@ document.addEventListener('DOMContentLoaded', () => {
         // Asegurarse de que el contenedor tenga la clase correcta
         container.className = 'stores-grid';
         
-        container.innerHTML = (storesToDisplay || []).map(store => `
+        container.innerHTML = (storesToDisplay || []).map(store => {
+            const sName = getText(store, 'nombre', 'nombre_en');
+            const sDesc = getText(store, 'descripcion', 'descripcion_en') || 'Tienda de artesanías';
+            return `
             <div class="store-card" onclick="app.navigateToStore('${store.id}')">
                 <div class="store-image-container">
                     <img src="${store.imagen || 'img/default-store.jpg'}" 
-                         alt="${store.nombre}" 
+                         alt="${sName}" 
                          class="store-image">
                 </div>
                 <div class="store-content">
-                    <h3 class="store-name">${store.nombre}</h3>
-                    <p class="store-description">${store.descripcion || 'Tienda de artesanías'}</p>
+                    <h3 class="store-name">${sName}</h3>
+                    <p class="store-description">${sDesc}</p>
                     <div class="store-button">
-                        <span>Ver Tienda</span>
+                        <span>${window.i18n?.t?.('actions.viewStore') || 'Ver Tienda'}</span>
                         <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
                     </div>
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
             
         // Si no hay tiendas para mostrar
         if ((!storesToDisplay || storesToDisplay.length === 0) && container) {
             container.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
                     <i class="fas fa-store-slash" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
-                    <p>No hay tiendas disponibles en este momento.</p>
+                    <p>${window.i18n?.t?.('stores.empty') || 'No hay tiendas disponibles en este momento.'}</p>
                 </div>`;
         }
     }
@@ -574,19 +609,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const store = stores.find(s => s.id === storeId);
         if (!store) {
             navigateTo('inicio');
-            showNotification('Tienda no encontrada', 'error');
+            notify('store.notFound', 'Tienda no encontrada', 'error');
             return;
         }
 
         // Renderizar encabezado de la tienda
         const headerContainer = document.getElementById('tienda-detalle-header');
         if (headerContainer) {
+            const headerName = getText(store, 'nombre', 'nombre_en');
+            const headerDesc = getText(store, 'descripcion', 'descripcion_en');
             headerContainer.innerHTML = `
             <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
                 <img src="${store.foto_perfil}" alt="${store.nombre}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;">
                 <div style="flex: 1;">
-                    <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">${store.nombre}</h2>
-                    <p style="margin-bottom: 1rem;">${store.descripcion}</p>
+                    <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">${headerName}</h2>
+                    <p style="margin-bottom: 1rem;">${headerDesc}</p>
                     <p><i class="fas fa-map-marker-alt fa-fw"></i> ${store.direccion}, ${store.ubicacion}</p>
                     <p><i class="fas fa-phone fa-fw"></i> ${store.contacto}</p>
                     <p><i class="fas fa-clock fa-fw"></i> ${store.horarios}</p>
@@ -600,9 +637,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Renderizar filtros
         const filtersContainer = document.getElementById('tienda-filtros-container');
         if (filtersContainer) {
-            filtersContainer.innerHTML = categories.map((cat, index) => `
-                <button class="btn ${index === 0 ? 'btn-primary' : 'btn-secondary'} btn-sm filter-btn" data-category="${cat}">${cat}</button>
-            `).join('');
+            filtersContainer.innerHTML = categories.map((cat, index) => {
+                const label = cat === 'Todas' ? 'Todas' : getCategoryLabel(cat);
+                return `
+                <button class="btn ${index === 0 ? 'btn-primary' : 'btn-secondary'} btn-sm filter-btn" data-category="${cat}">${label}</button>
+                `;
+            }).join('');
         }
 
         // Renderizar productos de la tienda
@@ -755,7 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (favoriteProducts.length > 0) {
             renderProducts(favoriteProducts, 'lista-favoritos');
         } else {
-            container.innerHTML = '<p class="text-center" style="grid-column: 1 / -1;">Tu lista de favoritos está vacía.</p>';
+            container.innerHTML = `<p class="text-center" style="grid-column: 1 / -1;">${window.i18n?.t?.('favorites.empty') || 'Tu lista de favoritos está vacía.'}</p>`;
         }
     }
 
@@ -765,7 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!itemsContainer || !summaryContainer || !currentUser) return;
 
         if (currentUser.carrito.length === 0) {
-            itemsContainer.innerHTML = '<div class="card" style="padding: 2rem; text-align: center;">Tu carrito está vacío.</div>';
+            itemsContainer.innerHTML = `<div class="card" style="padding: 2rem; text-align: center;">${window.i18n?.t?.('cart.empty') || 'Tu carrito está vacío.'}</div>`;
             summaryContainer.classList.add('hidden');
             currentStoreForPayment = null; // Resetear la tienda seleccionada
             return;
@@ -875,7 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
         itemsContainer.innerHTML = `
             <div style="margin-bottom: 1.5rem;">
                 <button class="btn btn-text" onclick="app.returnToCartView()">
-                    <i class="fas fa-arrow-left"></i> Volver al carrito
+                    <i class="fas fa-arrow-left"></i> ${window.i18n?.t?.('cart.backToCart') || 'Volver al carrito'}
                 </button>
             </div>
             <div class="store-cart-group">
@@ -898,18 +938,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         <label style="display: flex; align-items: center; cursor: pointer;">
                             <input type="radio" name="deliveryMethod" value="retiro" 
                                    onchange="app.setDeliveryMethod('retiro')" ${deliveryMethod === 'retiro' ? 'checked' : ''}>
-                            <span style="margin-left: 0.5rem;">Retiro en Local</span>
+                            <span style="margin-left: 0.5rem;">${window.i18n?.t?.('cart.delivery.pickup') || 'Retiro en Local'}</span>
                         </label>
                         <label style="display: flex; align-items: center; cursor: pointer;">
                             <input type="radio" name="deliveryMethod" value="domicilio" 
                                    onchange="app.setDeliveryMethod('domicilio')" ${deliveryMethod === 'domicilio' ? 'checked' : ''}>
-                            <span style="margin-left: 0.5rem;">A Domicilio</span>
+                            <span style="margin-left: 0.5rem;">${window.i18n?.t?.('cart.delivery.home') || 'A Domicilio'}</span>
                         </label>
                     </div>
                 </div>
                 
                 <div id="direccion-container" class="form-group" style="margin-top: 1rem; ${deliveryMethod !== 'domicilio' ? 'display: none;' : ''}">
-                    <label for="direccion-envio" class="form-label">Dirección de Envío</label>
+                    <label for="direccion-envio" class="form-label">${window.i18n?.t?.('cart.delivery.address') || 'Dirección de Envío'}</label>
                     <input type="text" id="direccion-envio" class="form-input" 
                            value="${deliveryAddress}" 
                            oninput="app.setDeliveryAddress(this.value)" 
@@ -934,7 +974,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" 
                         onclick="app.processPayment('${storeOrder.storeId}')">
-                    Proceder al Pago
+                    ${window.i18n?.t?.('cart.proceedPayment') || 'Proceder al Pago'}
                 </button>
             </div>
         `;

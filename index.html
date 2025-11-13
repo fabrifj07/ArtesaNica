@@ -96,7 +96,7 @@
                 </div>
             </section>
         </div>
-        <div id="seccion-buscar" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.search">Buscar productos</h2><div class="search-bar search-bar-modal"><input type="text" id="buscar-productos" placeholder="Escribe aquí para buscar..." class="form-input"><i class="fas fa-search search-icon"></i></div><div id="resultados-busqueda" class="grid-container grid-products"></div></div></div>
+        <div id="seccion-buscar" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.search">Buscar productos</h2><div class="search-bar search-bar-modal"><input type="text" id="buscar-productos" placeholder="Escribe aquí para buscar..." class="form-input" data-i18n-attr="placeholder=search.placeholder"><i class="fas fa-search search-icon"></i></div><div id="resultados-busqueda" class="grid-container grid-products"></div></div></div>
         <div id="seccion-favoritos" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.favorites">Tus Favoritos</h2><div id="lista-favoritos" class="grid-container grid-products"></div></div></div>
         <div id="seccion-carrito" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.cart">Mi Carrito</h2><div class="carrito-layout"><div id="contenido-carrito"></div><div id="resumen-carrito" class="card"></div></div></div></div>
         <div id="seccion-perfil" class="seccion-principal hidden"><div class="container section"><h2 class="section-title" data-i18n="sections.profile">Mi Perfil</h2><div id="perfil-contenido"></div></div></div>
@@ -140,11 +140,11 @@
        =================================================================== -->
     <nav class="bottom-nav">
         <ul class="nav-list">
-            <li class="nav-item"><a href="#" id="nav-inicio" class="active"><i class="fas fa-home"></i><span>Inicio</span></a></li>
-            <li class="nav-item"><a href="#" id="nav-buscar"><i class="fas fa-search"></i><span>Buscar</span></a></li>
-            <li class="nav-item"><a href="#" id="nav-favoritos"><i class="fas fa-heart"></i><span>Favoritos</span><span id="contador-favoritos" class="nav-counter hidden">0</span></a></li>
-            <li class="nav-item"><a href="#" id="nav-carrito"><i class="fas fa-shopping-cart"></i><span>Carrito</span><span id="contador-carrito" class="nav-counter hidden">0</span></a></li>
-            <li class="nav-item"><a href="#" id="nav-perfil"><i class="fas fa-user"></i><span>Perfil</span></a></li>
+            <li class="nav-item"><a href="#" id="nav-inicio" class="active"><i class="fas fa-home"></i><span data-i18n="bottom.home">Inicio</span></a></li>
+            <li class="nav-item"><a href="#" id="nav-buscar"><i class="fas fa-search"></i><span data-i18n="bottom.search">Buscar</span></a></li>
+            <li class="nav-item"><a href="#" id="nav-favoritos"><i class="fas fa-heart"></i><span data-i18n="bottom.favorites">Favoritos</span><span id="contador-favoritos" class="nav-counter hidden">0</span></a></li>
+            <li class="nav-item"><a href="#" id="nav-carrito"><i class="fas fa-shopping-cart"></i><span data-i18n="bottom.cart">Carrito</span><span id="contador-carrito" class="nav-counter hidden">0</span></a></li>
+            <li class="nav-item"><a href="#" id="nav-perfil"><i class="fas fa-user"></i><span data-i18n="bottom.profile">Perfil</span></a></li>
         </ul>
     </nav>
 
@@ -154,48 +154,48 @@
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-tabs">
-                <button id="login-tab" class="tab active">Iniciar Sesión</button>
-                <button id="register-tab" class="tab">Registrarse</button>
+                <button id="login-tab" class="tab active" data-i18n="auth.loginTab">Iniciar Sesión</button>
+                <button id="register-tab" class="tab" data-i18n="auth.registerTab">Registrarse</button>
             </div>
             
             <!-- Contenido del Login -->
             <div id="login-content" class="modal-body">
-                <h3>Bienvenido de nuevo</h3>
+                <h3 data-i18n="auth.welcomeTitle">Bienvenido de nuevo</h3>
                 <form id="login-form">
                     <div class="form-group">
-                        <label for="login-email" class="form-label">Correo electrónico</label>
+                        <label for="login-email" class="form-label" data-i18n="auth.email">Correo electrónico</label>
                         <input type="email" id="login-email" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="login-password" class="form-label">Contraseña</label>
+                        <label for="login-password" class="form-label" data-i18n="auth.password">Contraseña</label>
                         <input type="password" id="login-password" class="form-input" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-full-width">Iniciar sesión</button>
+                    <button type="submit" class="btn btn-primary btn-full-width" data-i18n="auth.loginButton">Iniciar sesión</button>
                 </form>
             </div>
             
             <!-- Contenido de Registro -->
             <div id="register-content" class="modal-body hidden">
-                <h3>Crear una cuenta</h3>
+                <h3 data-i18n="auth.registerTitle">Crear una cuenta</h3>
                 <form id="register-form">
                     <div class="form-group">
-                        <label for="register-name" class="form-label">Nombre</label>
+                        <label for="register-name" class="form-label" data-i18n="auth.name">Nombre</label>
                         <input type="text" id="register-name" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="register-email" class="form-label">Correo electrónico</label>
+                        <label for="register-email" class="form-label" data-i18n="auth.email">Correo electrónico</label>
                         <input type="email" id="register-email" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label for="register-password" class="form-label">Contraseña</label>
+                        <label for="register-password" class="form-label" data-i18n="auth.password">Contraseña</label>
                         <input type="password" id="register-password" class="form-input" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-full-width">Registrarme</button>
+                    <button type="submit" class="btn btn-primary btn-full-width" data-i18n="auth.registerButton">Registrarme</button>
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button id="close-auth-modal" class="btn-close">Cerrar</button>
+                <button id="close-auth-modal" class="btn-close" data-i18n="auth.close">Cerrar</button>
             </div>
         </div>
     </div>

@@ -21,6 +21,13 @@
     "allProducts": "Todos los Productos",
     "moreStores": "Más Tiendas"
   },
+  "bottom": {
+    "home": "Inicio",
+    "search": "Buscar",
+    "favorites": "Favoritos",
+    "cart": "Carrito",
+    "profile": "Perfil"
+  },
   "nav": {
     "back": "Volver",
     "changeLanguage": "Cambiar idioma",
@@ -31,6 +38,57 @@
   },
   "actions": {
     "seeMoreProducts": "Ver más productos",
-    "seeMoreStores": "Ver más tiendas"
+    "seeMoreStores": "Ver más tiendas",
+    "viewStore": "Ver Tienda"
+  },
+  "common": {
+    "emptyProducts": "No hay productos para mostrar."
+  },
+  "search": {
+    "placeholder": "Escribe aquí para buscar...",
+    "emptyPrompt": "Busca productos o artesanos.",
+    "noResults": "No se encontraron productos."
+  },
+  "stores": {
+    "empty": "No hay tiendas disponibles en este momento."
+  },
+  "favorites": {
+    "empty": "Tu lista de favoritos está vacía."
+  },
+  "auth": {
+    "loginTab": "Iniciar Sesión",
+    "registerTab": "Registrarse",
+    "welcomeTitle": "Bienvenido de nuevo",
+    "registerTitle": "Crear una cuenta",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "loginButton": "Iniciar sesión",
+    "registerButton": "Registrarme",
+    "close": "Cerrar",
+    "emailExists": "Ya existe una cuenta con este correo",
+    "registerSuccess": "¡Registro exitoso! Iniciando sesión...",
+    "welcomeBack": "¡Bienvenido de nuevo, {name}!",
+    "badCredentials": "Correo o contraseña incorrectos",
+    "goodbye": "Hasta pronto, {name}",
+    "loginRequired": "Por favor, inicia sesión para continuar"
+  },
+  "cart": {
+    "empty": "Tu carrito está vacío.",
+    "payStore": "Pagar Pedido",
+    "backToCart": "Volver al carrito",
+    "delivery": {
+      "pickup": "Retiro en Local",
+      "home": "A Domicilio",
+      "address": "Dirección de Envío"
+    },
+    "proceedPayment": "Proceder al Pago"
+  },
+  "categories": {
+    "barro": "Barro",
+    "bambu": "Bambú",
+    "madera": "Madera",
+    "hamacas": "Hamacas",
+    "repujado": "Repujado"
   }
 }
