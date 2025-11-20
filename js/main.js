@@ -890,7 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!itemsContainer || !summaryContainer || !currentUser) return;
 
         if (currentUser.carrito.length === 0) {
-            itemsContainer.innerHTML = `<div class="card" style="padding: 2rem; text-align: center;">${window.i18n?.t?.('cart.empty') || 'Tu carrito está vacío.'}</div>`;
+            itemsContainer.innerHTML = `<div class="card" style="padding: 2rem; text-align: center;" data-i18n="cart.empty">Tu carrito está vacío.</div>`;
             summaryContainer.classList.add('hidden');
             currentStoreForPayment = null; // Resetear la tienda seleccionada
             return;
@@ -929,16 +929,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const storeItemsHtml = storeOrder.items.map(item => `
                 <div class="card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem;">
-                    <img src="${item.productData.imagen}" alt="${item.productData.nombre}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
+                    <img src="${item.productData.imagen}" alt="${getText(item.productData, 'nombre', 'nombre_en')}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
                     <div style="flex: 1;">
-                        <h3 style="font-weight: 600;">${item.productData.nombre}</h3>
-                        <p class="price">C$${item.productData.precio.toFixed(2)}</p>
+                        <h3 style="font-weight: 600;">${getText(item.productData, 'nombre', 'nombre_en')}</h3>
+                        <p class="price">${formatCurrency(item.productData.precio)}</p>
                     </div>
                     <div style="text-align: right;">
                         <input type="number" min="1" value="${item.cantidad}" 
                                onchange="app.updateCartQuantity('${item.id}', this.valueAsNumber)" 
                                class="form-input" style="width: 70px; text-align: center; margin-bottom: 0.5rem;">
-                        <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="Eliminar">
+                        <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="${window.i18n?.t?.('actions.delete') || 'Eliminar'}" data-i18n-attr="title=actions.delete">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -949,13 +949,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="store-cart-group" style="margin-bottom: 2rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-borde);">
                         <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0;">${storeOrder.storeName}</h3>
-                        <button class="btn btn-primary" onclick="app.payForStore('${storeOrder.storeId}')">
-                            Pagar Pedido (C$${storeSubtotal.toFixed(2)})
+                        <button class="btn btn-primary" onclick="app.payForStore('${storeOrder.storeId}')" data-i18n="[html]cart.payOrder">
+                            ${window.i18n?.t?.('cart.payOrder', { amount: formatCurrency(storeSubtotal) }) || `Pagar Pedido (${formatCurrency(storeSubtotal)})`}
                         </button>
                     </div>
                     ${storeItemsHtml}
-                    <div style="text-align: right; font-weight: bold; margin-top: 1rem;">
-                        Subtotal Tienda: C$${storeSubtotal.toFixed(2)}
+                    <div style="text-align: right; font-weight: bold; margin-top: 1rem;" data-i18n="[html]cart.storeSubtotal">
+                        ${window.i18n?.t?.('cart.storeSubtotal', { amount: formatCurrency(storeSubtotal) }) || `Subtotal Tienda: ${formatCurrency(storeSubtotal)}`}
                     </div>
                 </div>
             `;
@@ -963,6 +963,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         itemsContainer.innerHTML = itemsHtml;
         summaryContainer.classList.add('hidden'); // Ocultar resumen general cuando se muestran todas las tiendas
+        
+        // Aplicar traducciones a los elementos dinámicos
+        if (window.i18n) {
+            window.i18n.localizePage();
+        }
     }
 
     // Función para renderizar el checkout de una tienda específica
@@ -973,16 +978,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Renderizar productos de la tienda
         const storeItemsHtml = storeOrder.items.map(item => `
             <div class="card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin-bottom: 1rem;">
-                <img src="${item.productData.imagen}" alt="${item.productData.nombre}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
+                <img src="${item.productData.imagen}" alt="${getText(item.productData, 'nombre', 'nombre_en')}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 0.25rem;">
                 <div style="flex: 1;">
-                    <h3 style="font-weight: 600;">${item.productData.nombre}</h3>
-                    <p class="price">C$${item.productData.precio.toFixed(2)}</p>
+                    <h3 style="font-weight: 600;">${getText(item.productData, 'nombre', 'nombre_en')}</h3>
+                    <p class="price">${formatCurrency(item.productData.precio)}</p>
                 </div>
                 <div style="text-align: right;">
                     <input type="number" min="1" value="${item.cantidad}" 
                            onchange="app.updateCartQuantity('${item.id}', this.valueAsNumber)" 
                            class="form-input" style="width: 70px; text-align: center; margin-bottom: 0.5rem;">
-                    <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="Eliminar">
+                    <button onclick="app.updateCartQuantity('${item.id}', 0)" class="btn-icon" title="${window.i18n?.t?.('actions.delete') || 'Eliminar'}" data-i18n-attr="title=actions.delete">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -999,13 +1004,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Actualizar la interfaz
         itemsContainer.innerHTML = `
             <div style="margin-bottom: 1.5rem;">
-                <button class="btn btn-text" onclick="app.returnToCartView()">
+                <button class="btn btn-text" onclick="app.returnToCartView()" data-i18n="[html]cart.backToCart">
                     <i class="fas fa-arrow-left"></i> ${window.i18n?.t?.('cart.backToCart') || 'Volver al carrito'}
                 </button>
             </div>
             <div class="store-cart-group">
-                <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;">
-                    Pedido de ${storeOrder.storeName}
+                <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;" data-i18n="[html]cart.orderFrom">
+                    ${window.i18n?.t?.('cart.orderFrom', { store: storeOrder.storeName }) || `Pedido de ${storeOrder.storeName}`}
                 </h2>
                 ${storeItemsHtml}
             </div>
@@ -1014,55 +1019,64 @@ document.addEventListener('DOMContentLoaded', () => {
         // Actualizar el resumen del pedido
         summaryContainer.innerHTML = `
             <div style="padding: 1.5rem;">
-                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Resumen del Pedido</h3>
+                <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;" data-i18n="cart.orderSummary">Resumen del Pedido</h3>
                 
                 <!-- Opciones de Entrega -->
                 <div class="form-group">
-                    <label class="form-label">Método de Entrega</label>
+                    <label class="form-label" data-i18n="cart.delivery.method">Método de Entrega</label>
                     <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
                         <label style="display: flex; align-items: center; cursor: pointer;">
                             <input type="radio" name="deliveryMethod" value="retiro" 
                                    onchange="app.setDeliveryMethod('retiro')" ${deliveryMethod === 'retiro' ? 'checked' : ''}>
-                            <span style="margin-left: 0.5rem;">${window.i18n?.t?.('cart.delivery.pickup') || 'Retiro en Local'}</span>
+                            <span style="margin-left: 0.5rem;" data-i18n="cart.delivery.pickup">Retiro en Local</span>
                         </label>
                         <label style="display: flex; align-items: center; cursor: pointer;">
                             <input type="radio" name="deliveryMethod" value="domicilio" 
                                    onchange="app.setDeliveryMethod('domicilio')" ${deliveryMethod === 'domicilio' ? 'checked' : ''}>
-                            <span style="margin-left: 0.5rem;">${window.i18n?.t?.('cart.delivery.home') || 'A Domicilio'}</span>
+                            <span style="margin-left: 0.5rem;" data-i18n="cart.delivery.home">A Domicilio</span>
                         </label>
                     </div>
                 </div>
                 
                 <div id="direccion-container" class="form-group" style="margin-top: 1rem; ${deliveryMethod !== 'domicilio' ? 'display: none;' : ''}">
-                    <label for="direccion-envio" class="form-label">${window.i18n?.t?.('cart.delivery.address') || 'Dirección de Envío'}</label>
+                    <label for="direccion-envio" class="form-label" data-i18n="cart.delivery.address">Dirección de Envío</label>
                     <input type="text" id="direccion-envio" class="form-input" 
                            value="${deliveryAddress}" 
                            oninput="app.setDeliveryAddress(this.value)" 
-                           placeholder="Escribe tu dirección completa">
+                           placeholder="${window.i18n?.t?.('cart.delivery.addressPlaceholder') || 'Escribe tu dirección completa'}"
+                           data-i18n-attr="placeholder=cart.delivery.addressPlaceholder">
                 </div>
 
                 <!-- Resumen de Costos -->
                 <div style="margin-top: 1.5rem;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>${window.i18n?.t?.('cart.summary.subtotal', { count: storeOrder.items.length }) || `Subtotal (${storeOrder.items.length} productos):`}</span>
+                        <span data-i18n="[html]cart.summary.subtotal">
+                            ${window.i18n?.t?.('cart.summary.subtotal', { count: storeOrder.items.length }) || `Subtotal (${storeOrder.items.length} productos):`}
+                        </span>
                         <span id="subtotal">${formatCurrency(subtotal)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>${window.i18n?.t?.('cart.summary.shipping') || 'Costo de envío:'}</span>
+                        <span data-i18n="cart.summary.shipping">Costo de envío:</span>
                         <span id="costo-envio">${formatCurrency(envio)}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.25rem;">
-                        <span>${window.i18n?.t?.('cart.summary.total') || 'Total:'}</span>
+                        <span data-i18n="cart.summary.total">Total:</span>
                         <span id="total-pedido">${formatCurrency(total)}</span>
                     </div>
                 </div>
                 
                 <button class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" 
-                        onclick="app.processPayment('${storeOrder.storeId}')">
+                        onclick="app.processPayment('${storeOrder.storeId}')"
+                        data-i18n="cart.proceedPayment">
                     ${window.i18n?.t?.('cart.proceedPayment') || 'Proceder al Pago'}
                 </button>
             </div>
         `;
+        
+        // Aplicar traducciones a los elementos dinámicos
+        if (window.i18n) {
+            window.i18n.localizePage();
+        }
     }
 
     // =================================================================================
